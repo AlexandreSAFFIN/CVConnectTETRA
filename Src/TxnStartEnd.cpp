@@ -1,0 +1,167 @@
+/**
+ * \file    TxnStartEnd.cpp
+ * \author  Kassovic
+ * \date    31 June 2016
+ * \brief   This file manages the start and the end of a transaction.
+ *
+ * \details 053116-BK : File created.
+ */
+
+#include "TxnStartEnd.hpp"
+#include "Transaction.hpp"
+#include "AppResources.hpp"
+
+//                            #####################
+//                            #   TXN START END   #
+//                            #####################
+
+//! \brief TxnStartEnd constructor.
+//! \param[in] graphicLib A reference to the graphic library instance.
+TxnStartEnd::TxnStartEnd()
+{
+}
+
+//! \brief TxnStartEnd destructor.
+TxnStartEnd::~TxnStartEnd()
+{
+}
+
+//! \brief Indicates that the transaction is started.
+//! \details At this step, transaction data can be updated.
+//! \details Call type : broadcast.
+//! \param[in] inputData May have been updated by a previously called application.
+//! \details TAG_TXN_STRUCT_INPUT_DATA_LOG : present only if input data have been modified.
+//! \details - list of TAG_TXN_STRUCT_LOG_ENTRY : contains the modification done bye one application.
+//! \details -- TAG_TXN_SERVICE_CLASS_NAME : the application class name that has changed the input data.
+//! \details -- TAG_TXN_STRUCT_PREVIOUS_TAGS : the application id that has changed the inpud data.
+//! \details -- TAG_TXN_STRUCT_PREVIOUS_TAGS : modified tags with their previous value.
+//! \details --- list of modified tags.
+//! \details -- TAG_TXN_STRUCT_ADDED_TAGS : added tags (without value).
+//! \details --- list of added tags.
+//! \param[out] outputData No output data or list of updated input tags.
+//! \return TXN_SR_OK.
+int TxnStartEnd::start(const TLV_TREE_NODE inputData, TLV_TREE_NODE outputData)
+{
+	// Get transaction info
+	TransactionInfo txn;
+	getTransactionInfo(inputData, txn);
+	m_transaction = new Transaction();
+
+	cib::json::Document jsonParam;
+	loadDataAsJson(FIC_PARAM, jsonParam);
+	bool isParam = (bool)jsonParam["Acceptor"]["isParam"].as_bool() && (bool)jsonParam["Domain"]["isParam"].as_bool();
+	bool isCfPay = false;
+	if(isParam)
+	{
+		isCfPay = m_transaction->paymentChoice();
+	}
+
+	long long int amount = atoll((txn.amount).c_str());
+	if((!(atoll((txn.amount).c_str()) > 2147483647) && txn.txnType == TXN_TRANSACTION_TYPE_DEBIT && isCfPay))
+	{
+		bool resultQrCodeReading = m_transaction->showQRCode(amount);
+		const string currency = (string)jsonParam["Acceptor"]["devise"].as_string();
+		if (resultQrCodeReading)
+		{
+			unsigned long readerDetected = TXN_TECHNO_NONE;
+			updateTransactionInfo(outputData, amount, &currency, NULL, &readerDetected);
+		}
+		else
+		{
+			unsigned long readerDetected = TXN_TECHNO_READER_DETECTED;
+			updateTransactionInfo(outputData, 0, NULL, NULL, &readerDetected);
+		}
+
+	}
+
+	return TXN_SR_OK;
+}
+
+//! \brief Asks if the application is ready to process the transaction.
+//! \details If not implemented, the application is not involved in the transaction processing.
+//! \details Call type : broadcast.
+//! \param[in] inputData Provided by Transaction::start and may have been updated.
+//! \details For each technology available and defined in TAG_TXN_REQUESTED_TECHNOLOGIES:
+//! \details TAG_TXN_READER : constructed tag containing the reader information.
+//! \details - TAG_TXN_READER_TECHNOLOGY : technology manager by the reader.
+//! \details - TAG_TXN_READER_NAME : name of the reader.
+//! \param[out] outputData The list of supported readers by the application with the given transaction conditions.
+//! \details TAG_TXN_READER : constructed tag containing the reader information.
+//! \details - TAG_TXN_READER_TECHNOLOGY : technology managed by the reader.
+//! \details - TAG_TXN_READER_NAME : name of the reader.
+//! \return May return the following values:
+//! - \ref TXN_SR_OK if the application continues the transaction.
+//! - \ref TXN_SR_NOT_SATISFIED if the application stops the transaction.
+int TxnStartEnd::checkAndPrepare(const TLV_TREE_NODE inputData, TLV_TREE_NODE outputData)
+{
+	// Get the list of applications with their tags that have changed the transaction input data
+	vector<LogApp> list;
+	getLogInfo(inputData, list);
+
+	// Get transaction info
+	TransactionInfo txn;
+	getTransactionInfo(inputData, txn);
+
+	// Get requested technologies
+	vector<ReaderInfo> listTechno;
+	getRequestedTechno(inputData, listTechno);
+
+	// *************************************************************
+	// Check the amount and the currency here :                    *
+	// 	  - Amount over a floor limit                              *
+	//    - Currency supported by the application                  *
+	//    If conditions not satisfied return :                     *
+	//    - TXN_SR_NOT_SATISFIED                                   *
+	//    This application does not participate to the transaction *
+	// *************************************************************
+
+	// All readers are supported by the application with the given transaction conditions
+	// For example, the application can reject the transaction over the contactless reader if the amount exceeds a limit
+	TLV_TREE_NODE nodeIn = TlvTree_GetFirstChild(inputData);
+	while (nodeIn != NULL)
+	{
+		if (TlvTree_GetTag(nodeIn) == TAG_TXN_READER)
+		{
+			// Get reader technology & reader name
+			unsigned long readerTechno;
+			string readerName;
+			getReaderInfo(nodeIn, readerTechno, readerName);
+
+			if ((readerTechno & (TXN_TECHNO_CONTACT_CHIP | TXN_TECHNO_CONTACTLESS | TXN_TECHNO_READER_DETECTED)) != 0)
+			{
+				// Return the reader technology & name supported by the application
+				TLV_TREE_NODE nodeOut = TlvTree_AddChild(outputData, TAG_TXN_READER, NULL, 0);
+				if (nodeOut != NULL)
+				{
+					unsigned long readerTechnoMsb;
+					readerTechnoMsb = SWAP32(readerTechno);
+					TlvTree_AddChildInteger(nodeOut, TAG_TXN_READER_TECHNOLOGY, readerTechnoMsb, sizeof(unsigned long));
+					// !!! Do not add the ending null of the readerName string to the tag (TlvTree_AddChildString will not work for cless)
+					TlvTree_AddChild(nodeOut, TAG_TXN_READER_NAME, readerName.c_str(), readerName.length());
+				}
+			}
+		}
+
+		// Get next reader
+		nodeIn = TlvTree_GetNext(nodeIn);
+	}
+	//	 Continue the transaction
+	return TXN_SR_OK;
+}
+
+//! \brief Indicates that the transaction is completed (whatever the result).
+//! \details Call type : broadcast.
+//! \param[in] inputData Amount, currency, transaction type, etc...
+//! \details TAG_TXN_PROCESSING_STATUS : the final transaction status.
+//! \details TAG_TXN_USED_TECHNOLOGY : the technology used for the transaction, if available.
+//! \param[out] outputData No output data.
+//! \return TXN_SR_OK.
+int TxnStartEnd::end(const TLV_TREE_NODE inputData, TLV_TREE_NODE outputData)
+{
+	// Get transaction final status
+	unsigned long status, readerUsed, appId;
+	string appName;
+	getTransactionStatus(inputData, status, readerUsed, appName, appId);
+
+	return TXN_SR_OK;
+}

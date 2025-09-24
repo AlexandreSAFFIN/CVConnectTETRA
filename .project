@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>CVConnectTETRA</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>com.ingenico.ingedev.telium.fwt3.core.ingedevT3Builder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>com.ingenico.ingedev.telium.fwt3.core.teliumFwT3AppNature</nature>
+		<nature>com.ingenico.ingedev.telium.fwt3.core.teliumFwT3Nature</nature>
+		<nature>org.eclipse.cdt.core.cnature</nature>
+		<nature>org.eclipse.cdt.core.ccnature</nature>
+	</natures>
+	<linkedResources>
+		<link>
+			<name>.links/projLinks/CIB_T3_DLL</name>
+			<type>2</type>
+			<locationURI>com.ingenico.ingedev.filesystem.workspaceLink:/CIB_T3_DLL</locationURI>
+		</link>
+	</linkedResources>
+</projectDescription>
