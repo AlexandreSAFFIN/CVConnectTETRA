@@ -14,6 +14,7 @@
 #include "GL_File.h"
 #include <string.h>
 #include <cstring>
+#include "BaseDrawWindow.hpp"
 
 
 class Utils : public Singleton<Utils>
@@ -55,7 +56,7 @@ public:
 	string m_token_domain;
 
 	string tr_token;
-
+	BaseDrawWindow* parameterWindow;
 	gprs::GprsConfig m_gprs;
 
 };

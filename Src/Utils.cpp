@@ -346,7 +346,7 @@ ulong Utils::displayDualScreen(const std::string & title, const std::string & te
 string Utils::getIconsPath(string name)
 {
 	std::ostringstream iconPath;
-	iconPath << "file://param/" << "DATA5525250" << ".tar/Icons/" << name << ".png";
+	iconPath << "file://param/" << "DATA54F9250"<< ".tar/Icons/" << name << ".png";
 	return iconPath.str();
 }
 

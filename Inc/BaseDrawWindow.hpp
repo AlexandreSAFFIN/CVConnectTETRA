@@ -6,9 +6,20 @@
 class Utils; // Déclaration anticipée de la classe Utils, si nécessaire
 
 class BaseDrawWindow {
+
+#define GL_COLOR_ANCV                  ((T_GL_COLOR)0xFFFF271A)
+
 protected:
-    Window mainWindow;  // Fenêtre principale
+    Window mainWindow;
+
+    Picture picture;
+    Layout topLayout;
+    Layout centerLayout;
+    Layout bottomLayout;
+
+
     Window* eventWindow;  // Fenêtre principale
+    Label *title;
     Label *snackBar;     // SnackBar pour afficher des messages
     bool canDispatch;
 
@@ -17,7 +28,7 @@ protected:
 
 public:
     // Constructeur
-    BaseDrawWindow(GraphicLib& glib);
+    BaseDrawWindow(GraphicLib& glib, string topText);
 
     // Afficher un message dans la SnackBar
     void showSnackBar(const std::string& message, bool isSuccess);
@@ -25,12 +36,9 @@ public:
     // Cacher la SnackBar
     void hideSnackBar();
 
-    // Méthode de dessin virtuelle (doit être redéfinie dans les classes dérivées)
     virtual bool drawing() = 0;
 
     virtual void refreshInformation() = 0;
-
-    Window getMainWindow();
 
     // Destructeur virtuel
     virtual ~BaseDrawWindow();

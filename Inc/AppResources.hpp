@@ -13,10 +13,10 @@
 #define AUTH 1
 #define CREATE 2
 
-#define DISK_PATH "/CFPAY"
-#define FIC_PARAM "/CFPAY/PARAM"
-#define FIC_LICENSE "/CFPAY/LICENSE"
-#define FIC_UPDATE "/CFPAY/UPDATE"
+#define DISK_PATH "/CVCONNECT"
+#define FIC_PARAM "/CVCONNECT/PARAM"
+#define FIC_LICENSE "/CVCONNECT/LICENSE"
+#define FIC_UPDATE "/CVCONNECT/UPDATE"
 
 #define HOST_PROD "api-cfpay.cib-ingenierie.fr"
 #define HOST_DEV "api-cfpay-dev.cib-ingenierie.fr"

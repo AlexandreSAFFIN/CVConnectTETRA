@@ -15,15 +15,15 @@ SPACE := $(EMPTY) $(EMPTY)
 # Project and file names
 #-------------------------------------------------------------------------------
 # Project name
-PROJECT_NAME    := CVConnectTETRA
+PROJECT_NAME    := CVConnect
 # Compiler version
-COMPILER_VERSION    := GNU ARM 5.3.1 (HWTetra)
+COMPILER_VERSION    := GNU ARM 4.7.3 (HWTetra)
 #path compiler
-PATH_COMPILER       :=D:/Ingenico/IngeDev_8.20.26.0/toolchains/gnuArm531v7a-5/bin
+PATH_COMPILER       :=D:/Ingenico/IngeDev_8.20.26.0/toolchains/gnuArm47v7a-4/bin
 # Configuration name
 CFG_NAME        := GNU_ARM_DEBUG_TETRA
 # Target file name (without extension)
-TRG_FILE_NAME   := CVConnectTE
+TRG_FILE_NAME   := 8217530100
 
 #-------------------------------------------------------------------------------
 # Directories
@@ -53,19 +53,19 @@ BIN_PATH        := $(BIN_DIR)/$(CFG_NAME)
 # Compiler, linker, assembler, ...
 #-------------------------------------------------------------------------------
 # Gnu Compiler executable
-CC              := arm-islero-linux-gnueabihf-gcc.exe
+CC              := arm-islero-linux-gnueabi-gcc.exe
 # Gnu Assembler executable
-AS              := arm-islero-linux-gnueabihf-as.exe
+AS              := arm-islero-linux-gnueabi-as.exe
 # Gnu Linker executable
-LD              := arm-islero-linux-gnueabihf-ld.exe
+LD              := arm-islero-linux-gnueabi-ld.exe
 # Gnu binary file transforming executable
-OBJ_COPY        := arm-islero-linux-gnueabihf-objcopy.exe
+OBJ_COPY        := arm-islero-linux-gnueabi-objcopy.exe
 # Gnu binary sections size executable
-SIZE            := arm-islero-linux-gnueabihf-size.exe
+SIZE            := arm-islero-linux-gnueabi-size.exe
 # Gnu binary Obj Dump executable
-OBJ_DUMP        := arm-islero-linux-gnueabihf-objdump.exe
+OBJ_DUMP        := arm-islero-linux-gnueabi-objdump.exe
 # Gnu binary strip executable
-STRIP           := arm-islero-linux-gnueabihf-strip.exe
+STRIP           := arm-islero-linux-gnueabi-strip.exe
 
 
 #-------------------------------------------------------------------------------
@@ -86,28 +86,28 @@ PRINTF          := printf
 INCLUDES_PATH   := \
 -IInc \
 -ID:/MyProjects/TETRA/cib_dll_t3/ExpInc \
--isystemD:/Ingenico/IngeDev_8.20.26.0/toolchains/gnuArm531v7a-5/arm-islero-linux-gnueabihf/include/c++/5.3.1 \
--isystemD:/Ingenico/IngeDev_8.20.26.0/toolchains/gnuArm531v7a-5/arm-islero-linux-gnueabihf/include/c++/5.3.1/arm-islero-linux-gnueabihf \
--isystemD:/Ingenico/IngeDev_8.20.26.0/toolchains/gnuArm531v7a-5/arm-islero-linux-gnueabihf/include/c++/5.3.1/backward \
--isystemD:/Ingenico/IngeDev_8.20.26.0/toolchains/gnuArm531v7a-5/lib/gcc/arm-islero-linux-gnueabihf/5.3.1/include \
--isystemD:/Ingenico/IngeDev_8.20.26.0/toolchains/gnuArm531v7a-5/lib/gcc/arm-islero-linux-gnueabihf/5.3.1/include-fixed \
--isystemD:/Ingenico/IngeDev_8.20.26.0/toolchains/gnuArm531v7a-5/arm-islero-linux-gnueabihf/include \
--isystemD:/Ingenico/IngeDev_8.20.26.0/toolchains/gnuArm531v7a-5/arm-islero-linux-gnueabihf/sysroot/usr/include \
--IC:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/inc/c/Platform \
--IC:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/inc/c/Platform/CommonTools \
--IC:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/inc/c/Platform/Communication \
--IC:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/inc/c/Platform/GOAL \
--IC:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/inc/c/Platform/GTL \
--IC:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/inc/c/Platform/PCL \
--IC:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/inc/c/Platform/Pinpad \
--IC:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/inc/c/Platform/SDK \
--IC:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/inc/c/Platform/SQLite \
--IC:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/inc/c/Platform/TPass \
--IC:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/inc/c/OS \
--IC:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/inc/cpp \
--IC:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/inc/cpp/google \
--IC:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/inc/cpp/ingenico \
--IC:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/proto \
+-isystemD:/Ingenico/IngeDev_8.20.26.0/toolchains/gnuArm47v7a-4/arm-islero-linux-gnueabi/include/c++/4.7.3 \
+-isystemD:/Ingenico/IngeDev_8.20.26.0/toolchains/gnuArm47v7a-4/arm-islero-linux-gnueabi/include/c++/4.7.3/arm-islero-linux-gnueabi \
+-isystemD:/Ingenico/IngeDev_8.20.26.0/toolchains/gnuArm47v7a-4/arm-islero-linux-gnueabi/include/c++/4.7.3/backward \
+-isystemD:/Ingenico/IngeDev_8.20.26.0/toolchains/gnuArm47v7a-4/lib/gcc/arm-islero-linux-gnueabi/4.7.3/include \
+-isystemD:/Ingenico/IngeDev_8.20.26.0/toolchains/gnuArm47v7a-4/lib/gcc/arm-islero-linux-gnueabi/4.7.3/include-fixed \
+-isystemD:/Ingenico/IngeDev_8.20.26.0/toolchains/gnuArm47v7a-4/arm-islero-linux-gnueabi/include \
+-isystemD:/Ingenico/IngeDev_8.20.26.0/toolchains/gnuArm47v7a-4/arm-islero-linux-gnueabi/sysroot/usr/include \
+-IC:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/inc/c/Platform \
+-IC:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/inc/c/Platform/CommonTools \
+-IC:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/inc/c/Platform/Communication \
+-IC:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/inc/c/Platform/GOAL \
+-IC:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/inc/c/Platform/GTL \
+-IC:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/inc/c/Platform/PCL \
+-IC:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/inc/c/Platform/Pinpad \
+-IC:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/inc/c/Platform/SDK \
+-IC:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/inc/c/Platform/SQLite \
+-IC:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/inc/c/Platform/TPass \
+-IC:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/inc/c/OS \
+-IC:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/inc/cpp \
+-IC:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/inc/cpp/google \
+-IC:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/inc/cpp/ingenico \
+-IC:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/proto \
 
 #-------------------------------------------------------------------------------
 # Includes path used in assembler process
@@ -122,60 +122,59 @@ INCLUDES_ASM_PATH   := \
 #-------------------------------------------------------------------------------
 LIBS            := \
 D:/MyProjects/TETRA/cib_dll_t3/Bin/GNU_ARM_DEBUG_TETRA/libCibT3Dll.so \
-C:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/gnu_531/lib/Platform/LIBBATTERY.T3L \
-C:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/gnu_531/lib/Platform/LIBBLIGHT.T3L \
-C:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/gnu_531/lib/Platform/LIBBUZZER.T3L \
-C:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/gnu_531/lib/Platform/LIBCAPTURE.T3L \
-C:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/gnu_531/lib/Platform/LIBBIO.T3L \
-C:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/gnu_531/lib/Platform/LIBPPADTEXT.T3L \
-C:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/gnu_531/lib/Platform/LIBGPS.T3L \
-C:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/gnu_531/lib/Platform/LIBDESKTOP.T3L \
-C:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/gnu_531/lib/Platform/libethernet.lib \
-C:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/gnu_531/lib/Platform/LIBEXPLORER.T3L \
-C:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/gnu_531/lib/Platform/libgprs.lib \
-C:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/gnu_531/lib/Platform/libspmci.lib \
-C:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/gnu_531/lib/Platform/libpcl.lib \
-C:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/gnu_531/lib/Platform/libwifi.lib \
-C:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/gnu_531/lib/Platform/LIBGRAPHICS.T3L \
-C:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/gnu_531/lib/Platform/LIBACCELERO.T3L \
-C:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/gnu_531/lib/Platform/LIBHEADER.T3L \
-C:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/gnu_531/lib/Platform/LIBINACTIVI.T3L \
-C:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/gnu_531/lib/Platform/liblinklayer.lib \
-C:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/gnu_531/lib/Platform/libtmscall.lib \
-C:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/gnu_531/lib/Platform/libtmsdownload.lib \
-C:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/gnu_531/lib/Platform/libmodem.lib \
-C:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/gnu_531/lib/Platform/LIBMONITOR.T3L \
-C:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/gnu_531/lib/Platform/LIBOS.T3L \
-C:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/gnu_531/lib/Platform/libpackip.lib \
-C:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/gnu_531/lib/Platform/LIBPRINTER.T3L \
-C:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/gnu_531/lib/Platform/LIBPROTOBUF.T3L \
-C:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/gnu_531/lib/Platform/LIBSCRSAVER.T3L \
-C:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/gnu_531/lib/Platform/LIBSERVICE.T3L \
-C:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/gnu_531/lib/Platform/libSecurity.lib \
-C:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/gnu_531/lib/Platform/LIBSETTING.T3L \
-C:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/gnu_531/lib/Platform/libsoftmgt.lib \
-C:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/gnu_531/lib/Platform/LIBSVCDIRPX.T3L \
-C:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/gnu_531/lib/Platform/LIBSVCDIRSK.T3L \
-C:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/gnu_531/lib/Platform/libTrEngine.T3L \
-C:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/gnu_531/lib/Platform/LIBVIRT_KB.T3L \
-C:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/gnu_531/lib/Platform/libtlvtree.lib \
-C:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/gnu_531/lib/Platform/SQLITELIB.a \
-C:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/gnu_531/lib/Platform/LibBridge.T3L \
-C:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/gnu_531/lib/Platform/libbluetooth.lib \
-C:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/gnu_531/lib/Platform/LIBMORPHO.T3L \
-C:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/gnu_531/lib/Platform/libndef.lib \
-C:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/gnu_531/lib/Platform/LIB1LINESCR.T3L \
-C:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/gnu_531/lib/Platform/LIBCASHDRAW.T3L \
-C:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/gnu_531/lib/Platform/termdiag.a \
+C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/lib/Platform/LIBBATTERY.T3L \
+C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/lib/Platform/LIBBLIGHT.T3L \
+C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/lib/Platform/LIBBUZZER.T3L \
+C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/lib/Platform/LIBCAPTURE.T3L \
+C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/lib/Platform/LIBBIO.T3L \
+C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/lib/Platform/LIBPPADTEXT.T3L \
+C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/lib/Platform/LIBGPS.T3L \
+C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/lib/Platform/LIBDESKTOP.T3L \
+C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/lib/Platform/libethernet.lib \
+C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/lib/Platform/LIBEXPLORER.T3L \
+C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/lib/Platform/libgprs.lib \
+C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/lib/Platform/libspmci.lib \
+C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/lib/Platform/libpcl.lib \
+C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/lib/Platform/libwifi.lib \
+C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/lib/Platform/LIBGRAPHICS.T3L \
+C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/lib/Platform/LIBACCELERO.T3L \
+C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/lib/Platform/LIBHEADER.T3L \
+C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/lib/Platform/LIBINACTIVI.T3L \
+C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/lib/Platform/liblinklayer.lib \
+C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/lib/Platform/libtmscall.lib \
+C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/lib/Platform/libtmsdownload.lib \
+C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/lib/Platform/libmodem.lib \
+C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/lib/Platform/LIBMONITOR.T3L \
+C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/lib/Platform/LIBOS.T3L \
+C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/lib/Platform/libpackip.lib \
+C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/lib/Platform/LIBPRINTER.T3L \
+C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/lib/Platform/LIBPROTOBUF.T3L \
+C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/lib/Platform/LIBSCRSAVER.T3L \
+C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/lib/Platform/LIBSERVICE.T3L \
+C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/lib/Platform/libSecurity.lib \
+C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/lib/Platform/LIBSETTING.T3L \
+C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/lib/Platform/libsoftmgt.lib \
+C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/lib/Platform/LIBSVCDIRPX.T3L \
+C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/lib/Platform/LIBSVCDIRSK.T3L \
+C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/lib/Platform/libTrEngine.T3L \
+C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/lib/Platform/LIBVIRT_KB.T3L \
+C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/lib/Platform/libtlvtree.lib \
+C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/lib/Platform/SQLITELIB.a \
+C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/lib/Platform/LibBridge.T3L \
+C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/lib/Platform/libbluetooth.lib \
+C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/lib/Platform/LIBMORPHO.T3L \
+C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/lib/Platform/libndef.lib \
+C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/lib/Platform/LIB1LINESCR.T3L \
+C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/lib/Platform/LIBCASHDRAW.T3L \
 
 #-------------------------------------------------------------------------------
 # System libraries path to be included during link operation
 #-------------------------------------------------------------------------------
 SYSTEM_LIBS_PATH     := \
--LD:/Ingenico/IngeDev_8.20.26.0/toolchains/gnuArm531v7a-5/lib/gcc/arm-islero-linux-gnueabihf/5.3.1 \
--LD:/Ingenico/IngeDev_8.20.26.0/toolchains/gnuArm531v7a-5/arm-islero-linux-gnueabihf/sysroot/lib \
--LC:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/gnu_531/lib/Platform \
--LC:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/gnu_531/lib/OS \
+-LD:/Ingenico/IngeDev_8.20.26.0/toolchains/gnuArm47v7a-4/lib/gcc/arm-islero-linux-gnueabi/4.7.3 \
+-LD:/Ingenico/IngeDev_8.20.26.0/toolchains/gnuArm47v7a-4/arm-islero-linux-gnueabi/lib \
+-LC:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/lib/Platform \
+-LC:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/lib/OS \
 
 
 
@@ -184,13 +183,12 @@ SYSTEM_LIBS_PATH     := \
 # RPATH for libraries to be included during link operation
 #-------------------------------------------------------------------------------
 LIBS_RPATH_LINK   := \
--rpath-link=D:/Ingenico/IngeDev_8.20.26.0/toolchains/gnuArm531v7a-5/lib/gcc/arm-islero-linux-gnueabihf/5.3.1 \
--rpath-link=D:/Ingenico/IngeDev_8.20.26.0/toolchains/gnuArm531v7a-5/arm-islero-linux-gnueabihf/sysroot/lib \
--rpath-link=C:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/gnu_531/lib/OS \
--rpath-link=C:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/gnu_531/lib_for_dbg \
--rpath-link=D:/MyProjects/TETRA/cib_dll_t3/Bin/GNU_ARM_DEBUG_TETRA \
--rpath-link=C:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/gnu_531/lib/Platform \
--rpath-link=C:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/gnu_531/lib/OS \
+-rpath-link=D:/Ingenico/IngeDev_8.20.26.0/toolchains/gnuArm47v7a-4/lib/gcc/arm-islero-linux-gnueabi/4.7.3 \
+-rpath-link=D:/Ingenico/IngeDev_8.20.26.0/toolchains/gnuArm47v7a-4/arm-islero-linux-gnueabi/lib \
+-rpath-link=C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/lib/OS \
+-rpath-link=C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/lib_for_dbg \
+-rpath-link=C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/lib/Platform \
+-rpath-link=C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/lib/OS \
 
 
 #-------------------------------------------------------------------------------
@@ -211,9 +209,7 @@ PACKAGE_LIBS    :=\
 -ltmsapplication \
 -lmifare \
 -lmifareProxy \
--lhbeat \
 -lautoinit \
--lcommmisc \
 
 #-------------------------------------------------------------------------------
 # System libraries to be included during link operation
@@ -263,11 +259,11 @@ LD_OPT_FILE:=$(OBJ_PATH)/ldFile.opt
 # Default compiler, linker, assembler options
 #-------------------------------------------------------------------------------
 # Default compiler options
-CC_DEF_OPTS     := -g -c -Wall -fPIE
+CC_DEF_OPTS     := -g -c -Wall
 # Default assembler options
 AS_DEF_OPTS     := 
 # Default linker options
-LD_DEF_OPTS     := -pie -z noexecstack --copy-dt-needed-entries --as-needed -I/lib/ld-linux.so.3 --exclude-libs ALL --allow-shlib-undefined --sysroot=D:/Ingenico/IngeDev_8.20.26.0/toolchains/gnuArm531v7a-5/arm-islero-linux-gnueabihf/sysroot -Map=$(INTER_MAP_FILE)
+LD_DEF_OPTS     := -z noexecstack --as-needed -I/lib/ld-linux.so.3 --exclude-libs ALL --allow-shlib-undefined --sysroot=D:/Ingenico/IngeDev_8.20.26.0/toolchains/gnuArm47v7a-4/arm-islero-linux-gnueabi/sysroot -Map=$(INTER_MAP_FILE)
 # Default linker options
 OD_DEF_OPTS     := --disassemble --source --syms
 
@@ -275,9 +271,9 @@ OD_DEF_OPTS     := --disassemble --source --syms
 # Specific compiler, linker, assembler options
 #-------------------------------------------------------------------------------
 # Specific compiler options
-CC_SPEC_OPTS    := -mthumb -fstack-protector-strong  -D_ING_GNU_ARM_DEBUG_TETRA
-CC_SPEC_OPTS    +=  -D__FRAMEWORK_TELIUM_3__=1 -D_PACKAGE_NAME_=Telium3SDK -DSDK_VERSION=112003 -D__TELIUM3__=1
-CC_SPEC_OPTS    +=  -D_ING_TELIUM_SDK_LOC='"C:\Program Files\TeliumSDK\SDK11.20.3.05"' -D_ING_TELIUM_SDK_NAME='"Telium SDK"' -D_ING_TELIUM_SDK_VERSION='"11.20.3.05"' -D_ING_APPLI_BINARY_NAME='"CVConnectTE"' -D_ING_APPLI_FAMILY='"8217869"' -D_ING_APPLI_TYPE=0x6e -D_ING_APPLI_TELIUM_TETRA_FULL_BINARY_NAME='"CVConnectTE.T3A"' -D_ING_APPLI_TELIUM_COMPATIBILITY='"Telium Tetra"' -D_ING_APPLI_SIGN_MODE='"Unsigned"' -D_ING_APPLI_DATA_FILE_TELIUM_TETRA_BINARY_NAME='"DATA006E250.T3P"' -D_ING_APPLI_TELIUM_TETRA_PACKAGE_NAME='"2500000110000000_CVConnectTETRA.P3A"' -D_ING_APPLI_TELIUM_TETRA_PACKAGE_TYPE='"A"' -D_ING_APPLI_TELIUM_TETRA_PACKAGE_RANGE='"00"' -D_ING_APPLI_TELIUM_TETRA_PACKAGE_COUNTRY_CODE='"250"' -D_ING_APPLI_TELIUM_TETRA_PACKAGE_IDENTIFIER='"110"' -D_ING_APPLI_TELIUM_TETRA_PACKAGE_VERSION='"000000"' -D_ING_APPLI_TELIUM_TETRA_COMPONENT_NAME='"CVConnectTE.T3A"' -D_ING_APPLI_TELIUM_TETRA_PACKAGE_FAMILY='"CVConnectTETRA"' -D_ING_APPLI_TELIUM_TETRA_PACKAGE_ROOTNAME='"2500000110000000_CVConnectTETRA"' -D_ING_APPLI_CURRENT_CONFIG_NAME='"GNU_ARM_DEBUG_TETRA"' -D_ING_APPLI_FULL_BINARY_NAME='"CVConnectTE.T3A"'
+CC_SPEC_OPTS    := -mthumb -fstack-protector-all  -D_ING_GNU_ARM_DEBUG_TETRA
+CC_SPEC_OPTS    +=  -D__FRAMEWORK_TELIUM_3__=1 -D_PACKAGE_NAME_=Telium3SDK -DSDK_VERSION=112000 -D__TELIUM3__=1
+CC_SPEC_OPTS    +=  -D_ING_TELIUM_SDK_LOC='"C:\Program Files\TeliumSDK\SDK11.20.0.PatchA"' -D_ING_APPLI_DATA_FILE_BINARY_NAME=DATA54F9250 -D_ING_TELIUM_SDK_NAME='"Telium SDK"' -D_ING_TELIUM_SDK_VERSION='"11.20.0.PatchA(b08)"' -D_ING_APPLI_BINARY_NAME='"8217530100"' -D_ING_APPLI_FAMILY='"821753"' -D_ING_APPLI_TYPE=0x54f9 -D_ING_APPLI_TELIUM_TETRA_FULL_BINARY_NAME='"8217530100.T3A"' -D_ING_APPLI_TELIUM_COMPATIBILITY='"Telium Tetra"' -D_ING_APPLI_SIGN_MODE='"Unsigned"' -D_ING_APPLI_DATA_FILE_TELIUM_TETRA_BINARY_NAME='"DATA54F9250.T3P"' -D_ING_APPLI_TELIUM_TETRA_PACKAGE_NAME='"2500021753000000_CvConnect.P3A"' -D_ING_APPLI_TELIUM_TETRA_PACKAGE_TYPE='"A"' -D_ING_APPLI_TELIUM_TETRA_PACKAGE_RANGE='"00"' -D_ING_APPLI_TELIUM_TETRA_PACKAGE_COUNTRY_CODE='"250"' -D_ING_APPLI_TELIUM_TETRA_PACKAGE_IDENTIFIER='"21753"' -D_ING_APPLI_TELIUM_TETRA_PACKAGE_VERSION='"000000"' -D_ING_APPLI_TELIUM_TETRA_COMPONENT_NAME='"8217530100.T3A"' -D_ING_APPLI_TELIUM_TETRA_PACKAGE_FAMILY='"CvConnect"' -D_ING_APPLI_TELIUM_TETRA_PACKAGE_ROOTNAME='"2500021753000000_CvConnect"' -D_ING_APPLI_CURRENT_CONFIG_NAME='"GNU_ARM_DEBUG_TETRA"' -D_ING_APPLI_FULL_BINARY_NAME='"8217530100.T3A"'
 # Specific assembler options
 AS_SPEC_OPTS    := -mthumb  --defsym _ING_GNU_ARM_DEBUG_TETRA=1
 AS_SPEC_OPTS    +=  $(INCLUDES_ASM_PATH)
@@ -305,12 +301,14 @@ ST_OPTS         := $(ST_SPEC_OPTS)
 # SRC_OBJS is the list of the project object files
 #-------------------------------------------------------------------------------
 SRC_OBJS        := \
-$(OBJ_PATH)/Main.o \
-$(OBJ_PATH)/BaseDrawWindow.o \
-$(OBJ_PATH)/TxnStartEnd.o \
 $(OBJ_PATH)/Utils.o \
-$(OBJ_PATH)/Transaction.o \
+$(OBJ_PATH)/BaseDrawWindow.o \
 $(OBJ_PATH)/CvConnect.o \
+$(OBJ_PATH)/Main.o \
+$(OBJ_PATH)/MaintenanceDrawWindow.o \
+$(OBJ_PATH)/Transaction.o \
+$(OBJ_PATH)/TxnStartEnd.o \
+$(OBJ_PATH)/TileButton.o \
 
 #-------------------------------------------------------------------------------
 # Dependencies
@@ -336,14 +334,14 @@ $(BINARY_FILE): $(INTER_SIZE_FILE) \
 #===============================================================================
 # Rule for startup files rules generation
 #===============================================================================
-START_OBJS:= D:/Ingenico/IngeDev_8.20.26.0/toolchains/gnuArm531v7a-5/arm-islero-linux-gnueabihf/sysroot/usr/lib/crti.o \
-D:/Ingenico/IngeDev_8.20.26.0/toolchains/gnuArm531v7a-5/arm-islero-linux-gnueabihf/sysroot/usr/lib/crt1.o \
-D:/Ingenico/IngeDev_8.20.26.0/toolchains/gnuArm531v7a-5/lib/gcc/arm-islero-linux-gnueabihf/5.3.1/crtbegin.o \
-C:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/gnu_531/startfiles/startup_t3entry.o \
+START_OBJS:= D:/Ingenico/IngeDev_8.20.26.0/toolchains/gnuArm47v7a-4/arm-islero-linux-gnueabi/sysroot/usr/lib/crti.o \
+D:/Ingenico/IngeDev_8.20.26.0/toolchains/gnuArm47v7a-4/arm-islero-linux-gnueabi/sysroot/usr/lib/crt1.o \
+D:/Ingenico/IngeDev_8.20.26.0/toolchains/gnuArm47v7a-4/lib/gcc/arm-islero-linux-gnueabi/4.7.3/crtbegin.o \
+C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/startfiles/startup_t3entry.o \
 
-END_OBJS:= D:/Ingenico/IngeDev_8.20.26.0/toolchains/gnuArm531v7a-5/lib/gcc/arm-islero-linux-gnueabihf/5.3.1/crtend.o \
-D:/Ingenico/IngeDev_8.20.26.0/toolchains/gnuArm531v7a-5/arm-islero-linux-gnueabihf/sysroot/usr/lib/crtn.o \
-C:/Program\ Files/TeliumSDK/SDK11.20.3.05/SDKT3/HW_TETRA/gnu_531/startfiles/stapp_legacyexitpoint.o \
+END_OBJS:= D:/Ingenico/IngeDev_8.20.26.0/toolchains/gnuArm47v7a-4/lib/gcc/arm-islero-linux-gnueabi/4.7.3/crtend.o \
+D:/Ingenico/IngeDev_8.20.26.0/toolchains/gnuArm47v7a-4/arm-islero-linux-gnueabi/sysroot/usr/lib/crtn.o \
+C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/startfiles/stapp_legacyexitpoint.o \
 
 
 #-------------------------------------------------------------------------------
@@ -409,12 +407,12 @@ $(LST_FILE): $(INTER_AXF_FILE)
 # Rule for the compilation process
 #===============================================================================
 ifneq ($(MAKECMDGOALS), clean)
--include $(OBJ_PATH)/Main.d
+-include $(OBJ_PATH)/Utils.d
 endif
-$(OBJ_PATH)/Main.o: Src/Main.cpp $(DEPENDENCIES) $(EXTRA_DEPENDENCIES) $(INCLUDE_FILE_OPT)
-	@echo "'Src/Main.cpp' compilation in progress..."
+$(OBJ_PATH)/Utils.o: Src/Utils.cpp $(DEPENDENCIES) $(EXTRA_DEPENDENCIES) $(INCLUDE_FILE_OPT)
+	@echo "'Src/Utils.cpp' compilation in progress..."
 	$(CC) $(CC_OPTS) -MMD -MP -o "$@" "$<" @$(INCLUDE_FILE_OPT)
-ifeq ($(MAKECMDGOALS), $(OBJ_PATH)/Main.o)
+ifeq ($(MAKECMDGOALS), $(OBJ_PATH)/Utils.o)
 	@echo "done!"
 endif
 
@@ -429,22 +427,32 @@ ifeq ($(MAKECMDGOALS), $(OBJ_PATH)/BaseDrawWindow.o)
 endif
 
 ifneq ($(MAKECMDGOALS), clean)
--include $(OBJ_PATH)/TxnStartEnd.d
+-include $(OBJ_PATH)/CvConnect.d
 endif
-$(OBJ_PATH)/TxnStartEnd.o: Src/TxnStartEnd.cpp $(DEPENDENCIES) $(EXTRA_DEPENDENCIES) $(INCLUDE_FILE_OPT)
-	@echo "'Src/TxnStartEnd.cpp' compilation in progress..."
+$(OBJ_PATH)/CvConnect.o: Src/CvConnect.cpp $(DEPENDENCIES) $(EXTRA_DEPENDENCIES) $(INCLUDE_FILE_OPT)
+	@echo "'Src/CvConnect.cpp' compilation in progress..."
 	$(CC) $(CC_OPTS) -MMD -MP -o "$@" "$<" @$(INCLUDE_FILE_OPT)
-ifeq ($(MAKECMDGOALS), $(OBJ_PATH)/TxnStartEnd.o)
+ifeq ($(MAKECMDGOALS), $(OBJ_PATH)/CvConnect.o)
 	@echo "done!"
 endif
 
 ifneq ($(MAKECMDGOALS), clean)
--include $(OBJ_PATH)/Utils.d
+-include $(OBJ_PATH)/Main.d
 endif
-$(OBJ_PATH)/Utils.o: Src/Utils.cpp $(DEPENDENCIES) $(EXTRA_DEPENDENCIES) $(INCLUDE_FILE_OPT)
-	@echo "'Src/Utils.cpp' compilation in progress..."
+$(OBJ_PATH)/Main.o: Src/Main.cpp $(DEPENDENCIES) $(EXTRA_DEPENDENCIES) $(INCLUDE_FILE_OPT)
+	@echo "'Src/Main.cpp' compilation in progress..."
 	$(CC) $(CC_OPTS) -MMD -MP -o "$@" "$<" @$(INCLUDE_FILE_OPT)
-ifeq ($(MAKECMDGOALS), $(OBJ_PATH)/Utils.o)
+ifeq ($(MAKECMDGOALS), $(OBJ_PATH)/Main.o)
+	@echo "done!"
+endif
+
+ifneq ($(MAKECMDGOALS), clean)
+-include $(OBJ_PATH)/MaintenanceDrawWindow.d
+endif
+$(OBJ_PATH)/MaintenanceDrawWindow.o: Src/MaintenanceDrawWindow.cpp $(DEPENDENCIES) $(EXTRA_DEPENDENCIES) $(INCLUDE_FILE_OPT)
+	@echo "'Src/MaintenanceDrawWindow.cpp' compilation in progress..."
+	$(CC) $(CC_OPTS) -MMD -MP -o "$@" "$<" @$(INCLUDE_FILE_OPT)
+ifeq ($(MAKECMDGOALS), $(OBJ_PATH)/MaintenanceDrawWindow.o)
 	@echo "done!"
 endif
 
@@ -459,12 +467,22 @@ ifeq ($(MAKECMDGOALS), $(OBJ_PATH)/Transaction.o)
 endif
 
 ifneq ($(MAKECMDGOALS), clean)
--include $(OBJ_PATH)/CvConnect.d
+-include $(OBJ_PATH)/TxnStartEnd.d
 endif
-$(OBJ_PATH)/CvConnect.o: Src/CvConnect.cpp $(DEPENDENCIES) $(EXTRA_DEPENDENCIES) $(INCLUDE_FILE_OPT)
-	@echo "'Src/CvConnect.cpp' compilation in progress..."
+$(OBJ_PATH)/TxnStartEnd.o: Src/TxnStartEnd.cpp $(DEPENDENCIES) $(EXTRA_DEPENDENCIES) $(INCLUDE_FILE_OPT)
+	@echo "'Src/TxnStartEnd.cpp' compilation in progress..."
 	$(CC) $(CC_OPTS) -MMD -MP -o "$@" "$<" @$(INCLUDE_FILE_OPT)
-ifeq ($(MAKECMDGOALS), $(OBJ_PATH)/CvConnect.o)
+ifeq ($(MAKECMDGOALS), $(OBJ_PATH)/TxnStartEnd.o)
+	@echo "done!"
+endif
+
+ifneq ($(MAKECMDGOALS), clean)
+-include $(OBJ_PATH)/TileButton.d
+endif
+$(OBJ_PATH)/TileButton.o: Src/TileButton.cpp $(DEPENDENCIES) $(EXTRA_DEPENDENCIES) $(INCLUDE_FILE_OPT)
+	@echo "'Src/TileButton.cpp' compilation in progress..."
+	$(CC) $(CC_OPTS) -MMD -MP -o "$@" "$<" @$(INCLUDE_FILE_OPT)
+ifeq ($(MAKECMDGOALS), $(OBJ_PATH)/TileButton.o)
 	@echo "done!"
 endif
 
