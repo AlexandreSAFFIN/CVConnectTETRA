@@ -65,12 +65,12 @@
 <teliumSdkPackages>
 <teliumSdkPackage package="Telium SDK" version="11.20.0.PatchA(b08)"/>
 </teliumSdkPackages>
+<externalSchemes/>
 <dataFiles>
 <dataFile alias="Resources" isDefault="true" name="Bin/Resources.tar" parentProject="">
 <targetTerminals/>
 </dataFile>
 </dataFiles>
-<externalSchemes/>
 </config>
 <config applicationType="0x54f9" asmCpuMode="thumb" binaryName="8217530100" compiler="gnuArm531v7a" cpuMode="thumb" crc="true" dataBinaryFileBaseName="DATA54F9250" defaultTeliumCompatibility="Telium Tetra" disassembler="false" enableCPPExceptions="true" gcov="false" gnu4StackProtectionMode="ProPolice" gnuOptim="-Os" gprof="false" hardware="Telium Tetra" linkerCustomOpt="" name="GNU_ARM_RELEASE_TETRA" projectFamily="821753" relroMode="None" sign="true" signatureCertificate="PAYMENT" signatureCertificateProvider="Sign/Kit" stackProtectorMode="-fstack-protector-strong" stripEnable="true" stripOpt=" --remove-section=.comment " useDataFileNamingConvention="true" zip="true">
 <teliumCompatibilities>

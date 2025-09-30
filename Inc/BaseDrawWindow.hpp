@@ -14,9 +14,6 @@ protected:
 
     Picture picture;
     Layout topLayout;
-    Layout centerLayout;
-    Layout bottomLayout;
-
 
     Window* eventWindow;  // Fenêtre principale
     Label *title;

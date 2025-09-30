@@ -30,16 +30,7 @@ void Transaction::updateTransactionInfo(TLV_TREE_NODE outputData, const unsigned
 
 ulong Transaction::paymentChoice()
 {
-	// Ticket
-	ingenico::graphics::StringList paymentChoice;
 
-	paymentChoice.add("Carte Bancaire");
-	paymentChoice.add(Utils::ptr()->getIconsPath("credit-card"));
-
-	paymentChoice.add("CF-Pay");
-	paymentChoice.add(Utils::ptr()->getIconsPath("cfpaylogo"));
-
-	return SGL::ref().dialogIconMenu("", paymentChoice, 0, GL_BUTTON_VALID_CANCEL, GL_KEY_NONE, GL_TIME_INFINITE) == 1;
 }
 
 bool Transaction::showQRCode(long long int amount)

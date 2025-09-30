@@ -4,7 +4,7 @@
 #include "Utils.hpp"
 #include "GL_GraphicLib.h"
 #include "MaintenanceDrawWindow.hpp"
-
+#include "ANCVDrawWindow.hpp"
 
 #define APP_NAME "CvConnect"
 
@@ -134,8 +134,7 @@ void CvConnect::initTransacInterfaces()
 
 void CvConnect::initDisk()
 {
-	Utils::ptr()->m_token_acceptor="Bearer 1234";
-	Utils::ptr()->m_token_domain= "Bearer 1234";
+	Utils::ptr()->m_token = "";
 
 	if (disk::diskCreate(DISK_PATH) == DISK_CREATED)
 	{
@@ -143,6 +142,7 @@ void CvConnect::initDisk()
 		{
 			cib::json::Document jsonParam;
 			jsonParam["connectionType"] = (int)(connectionType::IP);
+			jsonParam["ANCVOnly"] = false;
 			jsonParam["host"] = HOST_PROD;
 			saveDataAsJson(FIC_PARAM, jsonParam);
 		}
@@ -156,8 +156,9 @@ void CvConnect::initApp()
 	initDisk();
 //	Utils::ptr()->copyLogoToPinPad();
 	Utils::ptr()->loadData();
-	Utils::ptr()->m_session.setSessionData(Utils::ptr()->m_host, 443, Utils::ptr()->m_cntType, "CIB", Utils::ptr()->m_gprs);
+	Utils::ptr()->m_session.setSessionData(Utils::ptr()->m_host, 443, Utils::ptr()->m_cntType, "ANCV", Utils::ptr()->m_gprs);
 	Utils::ptr()->parameterWindow = new MaintenanceDrawWindow(SGL::ref(), "PARAMETRAGE");
+	Utils::ptr()->parameterOptionWindow = new ANCVDrawWindow(SGL::ref(), "OPTION ANCV");
 	//	Utils::ptr()->acceptorWindow = new DrawWindowInitialisation(Utils::ptr()->glib);
 //	Utils::ptr()->paymentWindow = new PaymentWindow(SGL::ref(), PadSGL::ref());
 }

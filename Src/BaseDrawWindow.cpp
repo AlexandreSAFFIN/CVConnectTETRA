@@ -1,7 +1,6 @@
 #include "BaseDrawWindow.hpp"
 #include "Utils.hpp"
-BaseDrawWindow::BaseDrawWindow(GraphicLib& glib, string topText) : mainWindow(glib), picture(mainWindow),topLayout(mainWindow),
-centerLayout(mainWindow), bottomLayout(mainWindow)
+BaseDrawWindow::BaseDrawWindow(GraphicLib& glib, string topText) : mainWindow(glib), picture(mainWindow),topLayout(mainWindow)
 {
 	mainWindow.setSize(100, 100, GL_UNIT_PERCENT);
 
@@ -14,14 +13,7 @@ centerLayout(mainWindow), bottomLayout(mainWindow)
 	topLayout.setPosition(0, 0, GL_UNIT_PERCENT);
 	topLayout.setSize(100, 15, GL_UNIT_PERCENT);
 	topLayout.setBackColor(GL_COLOR_WHITE);
-	// --- CENTER --- (73%)
-	centerLayout.setPosition(0, 15, GL_UNIT_PERCENT);
-	centerLayout.setSize(100, 75, GL_UNIT_PERCENT);
-	centerLayout.setForeColor(GL_COLOR_WHITE);
-	// --- BOTTOM --- (17%)
-	bottomLayout.setPosition(0, 90, GL_UNIT_PERCENT);
-	bottomLayout.setSize(100, 10, GL_UNIT_PERCENT);
-//	bottomLayout.setBackColor(GL_COLOR_WHITE);
+
 
     title = new Label(topLayout);
     title->setText(topText);

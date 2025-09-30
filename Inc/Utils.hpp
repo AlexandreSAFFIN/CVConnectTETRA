@@ -31,10 +31,10 @@ public:
 	void loadData();
 	void resetTerminal(const string &host);
 	void mountAndRetrieveParamFile();
-	bool getNewToken(bool isDomain);
+	bool getNewToken();
 	int getTransactionState();
 	bool checkQrCodeHook();
-	Response createRequest(string path, eMethod method, const string &body, bool isDomain);
+	Response createRequest(string path, eMethod method, const string &body);
 	string formatDateTime(const std::string& input);
 	string removeSpecialCharacters(const std::string& input);
 	bool isApplicationReady();
@@ -52,11 +52,11 @@ public:
 	cib::communication::l_layer::LLSession m_session;
 	connectionType::EconnectionType m_cntType;
 	string m_host;
-	string m_token_acceptor;
-	string m_token_domain;
+	string m_token;
 
-	string tr_token;
 	BaseDrawWindow* parameterWindow;
+	BaseDrawWindow* parameterOptionWindow;
+
 	gprs::GprsConfig m_gprs;
 
 };

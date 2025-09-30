@@ -88,7 +88,7 @@ void Utils::loadData()
 }
 
 
-bool Utils::getNewToken(bool isDomain)
+bool Utils::getNewToken()
 {
 	Response response;
 	string path;
@@ -105,15 +105,12 @@ bool Utils::getNewToken(bool isDomain)
 
 
 	// Effectuer la requête POST pour obtenir un nouveau token
-	response = createRequest(path, _POST, jsonBody.serialize(), isDomain);
+	response = createRequest(path, _POST, jsonBody.serialize());
 	if (response.getStatusCode() == 200)
 	{
 		// Parser la réponse JSON pour extraire le token
 		jsonResponse.parse(response.getContent().data());
 
-		m_token_acceptor = "Bearer " + jsonResponse["access_token"].as_string();
-		jsonParam["Acceptor"]["token"] = m_token_acceptor;
-		jsonParam["Acceptor"]["isParam"] = true;
 
 		bRet = true;
 		saveDataAsJson(FIC_PARAM, jsonParam);
@@ -158,7 +155,7 @@ bool Utils::launchDispatch()
 	cib::json::Document jsonResponse;
 
 	loadDataAsJson(FIC_PARAM, jsonParam);
-	response = createRequest("/tpe/private/transaction/"+(string)jsonParam["tr_token"].as_string()+"/dispatch", _POST, jsonBody.serialize(), false);
+	response = createRequest("/tpe/private/transaction/"+(string)jsonParam["tr_token"].as_string()+"/dispatch", _POST, jsonBody.serialize());
 
 	if (response.getStatusCode() == 200)
 	{
@@ -180,36 +177,8 @@ int Utils::getTransactionState()
 	string trToken = (string)jsonParam["tr_token"].as_string();
 	// Effectuer la requête POST pour obtenir un nouveau token
 	string path = "/tpe/private/transaction/"+(string)jsonParam["tr_token"].as_string()+"/verify";
-	response = createRequest(path, _GET, jsonBody.serialize(), false);
+	response = createRequest(path, _GET, jsonBody.serialize());
 
-
-	char* rawContent = new char[response.getContentLength() + 1];
-	std::memcpy(rawContent, response.getContent().data(), response.getContentLength()-1);
-	rawContent[ response.getContentLength()] = '\0';
-
-	if(sizeof(rawContent)>1)
-	{
-		if (strstr(rawContent, "WAITING_CLIENT_INITIATION"))
-		{
-			ret = 204;
-		}
-
-		if (strstr(rawContent, "CLIENT_CONNECTED"))
-		{
-			ret = 202;
-		}
-
-		if (strstr(rawContent, "TRANSACTION_PREAUTH_OK"))
-		{
-			ret = 200;
-		}
-		else if(strstr(rawContent, "TRANSACTION_PREAUTH_KO") || strstr(rawContent, "TRANSACTION_FAILURE") || strstr(rawContent, "TRANSACTION_TIMEOUT"))
-		{
-			ret = 400;
-		}
-	}
-
-	delete rawContent;
 	return ret;
 
 }
@@ -224,7 +193,7 @@ bool Utils::checkQrCodeHook()
 
 	loadDataAsJson(FIC_PARAM, jsonParam);
 
-	response = createRequest("/tpe/private/transaction/"+(string)jsonParam["tr_token"].as_string()+"/confirm", _POST, jsonBody.serialize(), false);
+	response = createRequest("/tpe/private/transaction/"+(string)jsonParam["tr_token"].as_string()+"/confirm", _POST, jsonBody.serialize());
 
 	if (response.getStatusCode() == 200)
 	{
@@ -251,7 +220,7 @@ string Utils::getQrCodeTransaction(long long int price)
 	jsonBody["amount"]["currency"] = (string)jsonParam["Acceptor"]["devise"].as_string();
 	jsonBody["externalId"]= Terminal::ref().TerminalType + Terminal::ref().SerialNumber;
 	// Effectuer la requête POST pour obtenir un nouveau token
-	response = createRequest("/tpe/private/transaction", _POST, jsonBody.serialize(), false);
+	response = createRequest("/tpe/private/transaction", _POST, jsonBody.serialize());
 	if (response.getStatusCode() == 200)
 	{
 		jsonResponse.parse(response.getContent().data());
@@ -264,18 +233,10 @@ string Utils::getQrCodeTransaction(long long int price)
 }
 
 
-Response Utils::createRequest(string path, eMethod method, const string &body, bool isDomain)
+Response Utils::createRequest(string path, eMethod method, const string &body)
 {
 	string token;
 
-	if(!isDomain)
-	{
-		token = m_token_acceptor;
-	}
-	else
-	{
-		token = m_token_domain;
-	}
 
 	Request request = m_session.getRequest();
 
@@ -300,9 +261,9 @@ Response Utils::createRequest(string path, eMethod method, const string &body, b
 			break;
 		case 401:
 
-			if (path.find("login") == std::string::npos && getNewToken(isDomain))
+			if (path.find("login") == std::string::npos && getNewToken())
 			{
-				this->createRequest(path, method, body, isDomain);
+				this->createRequest(path, method, body);
 			}
 			break;
 		default:
@@ -354,9 +315,9 @@ string Utils::getIconsPath(string name)
 
 void Utils::copyLogoToPinPad()
 {
-	GL_File_Copy(Utils::ptr()->getIconsPath("cfpaylogo").c_str(), "file://flash/HOST/cfpaylogo.png");
-	GL_File_Copy(Utils::ptr()->getIconsPath("cancelicon").c_str(), "file://flash/HOST/cancelicon.png");
-	GL_File_Copy(Utils::ptr()->getIconsPath("okicon").c_str(), "file://flash/HOST/okicon.png");
+//	GL_File_Copy(Utils::ptr()->getIconsPath("cfpaylogo").c_str(), "file://flash/HOST/cfpaylogo.png");
+//	GL_File_Copy(Utils::ptr()->getIconsPath("cancelicon").c_str(), "file://flash/HOST/cancelicon.png");
+//	GL_File_Copy(Utils::ptr()->getIconsPath("okicon").c_str(), "file://flash/HOST/okicon.png");
 
 	if(Ppad_IsConnected(PPAD_ID_0))
 	{
