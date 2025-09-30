@@ -22,14 +22,14 @@ public:
 	void launchTransaction();
 	void getTransactionResult(int status, TLV_TREE_NODE outputData);
 	void addTransacDescriptors();
-	void goAcceptor();
+	void goMenu();
 	void initMenu();
 	void reset();
 	void initTransacInterfaces();
 	void initTransacWindow();
 	void initDisk();
 	void initApp();
-
+	ingenico::os::Error onSoftwareSelected(ingenico::service::Link &link);
 
 
 protected:

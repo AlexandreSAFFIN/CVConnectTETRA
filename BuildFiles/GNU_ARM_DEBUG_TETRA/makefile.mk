@@ -310,6 +310,7 @@ $(OBJ_PATH)/Transaction.o \
 $(OBJ_PATH)/TxnStartEnd.o \
 $(OBJ_PATH)/TileButton.o \
 $(OBJ_PATH)/ANCVDrawWindow.o \
+$(OBJ_PATH)/ConnectDrawWindow.o \
 
 #-------------------------------------------------------------------------------
 # Dependencies
@@ -494,6 +495,16 @@ $(OBJ_PATH)/ANCVDrawWindow.o: Src/ANCVDrawWindow.cpp $(DEPENDENCIES) $(EXTRA_DEP
 	@echo "'Src/ANCVDrawWindow.cpp' compilation in progress..."
 	$(CC) $(CC_OPTS) -MMD -MP -o "$@" "$<" @$(INCLUDE_FILE_OPT)
 ifeq ($(MAKECMDGOALS), $(OBJ_PATH)/ANCVDrawWindow.o)
+	@echo "done!"
+endif
+
+ifneq ($(MAKECMDGOALS), clean)
+-include $(OBJ_PATH)/ConnectDrawWindow.d
+endif
+$(OBJ_PATH)/ConnectDrawWindow.o: Src/ConnectDrawWindow.cpp $(DEPENDENCIES) $(EXTRA_DEPENDENCIES) $(INCLUDE_FILE_OPT)
+	@echo "'Src/ConnectDrawWindow.cpp' compilation in progress..."
+	$(CC) $(CC_OPTS) -MMD -MP -o "$@" "$<" @$(INCLUDE_FILE_OPT)
+ifeq ($(MAKECMDGOALS), $(OBJ_PATH)/ConnectDrawWindow.o)
 	@echo "done!"
 endif
 

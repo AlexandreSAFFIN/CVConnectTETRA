@@ -53,8 +53,9 @@ public:
 	connectionType::EconnectionType m_cntType;
 	string m_host;
 	string m_token;
-
+	bool isConnected;
 	BaseDrawWindow* parameterWindow;
+	BaseDrawWindow* connectionWindow;
 	BaseDrawWindow* parameterOptionWindow;
 
 	gprs::GprsConfig m_gprs;

@@ -30,7 +30,7 @@ void Transaction::updateTransactionInfo(TLV_TREE_NODE outputData, const unsigned
 
 ulong Transaction::paymentChoice()
 {
-
+	return 0;
 }
 
 bool Transaction::showQRCode(long long int amount)

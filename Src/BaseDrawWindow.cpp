@@ -21,6 +21,7 @@ BaseDrawWindow::BaseDrawWindow(GraphicLib& glib, string topText) : mainWindow(gl
 
     // Taille de police (seule la hauteur compte)
     title->setFontSize(0, 24, GL_UNIT_PIXEL);
+    title->setFontName("Arial");
     // ou: title->setFontScale(GL_SCALE_LARGE);
 
     // Alignement du texte à l'intérieur du label
@@ -33,6 +34,14 @@ BaseDrawWindow::BaseDrawWindow(GraphicLib& glib, string topText) : mainWindow(gl
     title->setExpand(GL_DIRECTION_ALL);           // occupe tout l'espace disponible
     title->setGrow(GL_DIRECTION_ALL);             // autorise l'étirement si besoin
     title->setFontStyle(GL_FONT_STYLE_BOLD);
+
+	Picture* logo = new Picture(mainWindow);
+	logo->setSize(13, 13, GL_UNIT_PERCENT);
+	logo->setPosition(1, 94, GL_UNIT_PERCENT);
+	logo->setSource(Utils::ptr()->getIconsPath("ancvlogomini"));
+	logo->setTransformation(GL_TRANSFORMATION_STRETCH_ALL);
+
+
 }
 
 
