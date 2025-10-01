@@ -312,6 +312,7 @@ $(OBJ_PATH)/TileButton.o \
 $(OBJ_PATH)/ANCVDrawWindow.o \
 $(OBJ_PATH)/ConnectDrawWindow.o \
 $(OBJ_PATH)/PaymentChoiceDrawWindow.o \
+$(OBJ_PATH)/ChoiceQrDrawWindow.o \
 
 #-------------------------------------------------------------------------------
 # Dependencies
@@ -516,6 +517,16 @@ $(OBJ_PATH)/PaymentChoiceDrawWindow.o: Src/PaymentChoiceDrawWindow.cpp $(DEPENDE
 	@echo "'Src/PaymentChoiceDrawWindow.cpp' compilation in progress..."
 	$(CC) $(CC_OPTS) -MMD -MP -o "$@" "$<" @$(INCLUDE_FILE_OPT)
 ifeq ($(MAKECMDGOALS), $(OBJ_PATH)/PaymentChoiceDrawWindow.o)
+	@echo "done!"
+endif
+
+ifneq ($(MAKECMDGOALS), clean)
+-include $(OBJ_PATH)/ChoiceQrDrawWindow.d
+endif
+$(OBJ_PATH)/ChoiceQrDrawWindow.o: Src/ChoiceQrDrawWindow.cpp $(DEPENDENCIES) $(EXTRA_DEPENDENCIES) $(INCLUDE_FILE_OPT)
+	@echo "'Src/ChoiceQrDrawWindow.cpp' compilation in progress..."
+	$(CC) $(CC_OPTS) -MMD -MP -o "$@" "$<" @$(INCLUDE_FILE_OPT)
+ifeq ($(MAKECMDGOALS), $(OBJ_PATH)/ChoiceQrDrawWindow.o)
 	@echo "done!"
 endif
 

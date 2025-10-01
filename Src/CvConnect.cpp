@@ -7,6 +7,7 @@
 #include "ANCVDrawWindow.hpp"
 #include "ConnectDrawWindow.hpp"
 #include "PaymentChoiceDrawWindow.hpp"
+#include "ChoiceQrDrawWindow.hpp"
 
 #define APP_NAME "CvConnect"
 
@@ -169,6 +170,7 @@ void CvConnect::initApp()
 	Utils::ptr()->parameterOptionWindow = new ANCVDrawWindow(SGL::ref(), "OPTION ANCV");
 	Utils::ptr()->connectionWindow = new ConnectDrawWindow(SGL::ref(), "AUTHENTIFICATION");
 	Utils::ptr()->paymentChoiceWindow = new PaymentChoiceDrawWindow(SGL::ref(), "CHOIX DU PAIEMENT");
+	Utils::ptr()->qrChoiceWindow = new ChoiceQrDrawWindow(SGL::ref(), "CHOIX METHODE PAIEMENT");
 	Utils::ptr()->isConnected = false;
 	//	Utils::ptr()->acceptorWindow = new DrawWindowInitialisation(Utils::ptr()->glib);
 //	Utils::ptr()->paymentWindow = new PaymentWindow(SGL::ref(), PadSGL::ref());
