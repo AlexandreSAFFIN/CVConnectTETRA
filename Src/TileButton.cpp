@@ -5,7 +5,9 @@ TileButton::TileButton(ingenico::graphics::Widget& parent,
                        const std::string& bgPng,
                        const std::string& iconPng,
                        const std::string& labelTxt,
-                       int posX, int posY)
+                       int posX, int posY, int id,
+					   BaseDrawWindow* target,
+					   OnClickMethod method)
   : background(0),
     icon(0),
 	back(0),
@@ -13,7 +15,9 @@ TileButton::TileButton(ingenico::graphics::Widget& parent,
     x(posX),
     y(posY),
     width(0),
-    height(0)
+    height(0),
+    target_(target),
+    method_(method)
 
 {
     using namespace ingenico::graphics;
@@ -41,6 +45,8 @@ TileButton::TileButton(ingenico::graphics::Widget& parent,
     background->setClickable(true);
     background->setFocusable(false);
     background->setPressable(false);
+    background->setId(id);
+    background->registerMethod(GL_EVENT_STYLUS_CLICK, this, &TileButton::handleClick);
     // Label (40px de hauteur en bas)
     label = new Label(parent, "");
     label->setText(labelTxt);
@@ -60,6 +66,13 @@ TileButton::TileButton(ingenico::graphics::Widget& parent,
     icon->setSource(iconPng);
     icon->setSize(iconSize, iconSize, GL_UNIT_PIXEL);
     icon->setPosition(iconX, iconY, GL_UNIT_PIXEL);
+}
+
+bool TileButton::handleClick(Message& msg) {
+    if (target_ && method_) {
+        return (target_->*method_)(msg);
+    }
+    return false;
 }
 
 TileButton::~TileButton() {

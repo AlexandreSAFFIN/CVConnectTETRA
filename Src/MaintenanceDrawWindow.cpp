@@ -5,7 +5,7 @@
 #include "TileButton.hpp"
 
 
-bool MaintenanceDrawWindow::onClickNetwork(Message& msg)
+bool MaintenanceDrawWindow::onClickNetwork()
 {
 	int choice;
 	cib::json::Document jsonParam;
@@ -52,18 +52,18 @@ bool MaintenanceDrawWindow::onClickNetwork(Message& msg)
 	return true;
 }
 
-bool MaintenanceDrawWindow::onClickMaintenance(Message& msg)
+bool MaintenanceDrawWindow::onClickMaintenance()
 {
     return true;  // Événement géré
 }
 
-bool MaintenanceDrawWindow::onClickANCV(Message& msg)
+bool MaintenanceDrawWindow::onClickANCV()
 {
 	Utils::ptr()->parameterOptionWindow->drawing();
-    return true;  // Événement géré
+    return true;
 }
 
-bool MaintenanceDrawWindow::onClickUpdate(Message& msg)
+bool MaintenanceDrawWindow::onClickUpdate()
 {
 
 	if (SGL::ref().dialogMessage("Mise à jour", "Souhaitez-vous mettre à jour le terminal ?", GL_ICON_QUESTION, GL_BUTTON_VALID_CANCEL, GL_TIME_INFINITE) == GL_KEY_VALID)
@@ -78,30 +78,49 @@ bool MaintenanceDrawWindow::onClickUpdate(Message& msg)
 	return true;
 }
 
+bool MaintenanceDrawWindow::onClick(Message& msg)
+{
+	int id = msg.getWidget().getId();
+	if(id == 1)
+	{
+		onClickMaintenance();
+	}
+	else if(id == 2)
+	{
+		onClickNetwork();
+	}
+	else if(id == 3)
+	{
+		onClickANCV();
+	}
+	else if(id == 4)
+	{
+		onClickUpdate();
+	}
+
+	return true;
+}
+
 MaintenanceDrawWindow::MaintenanceDrawWindow(GraphicLib& glib, string text) :
     BaseDrawWindow(glib, text)
 {
 
     createSnackBar();
 
-    TileButton* btn1 = new TileButton(mainWindow,
+    new TileButton(mainWindow,
         Utils::ref().getIconsPath("rounded"), Utils::ref().getIconsPath("pay"), "Maintenance",
-        8,74);
+        8,74,1, this, &BaseDrawWindow::onClick);
 
-    TileButton* btn2 = new TileButton(mainWindow,
+    new TileButton(mainWindow,
     		Utils::ref().getIconsPath("rounded"), Utils::ref().getIconsPath("pay"), "Reseau",
-    		        8,230);
-    // Ligne 2
-    TileButton* btn3 = new TileButton(mainWindow,
-    		Utils::ref().getIconsPath("rounded"), Utils::ref().getIconsPath("pay"), "Option",160,74);
+    		        8,230,2, this, &BaseDrawWindow::onClick);
 
-    TileButton* btn4 = new TileButton(mainWindow,
-    		Utils::ref().getIconsPath("rounded"), Utils::ref().getIconsPath("pay"), "Update",160,230);
+    new TileButton(mainWindow,
+    		Utils::ref().getIconsPath("rounded"), Utils::ref().getIconsPath("pay"), "Option",160,74,3, this, &BaseDrawWindow::onClick);
 
-    btn1->getButton()->registerMethod(GL_EVENT_STYLUS_CLICK, this, &MaintenanceDrawWindow::onClickMaintenance);
-    btn4->getButton()->registerMethod(GL_EVENT_STYLUS_CLICK, this, &MaintenanceDrawWindow::onClickUpdate);
-    btn2->getButton()->registerMethod(GL_EVENT_STYLUS_CLICK, this, &MaintenanceDrawWindow::onClickNetwork);
-    btn3->getButton()->registerMethod(GL_EVENT_STYLUS_CLICK, this, &MaintenanceDrawWindow::onClickANCV);
+    new TileButton(mainWindow,
+    		Utils::ref().getIconsPath("rounded"), Utils::ref().getIconsPath("pay"), "Update",160,230,4, this, &BaseDrawWindow::onClick);
+
 
     mainWindow.registerMethod(GL_EVENT_KEY_DOWN, this, &MaintenanceDrawWindow::onKeyPress);
 }

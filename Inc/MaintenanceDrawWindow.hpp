@@ -18,10 +18,12 @@ public:
 
     bool onKeyPress(ingenico::graphics::Message &message);
 
-    bool onClickNetwork(Message& msg);
-    bool onClickMaintenance(Message& msg);
-    bool onClickANCV(Message& msg);
-    bool onClickUpdate(Message& msg);
+    bool onClick(Message& msg);
+
+    bool onClickNetwork();
+    bool onClickMaintenance();
+    bool onClickANCV();
+    bool onClickUpdate();
 };
 
 #endif

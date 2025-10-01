@@ -10,7 +10,7 @@
 #include "TxnStartEnd.hpp"
 #include "Transaction.hpp"
 #include "AppResources.hpp"
-
+#include "Utils.hpp"
 //                            #####################
 //                            #   TXN START END   #
 //                            #####################
@@ -49,28 +49,28 @@ int TxnStartEnd::start(const TLV_TREE_NODE inputData, TLV_TREE_NODE outputData)
 
 	cib::json::Document jsonParam;
 	loadDataAsJson(FIC_PARAM, jsonParam);
-	bool isParam = (bool)jsonParam["Acceptor"]["isParam"].as_bool() && (bool)jsonParam["Domain"]["isParam"].as_bool();
-	bool isCfPay = false;
+	bool isParam = (bool)jsonParam["isConnected"].as_bool();
+	bool isANCV = false;
 	if(isParam)
 	{
-		isCfPay = m_transaction->paymentChoice();
+		isANCV = Utils::ref().paymentChoiceWindow->drawing();
 	}
 
 	long long int amount = atoll((txn.amount).c_str());
-	if((!(atoll((txn.amount).c_str()) > 2147483647) && txn.txnType == TXN_TRANSACTION_TYPE_DEBIT && isCfPay))
+	if((!(atoll((txn.amount).c_str()) > 2147483647) && txn.txnType == TXN_TRANSACTION_TYPE_DEBIT && isANCV))
 	{
-		bool resultQrCodeReading = m_transaction->showQRCode(amount);
-		const string currency = (string)jsonParam["Acceptor"]["devise"].as_string();
-		if (resultQrCodeReading)
-		{
-			unsigned long readerDetected = TXN_TECHNO_NONE;
-			updateTransactionInfo(outputData, amount, &currency, NULL, &readerDetected);
-		}
-		else
-		{
+//		bool resultQrCodeReading = m_transaction->showQRCode(amount);
+//		const string currency = (string)jsonParam["Acceptor"]["devise"].as_string();
+//		if (resultQrCodeReading)
+//		{
+//			unsigned long readerDetected = TXN_TECHNO_NONE;
+//			updateTransactionInfo(outputData, amount, &currency, NULL, &readerDetected);
+//		}
+//		else
+//		{
 			unsigned long readerDetected = TXN_TECHNO_READER_DETECTED;
 			updateTransactionInfo(outputData, 0, NULL, NULL, &readerDetected);
-		}
+//		}
 
 	}
 

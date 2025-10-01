@@ -13,6 +13,7 @@
 <file generated="false" name="Src/TileButton.cpp" parentProject=""/>
 <file generated="false" name="Src/ANCVDrawWindow.cpp" parentProject=""/>
 <file generated="false" name="Src/ConnectDrawWindow.cpp" parentProject=""/>
+<file generated="false" name="Src/PaymentChoiceDrawWindow.cpp" parentProject=""/>
 </virtualFolder>
 <archiveFilesVirtualFolder name="Archive Files">
 <archive dirParentProject="" directoryToArchive="Resources" name="Bin/Resources.tar"/>

@@ -34,7 +34,7 @@ public:
     void hideSnackBar();
 
     virtual bool drawing() = 0;
-
+    virtual bool onClick(Message& msg) = 0;
     virtual void refreshInformation() = 0;
 
     // Destructeur virtuel

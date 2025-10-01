@@ -15,7 +15,7 @@ public:
 
     // Redéfinition de la méthode drawing
     bool drawing();
-
+    bool onClick(Message&);
     void refreshInformation();
 
     bool onKeyPress(ingenico::graphics::Message &message);

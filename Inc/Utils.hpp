@@ -57,6 +57,7 @@ public:
 	BaseDrawWindow* parameterWindow;
 	BaseDrawWindow* connectionWindow;
 	BaseDrawWindow* parameterOptionWindow;
+	BaseDrawWindow* paymentChoiceWindow;
 
 	gprs::GprsConfig m_gprs;
 

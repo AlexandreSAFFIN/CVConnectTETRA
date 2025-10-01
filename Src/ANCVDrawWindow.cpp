@@ -6,21 +6,26 @@
 #include "string.h"
 
 
-bool ANCVDrawWindow::onClickPrint(Message& msg)
+bool ANCVDrawWindow::onClick(Message& msg)
 {
+
+	int id = msg.getWidget().getId();
+	if(id == 1)
+	{
+		cib::json::Document jsonParam;
+		loadDataAsJson(FIC_PARAM, jsonParam);
+		bool val = (bool)jsonParam["ANCVOnly"].as_bool();
+		jsonParam["ANCVOnly"] = !val;
+		saveDataAsJson(FIC_PARAM, jsonParam);
+		refreshInformation();
+	}
+	else
+	{
+
+	}
 	return true;
 }
 
-bool ANCVDrawWindow::onClickCompletion(Message& msg)
-{
-	cib::json::Document jsonParam;
-	loadDataAsJson(FIC_PARAM, jsonParam);
-	bool val = (bool)jsonParam["ANCVOnly"].as_bool();
-	jsonParam["ANCVOnly"] = !val;
-	saveDataAsJson(FIC_PARAM, jsonParam);
-	refreshInformation();
-    return true;
-}
 
 
 ANCVDrawWindow::ANCVDrawWindow(GraphicLib& glib, string text) :
@@ -32,15 +37,13 @@ ANCVDrawWindow::ANCVDrawWindow(GraphicLib& glib, string text) :
 
     btnCompletion = new TileButton(mainWindow,
         Utils::ref().getIconsPath(bg_completion), Utils::ref().getIconsPath("pay"), "Complétion",
-        8,175);
+        8,150, 1, this, &BaseDrawWindow::onClick);
 
-    TileButton* btn2 = new TileButton(mainWindow,
+    new TileButton(mainWindow,
     		Utils::ref().getIconsPath("rounded"), Utils::ref().getIconsPath("pay"), "Historique",
-    		        150,175);
+    		        165,150, 2,this, &BaseDrawWindow::onClick);
 
 
-    btnCompletion->getButton()->registerMethod(GL_EVENT_STYLUS_CLICK, this, &ANCVDrawWindow::onClickCompletion);
-    btn2->getButton()->registerMethod(GL_EVENT_STYLUS_CLICK, this, &ANCVDrawWindow::onClickPrint);
 
     mainWindow.registerMethod(GL_EVENT_KEY_DOWN, this, &ANCVDrawWindow::onKeyPress);
 }

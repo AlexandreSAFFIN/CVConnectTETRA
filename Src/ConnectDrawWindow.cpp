@@ -6,7 +6,10 @@
 #include "string.h"
 
 
-
+bool ConnectDrawWindow::onClick(Message& msg)
+{
+	return true;
+}
 
 ConnectDrawWindow::ConnectDrawWindow(GraphicLib& glib, string text) :
     BaseDrawWindow(glib, text)

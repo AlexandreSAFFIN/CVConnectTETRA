@@ -36,8 +36,8 @@ BaseDrawWindow::BaseDrawWindow(GraphicLib& glib, string topText) : mainWindow(gl
     title->setFontStyle(GL_FONT_STYLE_BOLD);
 
 	Picture* logo = new Picture(mainWindow);
-	logo->setSize(50, 50, GL_UNIT_PIXEL);
-	logo->setPosition(5, 350, GL_UNIT_PIXEL);
+	logo->setSize(65, 65, GL_UNIT_PIXEL);
+	logo->setPosition(5, 365, GL_UNIT_PIXEL);
 	logo->setSource(Utils::ptr()->getIconsPath("ancvlogomini"));
 	logo->setTransformation(GL_TRANSFORMATION_NONE);
 
