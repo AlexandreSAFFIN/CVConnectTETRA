@@ -7,6 +7,7 @@
 #include "ANCVDrawWindow.hpp"
 #include "ConnectDrawWindow.hpp"
 #include "PayIDWindow.hpp"
+#include "WaitingWindow.hpp"
 #include "PaymentChoiceDrawWindow.hpp"
 #include "SSL_.h"
 
@@ -172,7 +173,8 @@ void CvConnect::initApp()
 	Utils::ptr()->parameterOptionWindow = new ANCVDrawWindow(SGL::ref(), "OPTION ANCV");
 	Utils::ptr()->connectionWindow = new ConnectDrawWindow(SGL::ref(), "AUTHENTIFICATION");
 	Utils::ptr()->paymentChoiceWindow = new PaymentChoiceDrawWindow(SGL::ref(), "CHOIX DU PAIEMENT");
-	Utils::ptr()->isConnected = false;
+	Utils::ptr()->waitingWindow = new WaitingWindow(SGL::ref(), "OPERATION EN COURS\nMERCI DE PATIENTER");
+	Utils::ptr()->isConnected = Utils::ref().checkLicense();
 
 
 //	std::ostringstream iconPath2;

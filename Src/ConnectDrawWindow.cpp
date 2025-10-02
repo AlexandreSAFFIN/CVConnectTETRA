@@ -4,7 +4,7 @@
 #include "cib/disk/Disk.hpp"
 #include "TileButton.hpp"
 #include "string.h"
-
+#include <unistd.h>
 
 bool ConnectDrawWindow::onClick(Message& msg)
 {
@@ -110,19 +110,25 @@ bool ConnectDrawWindow::drawing()
 
 void ConnectDrawWindow::onValidate()
 {
-	cib::json::Document jsonParam;
-	loadDataAsJson(FIC_PARAM, jsonParam);
+
 	Utils::ref().isConnected = false;
-	//TODO PLAY REQUEST TO CHECK ID
-	if(true)
+
+	Utils::ref().isConnected = Utils::ref().connectWithShopId(editText->getText());
+
+	if(Utils::ref().isConnected)
 	{
-		jsonParam["login"] = editText->getText();
-		Utils::ref().isConnected = true;
-		saveDataAsJson(FIC_PARAM, jsonParam);
-		canDispatch = false;
+		showSnackBar("CONNEXION REUSSI", true);
+
+	}
+	else
+	{
+		showSnackBar("ECHEC CONNEXION", false);
 	}
 
-	saveDataAsJson(FIC_PARAM, jsonParam);
+	mainWindow.dispatch(0);
+	mainWindow.show();
+	sleep(1);
+	canDispatch = false;
 }
 
 bool ConnectDrawWindow::onKeyPress(ingenico::graphics::Message &message) {

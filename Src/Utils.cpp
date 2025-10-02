@@ -88,36 +88,6 @@ void Utils::loadData()
 }
 
 
-bool Utils::getNewToken()
-{
-	Response response;
-	string path;
-	cib::json::Document jsonBody;
-	cib::json::Document jsonParam;
-	cib::json::Document jsonResponse;
-
-	bool bRet = false;
-	loadDataAsJson(FIC_PARAM, jsonParam);
-
-	// Construction du corps de la requête avec les informations d'authentification
-	jsonBody["grant_type"] = "client_credentials";
-
-
-
-	// Effectuer la requête POST pour obtenir un nouveau token
-	response = createRequest(path, _POST, jsonBody.serialize());
-	if (response.getStatusCode() == 200)
-	{
-		// Parser la réponse JSON pour extraire le token
-		jsonResponse.parse(response.getContent().data());
-
-
-		bRet = true;
-		saveDataAsJson(FIC_PARAM, jsonParam);
-	}
-	return bRet;
-}
-
 std::string Utils::formatDateTime(const std::string& input) {
     int year, month, day, hour, minute, second;
 
@@ -223,23 +193,15 @@ string Utils::getQrCodeTransaction(long long int price)
 
 Response Utils::createRequest(string path, eMethod method, const string &body)
 {
-	string token;
-
-
 	Request request = m_session.getRequest();
-
+	waitingWindow->drawing();
 	if (this->connect() == LL_ERROR_OK)
 	{
 		request.editRequest(method, path, body);
-		if (!token.empty())
-		{
-			request.addHeader("Authorization", token);
-		}
 		if (method == _POST)
 		{
 			request.addHeader("Content-Type", "application/json");
 		}
-
 		m_session.setRequest(request);
 		m_session.sendReceive();
 
@@ -248,23 +210,72 @@ Response Utils::createRequest(string path, eMethod method, const string &body)
 		case 200:
 			break;
 		case 401:
-
-			if (path.find("login") == std::string::npos && getNewToken())
-			{
-				this->createRequest(path, method, body);
-			}
 			break;
 		default:
-			if(path.find("verify") == std::string::npos)
-			{
-				SGL::ref().dialogMessage("Communication", "Une erreur est survenue", GL_ICON_WARNING, GL_BUTTON_VALID, GL_TIME_SECOND);
-			}
+			SGL::ref().dialogMessage("Communication", "Une erreur est survenue", GL_ICON_WARNING, GL_BUTTON_VALID, GL_TIME_SECOND);
 			break;
 		}
 	}
+	waitingWindow->canDispatch = false;
 	return m_session.getResponse();
 }
 
+bool Utils::checkLicense()
+{
+	bool bRet = false;
+	Response response;
+	cib::json::Document jsonBody;
+	cib::json::Document jsonParam;
+	cib::json::Document jsonResponse;
+
+	loadDataAsJson(FIC_PARAM, jsonParam);
+	if(jsonParam["shopId"] && jsonParam["shopId"] != "")
+	{
+		// Construction du corps de la requête avec les informations d'authentification
+		jsonBody["RequestHasLicense"] = json::Document(json::VALUE_IS_OBJECT);
+		jsonBody["RequestHasLicense"]["serialNumber"] = Terminal::ref().SerialNumber;
+		jsonBody["RequestHasLicense"]["typeAppli"] = 0;
+		jsonBody["RequestHasLicense"]["typePeriph"] = Terminal::ref().TerminalType;
+		jsonBody["RequestHasLicense"]["shopId"] = (string)jsonParam["shopId"].as_string();
+
+		// Effectuer la requête POST pour obtenir un nouveau token
+		response = createRequest("/checkLicence", _POST, jsonBody.serialize());
+		if (response.getStatusCode() == 200)
+		{
+			jsonResponse.parse(response.getContent().data());
+			if(jsonResponse["ResponseHasValidLicense"] && (string)jsonResponse["ResponseHasValidLicense"]["checkLicenceResult"].as_string() == "VALID")
+			{
+				bRet = true;
+			}
+		}
+	}
+
+	return bRet;
+}
+
+bool Utils::connectWithShopId(string shopId)
+{
+	bool bRet = false;
+	Response response;
+	cib::json::Document jsonBody;
+	cib::json::Document jsonParam;
+	cib::json::Document jsonResponse;
+
+	loadDataAsJson(FIC_PARAM, jsonParam);
+		// Effectuer la requête POST pour obtenir un nouveau token
+	response = createRequest("/GetShopId/"+Terminal::ref().SerialNumber, _GET, "");
+	if (response.getStatusCode() == 200)
+	{
+		jsonResponse.parse(response.getContent().data());
+		if(jsonResponse["ResponseGetShopId"] && jsonResponse["ResponseGetShopId"]["GetShopIdResult"])
+		{
+			jsonParam["shopId"] = (string)jsonResponse["ResponseGetShopId"]["GetShopIdResult"].as_string();
+			bRet = true;
+		}
+	}
+	saveDataAsJson(FIC_PARAM, jsonParam);
+	return bRet;
+}
 
 ulong Utils::displayDualScreen(const std::string & title, const std::string & text, T_GL_DIALOG_ICON icon, T_GL_BUTTONS buttons, T_GL_DURATION duration)
 {

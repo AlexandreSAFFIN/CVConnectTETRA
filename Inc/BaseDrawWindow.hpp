@@ -18,7 +18,6 @@ protected:
     Window* eventWindow;  // Fenêtre principale
     Label *title;
     Label *snackBar;     // SnackBar pour afficher des messages
-    bool canDispatch;
 
     bool isShowSnackbar;
     int timer;
@@ -36,6 +35,7 @@ public:
     virtual bool drawing() = 0;
     virtual bool onClick(Message& msg) = 0;
     virtual void refreshInformation() = 0;
+    bool canDispatch;
 
     // Destructeur virtuel
     virtual ~BaseDrawWindow();

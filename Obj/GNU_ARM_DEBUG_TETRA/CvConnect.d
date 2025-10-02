@@ -308,7 +308,7 @@ Obj/GNU_ARM_DEBUG_TETRA/CvConnect.o: Src/CvConnect.cpp Inc/CvConnect.hpp \
  C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/inc/c/Platform/GOAL/GL_Version.h \
  C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/inc/c/Platform/GOAL/GL_ClassBinder.hpp \
  Inc/MaintenanceDrawWindow.hpp Inc/ANCVDrawWindow.hpp \
- Inc/ConnectDrawWindow.hpp Inc/PayIDWindow.hpp \
+ Inc/ConnectDrawWindow.hpp Inc/PayIDWindow.hpp Inc/WaitingWindow.hpp \
  Inc/PaymentChoiceDrawWindow.hpp
 
 Inc/CvConnect.hpp:
@@ -942,5 +942,7 @@ Inc/ANCVDrawWindow.hpp:
 Inc/ConnectDrawWindow.hpp:
 
 Inc/PayIDWindow.hpp:
+
+Inc/WaitingWindow.hpp:
 
 Inc/PaymentChoiceDrawWindow.hpp:

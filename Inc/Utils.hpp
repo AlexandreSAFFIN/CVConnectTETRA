@@ -31,8 +31,7 @@ public:
 	void disconnect();
 	void loadData();
 	void resetTerminal(const string &host);
-	void mountAndRetrieveParamFile();
-	bool getNewToken();
+
 	int getTransactionState();
 	bool checkQrCodeHook();
 	Response createRequest(string path, eMethod method, const string &body);
@@ -45,7 +44,8 @@ public:
 	void copyLogoToPinPad();
 	ulong displayDualScreen(const std::string & title, const std::string & text, T_GL_DIALOG_ICON icon, T_GL_BUTTONS buttons, T_GL_DURATION duration);
 	string getIconsPath(string name);
-
+	bool checkLicense();
+	bool connectWithShopId(string shopId);
 
     GraphicLib glib;
 
@@ -61,6 +61,7 @@ public:
 	BaseDrawWindow* parameterOptionWindow;
 	PaymentChoiceDrawWindow* paymentChoiceWindow;
 	BaseDrawWindow* qrWindow;
+	BaseDrawWindow* waitingWindow;
 
 	gprs::GprsConfig m_gprs;
 

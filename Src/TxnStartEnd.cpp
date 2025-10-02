@@ -55,7 +55,7 @@ int TxnStartEnd::start(const TLV_TREE_NODE inputData, TLV_TREE_NODE outputData)
 	bool isParam = (bool)jsonParam["isConnected"].as_bool();
 	bool isANCV = false;
 
-	if(true || isParam)
+	if(isParam)
 	{
 		isANCV = Utils::ref().paymentChoiceWindow->drawing();
 	}
