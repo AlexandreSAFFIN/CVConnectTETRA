@@ -263,7 +263,8 @@ Obj/GNU_ARM_DEBUG_TETRA/CvConnect.o: Src/CvConnect.cpp Inc/CvConnect.hpp \
  C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/inc/cpp/ingenico/emulation/EmulationTPlus.hpp \
  Inc/Utils.hpp Inc/AppResources.hpp \
  C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/inc/c/Platform/GOAL/GL_File.h \
- Inc/BaseDrawWindow.hpp \
+ Inc/BaseDrawWindow.hpp Inc/PaymentChoiceDrawWindow.hpp \
+ Inc/TileButton.hpp \
  C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/inc/c/Platform/GOAL/GL_GraphicLib.h \
  C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/inc/c/Platform/GOAL/GL_Types.h \
  C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/inc/c/Platform/GOAL/GL_Widget.h \
@@ -306,7 +307,7 @@ Obj/GNU_ARM_DEBUG_TETRA/CvConnect.o: Src/CvConnect.cpp Inc/CvConnect.hpp \
  C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/inc/c/Platform/GOAL/GL_Pinpad.h \
  C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/inc/c/Platform/GOAL/GL_Version.h \
  C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/inc/c/Platform/GOAL/GL_ClassBinder.hpp \
- Inc/MaintenanceDrawWindow.hpp Inc/ANCVDrawWindow.hpp Inc/TileButton.hpp \
+ Inc/MaintenanceDrawWindow.hpp Inc/ANCVDrawWindow.hpp \
  Inc/ConnectDrawWindow.hpp Inc/PayIDWindow.hpp \
  Inc/PaymentChoiceDrawWindow.hpp
 
@@ -846,6 +847,10 @@ C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/inc/c/Platf
 
 Inc/BaseDrawWindow.hpp:
 
+Inc/PaymentChoiceDrawWindow.hpp:
+
+Inc/TileButton.hpp:
+
 C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/inc/c/Platform/GOAL/GL_GraphicLib.h:
 
 C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/inc/c/Platform/GOAL/GL_Types.h:
@@ -933,8 +938,6 @@ C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/inc/c/Platf
 Inc/MaintenanceDrawWindow.hpp:
 
 Inc/ANCVDrawWindow.hpp:
-
-Inc/TileButton.hpp:
 
 Inc/ConnectDrawWindow.hpp:
 

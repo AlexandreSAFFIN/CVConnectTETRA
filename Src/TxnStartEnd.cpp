@@ -11,6 +11,8 @@
 #include "Transaction.hpp"
 #include "AppResources.hpp"
 #include "PaymentChoiceDrawWindow.hpp"
+#include "PaymentQRWindow.hpp"
+#include "PayIDWindow.hpp"
 #include "Utils.hpp"
 //                            #####################
 //                            #   TXN START END   #
@@ -53,7 +55,7 @@ int TxnStartEnd::start(const TLV_TREE_NODE inputData, TLV_TREE_NODE outputData)
 	bool isParam = (bool)jsonParam["isConnected"].as_bool();
 	bool isANCV = false;
 
-	if(isParam)
+	if(true || isParam)
 	{
 		isANCV = Utils::ref().paymentChoiceWindow->drawing();
 	}
@@ -61,28 +63,38 @@ int TxnStartEnd::start(const TLV_TREE_NODE inputData, TLV_TREE_NODE outputData)
 	long long int amount = atoll((txn.amount).c_str());
 	if((!(atoll((txn.amount).c_str()) > 2147483647) && txn.txnType == TXN_TRANSACTION_TYPE_DEBIT && isANCV))
 	{
-		PaymentChoiceDrawWindow* pw = new PaymentChoiceDrawWindow(Utils::ref().glib, "MOYEN DE PAIEMENT");
-		if(pw->drawing())
+		PaymentQRWindow* pw;
+		if(Utils::ref().paymentChoiceWindow->getPM() == QRCODE)
 		{
-			//		bool resultQrCodeReading = m_transaction->showQRCode(amount);
-			//		const string currency = (string)jsonParam["Acceptor"]["devise"].as_string();
-			//		if (resultQrCodeReading)
-			//		{
-			//			unsigned long readerDetected = TXN_TECHNO_NONE;
-			//			updateTransactionInfo(outputData, amount, &currency, NULL, &readerDetected);
-			//		}
+			pw = new PaymentQRWindow(Utils::ref().glib,PadSGL::ref(), "MOYEN DE PAIEMENT", 555, "555");
+			pw->drawing();
+			free(pw);
 		}
 		else
 		{
-
+			if(!PayIDWindow(Utils::ref().glib,PadSGL::ref(), "MOYEN DE PAIEMENT", 555).drawing())
+			{
+				unsigned long readerDetected = TXN_TECHNO_READER_DETECTED;
+				updateTransactionInfo(outputData, 0, NULL, NULL, &readerDetected);
+			}
 		}
-//		else
-//		{
-//			unsigned long readerDetected = TXN_TECHNO_READER_DETECTED;
-//			updateTransactionInfo(outputData, 0, NULL, NULL, &readerDetected);
-//		}
+		//		bool resultQrCodeReading = m_transaction->showQRCode(amount);
+		//		const string currency = (string)jsonParam["Acceptor"]["devise"].as_string();
+		//		if (resultQrCodeReading)
+		//		{
+		//			unsigned long readerDetected = TXN_TECHNO_NONE;
+		//			updateTransactionInfo(outputData, amount, &currency, NULL, &readerDetected);
+		//		}
+		//		else
+		//		{
+		//			unsigned long readerDetected = TXN_TECHNO_READER_DETECTED;
+		//			updateTransactionInfo(outputData, 0, NULL, NULL, &readerDetected);
+		//		}
 
+		unsigned long readerDetected = TXN_TECHNO_READER_DETECTED;
+		updateTransactionInfo(outputData, 0, NULL, NULL, &readerDetected);
 	}
+
 
 	return TXN_SR_OK;
 }

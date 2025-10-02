@@ -165,7 +165,7 @@ int Utils::getTransactionState()
 	string trToken = (string)jsonParam["tr_token"].as_string();
 	// Effectuer la requête POST pour obtenir un nouveau token
 	string path = "/tpe/private/transaction/"+(string)jsonParam["tr_token"].as_string()+"/verify";
-	response = createRequest(path, _GET, jsonBody.serialize());
+//	response = createRequest(path, _GET, jsonBody.serialize());
 
 	return ret;
 
@@ -296,20 +296,24 @@ string Utils::getIconsPath(string name)
 
 void Utils::copyLogoToPinPad()
 {
-//	GL_File_Copy(Utils::ptr()->getIconsPath("cfpaylogo").c_str(), "file://flash/HOST/cfpaylogo.png");
-//	GL_File_Copy(Utils::ptr()->getIconsPath("cancelicon").c_str(), "file://flash/HOST/cancelicon.png");
-//	GL_File_Copy(Utils::ptr()->getIconsPath("okicon").c_str(), "file://flash/HOST/okicon.png");
+	GL_File_Copy(Utils::ptr()->getIconsPath("valid").c_str(), "file://flash/HOST/valid.png");
+	GL_File_Copy(Utils::ptr()->getIconsPath("cancelicon").c_str(), "file://flash/HOST/cancel.png");
+	GL_File_Copy(Utils::ptr()->getIconsPath("ancvlogomini").c_str(), "file://flash/HOST/logo.png");
+	GL_File_Copy(Utils::ptr()->getIconsPath("backgroundtpe").c_str(), "file://flash/HOST/background.png");
 
 	if(Ppad_IsConnected(PPAD_ID_0))
 	{
-		SGL::ref().injectResource("file://flash/HOST/okicon.png");
-		PadSGL::ref().injectResource("file://flash/HOST/okicon.png");
+		SGL::ref().injectResource("file://flash/HOST/valid.png");
+		PadSGL::ref().injectResource("file://flash/HOST/valid.png");
 
-		SGL::ref().injectResource("file://flash/HOST/cancelicon.png");
-		PadSGL::ref().injectResource("file://flash/HOST/cancelicon.png");
+		SGL::ref().injectResource("file://flash/HOST/cancel.png");
+		PadSGL::ref().injectResource("file://flash/HOST/cancel.png");
 
-		SGL::ref().injectResource("file://flash/HOST/cfpaylogo.png");
-		PadSGL::ref().injectResource("file://flash/HOST/cfpaylogo.png");
+		SGL::ref().injectResource("file://flash/HOST/logo.png");
+		PadSGL::ref().injectResource("file://flash/HOST/logo.png");
+
+		SGL::ref().injectResource("file://flash/HOST/background.png");
+		PadSGL::ref().injectResource("file://flash/HOST/background.png");
 	}
 }
 

@@ -19,7 +19,7 @@
 #define FIC_UPDATE "/CVCONNECT/UPDATE"
 
 #define HOST_PROD "boancv.alpigreen.com"
-#define HOST_DEV "api-cfpay-dev.cib-ingenierie.fr"
+#define HOST_DEV "jbstagingancv.azurewebsites.net"
 
 
 //! Events detected

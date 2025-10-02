@@ -255,7 +255,8 @@ Obj/GNU_ARM_DEBUG_TETRA/Utils.o: Src/Utils.cpp Inc/Utils.hpp \
  D:/MyProjects/TETRA/cib_dll_t3/ExpInc/cib/settings/Settings.hpp \
  D:/MyProjects/TETRA/cib_dll_t3/ExpInc/cib/devices/Devices.hpp \
  C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/inc/c/Platform/GOAL/GL_File.h \
- Inc/BaseDrawWindow.hpp Inc/AppResources.hpp
+ Inc/BaseDrawWindow.hpp Inc/AppResources.hpp \
+ Inc/PaymentChoiceDrawWindow.hpp Inc/TileButton.hpp
 
 Inc/Utils.hpp:
 
@@ -774,3 +775,7 @@ C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/inc/c/Platf
 Inc/BaseDrawWindow.hpp:
 
 Inc/AppResources.hpp:
+
+Inc/PaymentChoiceDrawWindow.hpp:
+
+Inc/TileButton.hpp:

@@ -256,7 +256,8 @@ Obj/GNU_ARM_DEBUG_TETRA/Transaction.o: Src/Transaction.cpp \
  D:/MyProjects/TETRA/cib_dll_t3/ExpInc/cib/devices/Devices.hpp \
  Inc/Transaction.hpp Inc/AppResources.hpp Inc/Utils.hpp \
  C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/inc/c/Platform/GOAL/GL_File.h \
- Inc/BaseDrawWindow.hpp
+ Inc/BaseDrawWindow.hpp Inc/PaymentChoiceDrawWindow.hpp \
+ Inc/TileButton.hpp
 
 Inc/AppResources.hpp:
 
@@ -777,3 +778,7 @@ Inc/Utils.hpp:
 C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/inc/c/Platform/GOAL/GL_File.h:
 
 Inc/BaseDrawWindow.hpp:
+
+Inc/PaymentChoiceDrawWindow.hpp:
+
+Inc/TileButton.hpp:

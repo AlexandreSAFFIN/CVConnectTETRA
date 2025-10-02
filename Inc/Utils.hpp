@@ -15,6 +15,7 @@
 #include <string.h>
 #include <cstring>
 #include "BaseDrawWindow.hpp"
+#include "PaymentChoiceDrawWindow.hpp"
 
 
 class Utils : public Singleton<Utils>
@@ -58,7 +59,7 @@ public:
 	BaseDrawWindow* parameterWindow;
 	BaseDrawWindow* connectionWindow;
 	BaseDrawWindow* parameterOptionWindow;
-	BaseDrawWindow* paymentChoiceWindow;
+	PaymentChoiceDrawWindow* paymentChoiceWindow;
 	BaseDrawWindow* qrWindow;
 
 	gprs::GprsConfig m_gprs;
