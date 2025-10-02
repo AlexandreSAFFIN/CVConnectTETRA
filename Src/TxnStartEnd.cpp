@@ -10,6 +10,7 @@
 #include "TxnStartEnd.hpp"
 #include "Transaction.hpp"
 #include "AppResources.hpp"
+#include "PaymentChoiceDrawWindow.hpp"
 #include "Utils.hpp"
 //                            #####################
 //                            #   TXN START END   #
@@ -60,17 +61,25 @@ int TxnStartEnd::start(const TLV_TREE_NODE inputData, TLV_TREE_NODE outputData)
 	long long int amount = atoll((txn.amount).c_str());
 	if((!(atoll((txn.amount).c_str()) > 2147483647) && txn.txnType == TXN_TRANSACTION_TYPE_DEBIT && isANCV))
 	{
-//		bool resultQrCodeReading = m_transaction->showQRCode(amount);
-//		const string currency = (string)jsonParam["Acceptor"]["devise"].as_string();
-//		if (resultQrCodeReading)
-//		{
-//			unsigned long readerDetected = TXN_TECHNO_NONE;
-//			updateTransactionInfo(outputData, amount, &currency, NULL, &readerDetected);
-//		}
+		PaymentChoiceDrawWindow* pw = new PaymentChoiceDrawWindow(Utils::ref().glib, "MOYEN DE PAIEMENT");
+		if(pw->drawing())
+		{
+			//		bool resultQrCodeReading = m_transaction->showQRCode(amount);
+			//		const string currency = (string)jsonParam["Acceptor"]["devise"].as_string();
+			//		if (resultQrCodeReading)
+			//		{
+			//			unsigned long readerDetected = TXN_TECHNO_NONE;
+			//			updateTransactionInfo(outputData, amount, &currency, NULL, &readerDetected);
+			//		}
+		}
+		else
+		{
+
+		}
 //		else
 //		{
-			unsigned long readerDetected = TXN_TECHNO_READER_DETECTED;
-			updateTransactionInfo(outputData, 0, NULL, NULL, &readerDetected);
+//			unsigned long readerDetected = TXN_TECHNO_READER_DETECTED;
+//			updateTransactionInfo(outputData, 0, NULL, NULL, &readerDetected);
 //		}
 
 	}

@@ -66,8 +66,15 @@ TileButton::TileButton(ingenico::graphics::Widget& parent,
     icon->setSource(iconPng);
     icon->setSize(iconSize, iconSize, GL_UNIT_PIXEL);
     icon->setPosition(iconX, iconY, GL_UNIT_PIXEL);
+
 }
 
+
+void TileButton::setTextAndIcon(string text, string path)
+{
+    icon->setSource(path);
+    label->setText(text);
+}
 bool TileButton::handleClick(Message& msg) {
     if (target_ && method_) {
         return (target_->*method_)(msg);

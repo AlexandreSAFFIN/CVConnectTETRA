@@ -6,8 +6,9 @@
 
 
 class ConnectDrawWindow : public BaseDrawWindow {
-private:
+protected:
 	Edit* editText;
+
 
 public:
     // Constructeur

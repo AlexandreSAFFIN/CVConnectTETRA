@@ -14,7 +14,10 @@
 <file generated="false" name="Src/ANCVDrawWindow.cpp" parentProject=""/>
 <file generated="false" name="Src/ConnectDrawWindow.cpp" parentProject=""/>
 <file generated="false" name="Src/PaymentChoiceDrawWindow.cpp" parentProject=""/>
-<file generated="false" name="Src/ChoiceQrDrawWindow.cpp" parentProject=""/>
+<file generated="false" name="Src/PayIDWindow.cpp" parentProject=""/>
+<file generated="false" name="Src/PrintTicketWindow.cpp" parentProject=""/>
+<file generated="false" name="Src/ThreadRequest.cpp" parentProject=""/>
+<file generated="false" name="Src/PaymentQRWindow.cpp" parentProject=""/>
 </virtualFolder>
 <archiveFilesVirtualFolder name="Archive Files">
 <archive dirParentProject="" directoryToArchive="Resources" name="Bin/Resources.tar"/>

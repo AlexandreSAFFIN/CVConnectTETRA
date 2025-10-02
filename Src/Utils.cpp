@@ -133,18 +133,6 @@ std::string Utils::formatDateTime(const std::string& input) {
     return std::string(formatted);
 }
 
-std::string Utils::removeSpecialCharacters(const std::string& input)
-{
-	std::string output;
-	for (size_t i = 0; i < input.length(); ++i) { // Boucle classique
-		char c = input[i];
-		if (std::isalnum(static_cast<unsigned char>(c))) { // Garde lettres et chiffres
-			output += c;
-		}
-	}
-	return output;
-}
-
 
 bool Utils::launchDispatch()
 {
@@ -278,13 +266,6 @@ Response Utils::createRequest(string path, eMethod method, const string &body)
 }
 
 
-
-
-bool Utils::isApplicationReady()
-{
-	return (m_isLicence);
-}
-
 ulong Utils::displayDualScreen(const std::string & title, const std::string & text, T_GL_DIALOG_ICON icon, T_GL_BUTTONS buttons, T_GL_DURATION duration)
 {
 	ulong ulRet;
@@ -331,3 +312,4 @@ void Utils::copyLogoToPinPad()
 		PadSGL::ref().injectResource("file://flash/HOST/cfpaylogo.png");
 	}
 }
+

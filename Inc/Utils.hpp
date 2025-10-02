@@ -36,8 +36,7 @@ public:
 	bool checkQrCodeHook();
 	Response createRequest(string path, eMethod method, const string &body);
 	string formatDateTime(const std::string& input);
-	string removeSpecialCharacters(const std::string& input);
-	bool isApplicationReady();
+
 	bool launchDispatch();
 	void drawActiveWindow();
 	string getQrCodeTransaction(long long int price);
@@ -46,19 +45,20 @@ public:
 	ulong displayDualScreen(const std::string & title, const std::string & text, T_GL_DIALOG_ICON icon, T_GL_BUTTONS buttons, T_GL_DURATION duration);
 	string getIconsPath(string name);
 
-	bool m_isLicence;
+
     GraphicLib glib;
 
 	cib::communication::l_layer::LLSession m_session;
 	connectionType::EconnectionType m_cntType;
 	string m_host;
-	string m_token;
+
 	bool isConnected;
+	bool isFirstConnection;
+
 	BaseDrawWindow* parameterWindow;
 	BaseDrawWindow* connectionWindow;
 	BaseDrawWindow* parameterOptionWindow;
 	BaseDrawWindow* paymentChoiceWindow;
-	BaseDrawWindow* qrChoiceWindow;
 	BaseDrawWindow* qrWindow;
 
 	gprs::GprsConfig m_gprs;

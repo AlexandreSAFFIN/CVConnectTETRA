@@ -6,8 +6,9 @@
 #include "MaintenanceDrawWindow.hpp"
 #include "ANCVDrawWindow.hpp"
 #include "ConnectDrawWindow.hpp"
+#include "PayIDWindow.hpp"
 #include "PaymentChoiceDrawWindow.hpp"
-#include "ChoiceQrDrawWindow.hpp"
+#include "SSL_.h"
 
 #define APP_NAME "CvConnect"
 
@@ -143,7 +144,6 @@ void CvConnect::initTransacInterfaces()
 
 void CvConnect::initDisk()
 {
-	Utils::ptr()->m_token = "";
 
 	if (disk::diskCreate(DISK_PATH) == DISK_CREATED)
 	{
@@ -152,26 +152,60 @@ void CvConnect::initDisk()
 			cib::json::Document jsonParam;
 			jsonParam["connectionType"] = (int)(connectionType::IP);
 			jsonParam["ANCVOnly"] = false;
+			jsonParam["shopid"] = "";
 			jsonParam["host"] = HOST_PROD;
 			saveDataAsJson(FIC_PARAM, jsonParam);
 		}
 	}
 }
 
+
 void CvConnect::initApp()
 {
 	Utils::ptr()->glib.setCharset(GL_ENCODING_ISO_8859_1);
 	cib::json::Document jsonParam;
 	initDisk();
-//	Utils::ptr()->copyLogoToPinPad();
+	Utils::ptr()->copyLogoToPinPad();
 	Utils::ptr()->loadData();
-	Utils::ptr()->m_session.setSessionData(Utils::ptr()->m_host, 443, Utils::ptr()->m_cntType, "ANCV", Utils::ptr()->m_gprs);
+	Utils::ptr()->m_session.setSessionData("boancv.alpigreen.com", 443, Utils::ptr()->m_cntType, "CIB", Utils::ptr()->m_gprs);
 	Utils::ptr()->parameterWindow = new MaintenanceDrawWindow(SGL::ref(), "PARAMETRAGE");
 	Utils::ptr()->parameterOptionWindow = new ANCVDrawWindow(SGL::ref(), "OPTION ANCV");
 	Utils::ptr()->connectionWindow = new ConnectDrawWindow(SGL::ref(), "AUTHENTIFICATION");
 	Utils::ptr()->paymentChoiceWindow = new PaymentChoiceDrawWindow(SGL::ref(), "CHOIX DU PAIEMENT");
-	Utils::ptr()->qrChoiceWindow = new ChoiceQrDrawWindow(SGL::ref(), "CHOIX METHODE PAIEMENT");
 	Utils::ptr()->isConnected = false;
-	//	Utils::ptr()->acceptorWindow = new DrawWindowInitialisation(Utils::ptr()->glib);
-//	Utils::ptr()->paymentWindow = new PaymentWindow(SGL::ref(), PadSGL::ref());
+
+
+//	std::ostringstream iconPath2;
+//		iconPath2 << "file://param/" << "DATA54F9250"<< ".tar/Icons/" << "ca1.pem";
+//
+//		int sizeCsr = File::getSizeFile(iconPath2.str().c_str());
+//		if (sizeCsr > 0) {
+//			std::vector<char> bufferCsr(sizeCsr);
+//			loadData(iconPath2.str().c_str(), bufferCsr.data(), sizeCsr);
+//
+//			if (disk::saveData("/CVCONNECT/ca1.pem", bufferCsr.data(), sizeCsr, 1) > 0) {
+//				int a = 0; // succès
+//			}
+//		}
+//
+//		std::ostringstream iconPath3;
+//		iconPath3 << "file://param/" << "DATA54F9250"<< ".tar/Icons/" << "ca2.pem";
+//
+//		sizeCsr = File::getSizeFile(iconPath3.str().c_str());
+//		if (sizeCsr > 0) {
+//			std::vector<char> bufferCsr(sizeCsr);
+//			loadData(iconPath3.str().c_str(), bufferCsr.data(), sizeCsr);
+//			int t = 0;
+//			if (t = disk::saveData("/CVCONNECT/ca2.pem", bufferCsr.data(), sizeCsr, 1) > 0) {
+//				int a = 0; // succès
+//			}
+//		}
+//
+//	SSL_PROFILE_HANDLE h = SSL_LoadProfile("CIB");
+//	Utils::ptr()->m_session.setSessionData("boancv.alpigreen.com", 443, Utils::ptr()->m_cntType, "CIB", Utils::ptr()->m_gprs);
+//	Utils::ref().createRequest("/Webservices/rest/FO//GetShopId/123456789", _POST, "" );
+
+//	addProfileCaOnly("ANCVE", "/CVCONNECT/client.pem",  "/CVCONNECT/ca1.pem","/CVCONNECT/caC.pem");
+
+
 }

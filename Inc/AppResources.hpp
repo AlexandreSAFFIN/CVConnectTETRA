@@ -18,7 +18,7 @@
 #define FIC_LICENSE "/CVCONNECT/LICENSE"
 #define FIC_UPDATE "/CVCONNECT/UPDATE"
 
-#define HOST_PROD "api-cfpay.cib-ingenierie.fr"
+#define HOST_PROD "boancv.alpigreen.com"
 #define HOST_DEV "api-cfpay-dev.cib-ingenierie.fr"
 
 

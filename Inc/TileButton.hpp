@@ -28,7 +28,7 @@ public:
     int getHeight() const { return height; }
     Button* getButton() const{return background;}
     Picture* getBack() const{return back;}
-
+    void setTextAndIcon(string, string);
 
 private:
     ingenico::graphics::Button* background;

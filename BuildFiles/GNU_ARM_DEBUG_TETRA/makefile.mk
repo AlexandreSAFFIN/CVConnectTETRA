@@ -312,7 +312,10 @@ $(OBJ_PATH)/TileButton.o \
 $(OBJ_PATH)/ANCVDrawWindow.o \
 $(OBJ_PATH)/ConnectDrawWindow.o \
 $(OBJ_PATH)/PaymentChoiceDrawWindow.o \
-$(OBJ_PATH)/ChoiceQrDrawWindow.o \
+$(OBJ_PATH)/PayIDWindow.o \
+$(OBJ_PATH)/PrintTicketWindow.o \
+$(OBJ_PATH)/ThreadRequest.o \
+$(OBJ_PATH)/PaymentQRWindow.o \
 
 #-------------------------------------------------------------------------------
 # Dependencies
@@ -521,12 +524,42 @@ ifeq ($(MAKECMDGOALS), $(OBJ_PATH)/PaymentChoiceDrawWindow.o)
 endif
 
 ifneq ($(MAKECMDGOALS), clean)
--include $(OBJ_PATH)/ChoiceQrDrawWindow.d
+-include $(OBJ_PATH)/PayIDWindow.d
 endif
-$(OBJ_PATH)/ChoiceQrDrawWindow.o: Src/ChoiceQrDrawWindow.cpp $(DEPENDENCIES) $(EXTRA_DEPENDENCIES) $(INCLUDE_FILE_OPT)
-	@echo "'Src/ChoiceQrDrawWindow.cpp' compilation in progress..."
+$(OBJ_PATH)/PayIDWindow.o: Src/PayIDWindow.cpp $(DEPENDENCIES) $(EXTRA_DEPENDENCIES) $(INCLUDE_FILE_OPT)
+	@echo "'Src/PayIDWindow.cpp' compilation in progress..."
 	$(CC) $(CC_OPTS) -MMD -MP -o "$@" "$<" @$(INCLUDE_FILE_OPT)
-ifeq ($(MAKECMDGOALS), $(OBJ_PATH)/ChoiceQrDrawWindow.o)
+ifeq ($(MAKECMDGOALS), $(OBJ_PATH)/PayIDWindow.o)
+	@echo "done!"
+endif
+
+ifneq ($(MAKECMDGOALS), clean)
+-include $(OBJ_PATH)/PrintTicketWindow.d
+endif
+$(OBJ_PATH)/PrintTicketWindow.o: Src/PrintTicketWindow.cpp $(DEPENDENCIES) $(EXTRA_DEPENDENCIES) $(INCLUDE_FILE_OPT)
+	@echo "'Src/PrintTicketWindow.cpp' compilation in progress..."
+	$(CC) $(CC_OPTS) -MMD -MP -o "$@" "$<" @$(INCLUDE_FILE_OPT)
+ifeq ($(MAKECMDGOALS), $(OBJ_PATH)/PrintTicketWindow.o)
+	@echo "done!"
+endif
+
+ifneq ($(MAKECMDGOALS), clean)
+-include $(OBJ_PATH)/ThreadRequest.d
+endif
+$(OBJ_PATH)/ThreadRequest.o: Src/ThreadRequest.cpp $(DEPENDENCIES) $(EXTRA_DEPENDENCIES) $(INCLUDE_FILE_OPT)
+	@echo "'Src/ThreadRequest.cpp' compilation in progress..."
+	$(CC) $(CC_OPTS) -MMD -MP -o "$@" "$<" @$(INCLUDE_FILE_OPT)
+ifeq ($(MAKECMDGOALS), $(OBJ_PATH)/ThreadRequest.o)
+	@echo "done!"
+endif
+
+ifneq ($(MAKECMDGOALS), clean)
+-include $(OBJ_PATH)/PaymentQRWindow.d
+endif
+$(OBJ_PATH)/PaymentQRWindow.o: Src/PaymentQRWindow.cpp $(DEPENDENCIES) $(EXTRA_DEPENDENCIES) $(INCLUDE_FILE_OPT)
+	@echo "'Src/PaymentQRWindow.cpp' compilation in progress..."
+	$(CC) $(CC_OPTS) -MMD -MP -o "$@" "$<" @$(INCLUDE_FILE_OPT)
+ifeq ($(MAKECMDGOALS), $(OBJ_PATH)/PaymentQRWindow.o)
 	@echo "done!"
 endif
 
