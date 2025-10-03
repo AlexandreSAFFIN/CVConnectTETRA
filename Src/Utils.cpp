@@ -85,21 +85,33 @@ static std::string stripDataUrlPrefix(const std::string& b64)
 }
 
 // --- Sauvegarde le PNG à partir d'un base64 (retourne true si OK) ---
-static bool saveImageBase64ToPng(const std::string& imageBase64, const string outPath)
+static bool saveImageBase64ToPng(const std::string& imageBase64, const char* outPath)
 {
-    // 1) nettoyer le header éventuel
-    std::string payload = stripDataUrlPrefix(imageBase64);
+	std::vector<unsigned char> png = base64Decode(imageBase64);
 
-    // 2) décoder base64 -> bytes PNG
-    std::vector<unsigned char> bytes = base64Decode(payload);
-    if (bytes.empty()) return false;
+	T_GL_HFILE myfile = GL_File_Open(outPath, GL_FILE_CREATE_ALWAYS, GL_FILE_ACCESS_READ_WRITE);
+	if (!myfile) return false;
 
-    // 3) sauver sur disque (même style que ton snippet)
-    //    int disk::saveData(const char* path, const void* data, int size, int flag)
-    int written = disk::saveData(outPath, (const char*)&bytes[0], (int)bytes.size(), 1);
-    return (written > 0);
+	// 3) écrire (attention si l’API peut écrire partiellement)
+	const unsigned char* p = png.data();
+	int remaining = static_cast<int>(png.size());
+	int totalWritten = 0;
+
+	while (remaining > 0) {
+		int n = GL_File_Write(myfile, p + totalWritten, remaining);
+		if (n <= 0) break; // erreur d'écriture
+		totalWritten += n;
+		remaining    -= n;
+	}
+
+	// 4) flush & close
+	if (totalWritten > 0) {
+		GL_File_Flush(myfile);
+	}
+	GL_File_Close(myfile);
+
+	return totalWritten > 0;
 }
-
 
 Utils::Utils()
 {
@@ -328,7 +340,7 @@ bool Utils::initQrCodePayment(long long int amount)
 			jsonResponse.parse(response.getContent().data());
 			if(jsonResponse["QRCodeReturned"] && jsonResponse["QRCodeReturned"]["InitAndGetQRPreTransacResult"])
 			{
-				bRet = saveImageBase64ToPng((string)jsonResponse["QRCodeReturned"]["InitAndGetQRPreTransacResult"]["ImageBase64"].as_string(), "/CVCONNECT/QRCODE.png");
+				bRet = saveImageBase64ToPng((string)jsonResponse["QRCodeReturned"]["InitAndGetQRPreTransacResult"]["ImageBase64"].as_string(), "file://flash/HOST/QRCODE.png");
 			}
 		}
 	}
@@ -620,6 +632,7 @@ void Utils::copyLogoToPinPad()
 	GL_File_Copy(Utils::ptr()->getIconsPath("cancelicon").c_str(), "file://flash/HOST/cancel.png");
 	GL_File_Copy(Utils::ptr()->getIconsPath("ancvlogomini").c_str(), "file://flash/HOST/logo.png");
 	GL_File_Copy(Utils::ptr()->getIconsPath("backgroundtpe").c_str(), "file://flash/HOST/background.png");
+//	GL_File_Copy("/CVCONNECT/QRCODE.png", "file://flash/HOST/QRCODE.png");
 
 	if(Ppad_IsConnected(PPAD_ID_0))
 	{

@@ -13,7 +13,7 @@ bool PaymentQRWindow::onClick(Message& msg)
 
 PaymentQRWindow::PaymentQRWindow(GraphicLib& glib, GraphicLib& pLib, string text, long long int amount, string qrCodeContent) :
     BaseDrawWindow(glib, text),
-	qrWindow(glib),
+//	qrWindow(glib),
 	m_ppwindow(pLib),
     transactionStatusLabel(mainWindow),
 	pp_bgpicture(m_ppwindow),
@@ -30,7 +30,6 @@ PaymentQRWindow::PaymentQRWindow(GraphicLib& glib, GraphicLib& pLib, string text
 	psize = pLib.getScreenSize();
 	this->amount = amount;
 	this->qrCodeContent = qrCodeContent;
-
 
 	transactionStatusLabel.setText("Etat de la transaction");
 	transactionStatusLabel.setFontName("Arial");
@@ -65,19 +64,19 @@ PaymentQRWindow::PaymentQRWindow(GraphicLib& glib, GraphicLib& pLib, string text
 	// Image de transaction
 	p_transactionImage = new Picture(m_ppwindow);
 	p_transactionImage->setSize(100, 100, GL_UNIT_PIXEL); // Taille suffisante pour le QR code ou autre image
-	p_transactionImage->setPosition((psize.width-100)/2, (psize.height-100)/2-15, GL_UNIT_PIXEL); // Centré en dessous des labels
+	p_transactionImage->setPosition((psize.width-100)/2, (psize.height-100)/2-20, GL_UNIT_PIXEL); // Centré en dessous des labels
 	p_transactionImage->setTransformation(GL_TRANSFORMATION_STRETCH_ALL);
 	p_transactionImage->setTextAlign(GL_ALIGN_CENTER); // Centré
 
 	transactionImage.setSize(160, 160, GL_UNIT_PIXEL);  // Taille du logo
-	transactionImage.setPosition((size.width-160)/2, (size.height-160)/2+35, GL_UNIT_PIXEL);  // Position du logo à gauche
-	transactionImage.setSource(Utils::ptr()->getIconsPath("ancvlogomini"));  // Chemin vers l'image du logo
+	transactionImage.setPosition((size.width-160)/2, (size.height-160)/2-45, GL_UNIT_PIXEL);  // Position du logo à gauche
+	transactionImage.setSource("file://flash/HOST/QRCODE.png");  // Chemin vers l'image du logo
 	transactionImage.setTransformation(GL_TRANSFORMATION_STRETCH_ALL);
 	p_logoimg.setSource("file://flash/HOST/logo.png");
 	p_logoimg.setSize(65,65, GL_UNIT_PIXEL);
 	p_logoimg.setPosition(5,115, GL_UNIT_PIXEL);
 	p_logoimg.setTransformation(GL_TRANSFORMATION_NONE);
-	qrCodeViewer = new Barcode(qrWindow);
+//	qrCodeViewer = new Barcode(qrWindow);
 
 
 
@@ -87,21 +86,21 @@ PaymentQRWindow::PaymentQRWindow(GraphicLib& glib, GraphicLib& pLib, string text
 void PaymentQRWindow::generateQrCodeImage()
 {
 
-	qrCodeViewer->setValue(qrCodeContent.c_str(), qrCodeContent.length());
-	qrCodeViewer->setMimeType(GL_MIME_BARCODE_QR);
-	qrCodeViewer->setParam(GL_BARCODE_QR_MARGIN, 1);
-	qrCodeViewer->setPosition(0, 0, GL_UNIT_PIXEL);
-	qrCodeViewer->setTransformation(GL_TRANSFORMATION_STRETCH_ALL);
-	qrCodeViewer->setSize(160, 160, GL_UNIT_PIXEL);
-	qrWindow.setSize(160,160, GL_UNIT_PIXEL);
-	qrWindow.setPosition(80, 105, GL_UNIT_PIXEL);
-	qrWindow.setTextAlign(GL_ALIGN_CENTER); // Centré
+//	qrCodeViewer->setValue(qrCodeContent.c_str(), qrCodeContent.length());
+//	qrCodeViewer->setMimeType(GL_MIME_BARCODE_QR);
+//	qrCodeViewer->setParam(GL_BARCODE_QR_MARGIN, 1);
+//	qrCodeViewer->setPosition(0, 0, GL_UNIT_PIXEL);
+//	qrCodeViewer->setTransformation(GL_TRANSFORMATION_STRETCH_ALL);
+//	qrCodeViewer->setSize(160, 160, GL_UNIT_PIXEL);
+//	qrWindow.setSize(160,160, GL_UNIT_PIXEL);
+//	qrWindow.setPosition(80, 105, GL_UNIT_PIXEL);
+//	qrWindow.setTextAlign(GL_ALIGN_CENTER); // Centré
 }
 
 // Redéfinition de la méthode drawing
 bool PaymentQRWindow::drawing()
 {
-	transactionImage.setVisible(false);
+	transactionImage.setVisible(true);
 	threadRequest=NULL;
 	error = 0;
 	eventWindow = new Window(SGL::ref());
@@ -124,7 +123,7 @@ bool PaymentQRWindow::drawing()
     {
     	m_ppwindow.dispatch(0);
     	mainWindow.dispatch(0);
-    	qrWindow.show();
+//    	qrWindow.show();
     	eventWindow->dispatch(0);
     	refreshInformation();
     	eventWindow->dispatch(0);
@@ -159,10 +158,12 @@ void PaymentQRWindow::displayQrCode(long long int amount)
 	title->setText(paymentText);
 
 	mainWindow.dispatch(0);
-	qrWindow.dispatch(0);
+//	qrWindow.dispatch(0);
 	mainWindow.dispatch(0);
+
+	transactionImage.setSource("file://flash/HOST/QRCODE.png");
 //	qrWindow.saveImage("file://flash/HOST/QRCODE.png", GL_MIME_IMAGE_PNG);
-	qrWindow.saveImage("/CVCONNECT/QRCODE.png", GL_MIME_IMAGE_PNG);
+//	qrWindow.saveImage("/CVCONNECT/QRCODE.png", GL_MIME_IMAGE_PNG);
 	sleep(1);
 
 	if(Ppad_IsConnected(PPAD_ID_0))
@@ -180,6 +181,7 @@ void PaymentQRWindow::refreshInformation()
 
 	switch (statePayment) {
 		case WaitingScanning:
+			p_transactionImage->setVisible(true);
 			if(threadRequest == NULL)
 			{
 				threadRequest = new ThreadRequest();
@@ -210,9 +212,9 @@ void PaymentQRWindow::refreshInformation()
 		case ProcessInProgress:
 			if(timer == 0)
 			{
-				qrWindow.setVisible(false);
-				qrWindow.dispatch(0);
-				transactionImage.setVisible(true);
+//				qrWindow.setVisible(false);
+//				qrWindow.dispatch(0);
+
 				transactionStatusLabel.setText("Transaction en cours...");
 				if(Ppad_IsConnected(PPAD_ID_0))
 				{
@@ -250,8 +252,8 @@ void PaymentQRWindow::refreshInformation()
 
 		case Finish:
 
-			qrWindow.setVisible(false);
-			qrWindow.dispatch(0);
+//			qrWindow.setVisible(false);
+//			qrWindow.dispatch(0);
 			transactionImage.setVisible(true);
 
 			if(transactionStatus)
@@ -260,7 +262,7 @@ void PaymentQRWindow::refreshInformation()
 				p_transactionImage->setSource("file://flash/HOST/valid.png");
 
 				p_transactionImage->setSize(100, 100, GL_UNIT_PIXEL); // Taille suffisante pour le QR code ou autre image
-				p_transactionImage->setPosition((psize.width-100)/2, (psize.height-100)/2, GL_UNIT_PIXEL); // Centré en dessous des labels
+				p_transactionImage->setPosition((psize.width-100)/2, (psize.height-15)/2, GL_UNIT_PIXEL); // Centré en dessous des labels
 
 				transactionStatusLabel.setText("Transaction OK");
 				transactionImage.setSource("file://flash/HOST/valid.png");
@@ -272,7 +274,7 @@ void PaymentQRWindow::refreshInformation()
 			    p_transactionStatusLabel.setText("Echec de la transaction");
 			    p_transactionImage->setSource("file://flash/HOST/cancel.png");
 			    p_transactionImage->setSize(100, 100, GL_UNIT_PIXEL); // Taille suffisante pour le QR code ou autre image
-			    p_transactionImage->setPosition((psize.width - 100)/2, (psize.height - 100)/2, GL_UNIT_PIXEL); // Centré en dessous des labels
+			    p_transactionImage->setPosition((psize.width - 100)/2, (psize.height)/2-60, GL_UNIT_PIXEL); // Centré en dessous des labels
 
 			    transactionStatusLabel.setText("Echec de la transaction");
 			    transactionImage.setSource("file://flash/HOST/cancel.png");

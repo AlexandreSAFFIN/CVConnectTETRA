@@ -12,6 +12,7 @@ class BaseDrawWindow {
 protected:
     Window mainWindow;
 
+    Picture gradient;
     Picture picture;
     Layout topLayout;
 

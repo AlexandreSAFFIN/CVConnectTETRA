@@ -35,7 +35,7 @@ private:
 
     long long int amount;
     ThreadRequest *threadRequest;
-    Window qrWindow;
+//    Window qrWindow;
 	Window m_ppwindow;
     string qrCodeContent;
 
@@ -48,7 +48,7 @@ private:
 
     ingenico::graphics::Picture p_logoimg;  // Image de la transactionn
 
-    ingenico::graphics::Barcode* qrCodeViewer;
+//    ingenico::graphics::Barcode* qrCodeViewer;
 
     StatePayment statePayment;
 	T_GL_SIZE size;

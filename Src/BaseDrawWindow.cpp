@@ -1,8 +1,13 @@
 #include "BaseDrawWindow.hpp"
 #include "Utils.hpp"
-BaseDrawWindow::BaseDrawWindow(GraphicLib& glib, string topText) : mainWindow(glib), picture(mainWindow),topLayout(mainWindow)
+BaseDrawWindow::BaseDrawWindow(GraphicLib& glib, string topText) : mainWindow(glib),gradient(mainWindow), picture(mainWindow),topLayout(mainWindow)
 {
 	mainWindow.setSize(100, 100, GL_UNIT_PERCENT);
+
+//	gradient.setSize(100, 100, GL_UNIT_PERCENT);
+//	gradient.setPosition(0, 0, GL_UNIT_PIXEL);
+//	gradient.setSource(Utils::ptr()->getIconsPath("gradient"));
+//	gradient.setTransformation(GL_TRANSFORMATION_STRETCH_ALL);
 
 	picture.setSize(100, 100, GL_UNIT_PERCENT);
 	picture.setPosition(0, 0, GL_UNIT_PIXEL);

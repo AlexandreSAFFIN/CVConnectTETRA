@@ -33,7 +33,7 @@
 <userInc value="Inc"/>
 <userInc value="${workspace_loc:/CIB_T3_DLL/ExpInc}"/>
 </userIncs>
-<teliumPackageInfo countryCode="250" family="CvConnect" identifier="21753" maintenancePatch="00" majorVersion="" minorRelease="00" range="00"/>
+<teliumPackageInfo countryCode="250" family="CvConnect" identifier="21753" maintenancePatch="00" majorVersion="01" minorRelease="00" range="00"/>
 <userDefines>
 <userDefine value="_ING_TELIUM_SDK_LOC=&quot;${telium_sdk_loc}&quot;"/>
 <userDefine value="_ING_APPLI_DATA_FILE_BINARY_NAME=${appli_data_file_binary_name}"/>
