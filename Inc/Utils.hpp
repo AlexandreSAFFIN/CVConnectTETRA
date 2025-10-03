@@ -50,7 +50,7 @@ public:
 	bool terminateTransac(string orderId, bool isValid);
 	bool initQrCodePayment(long long int amount);
 	bool pollingTransacResult(string orderId);
-//	bool saveImageBase64ToPng(const std::string& imageBase64, const string outPath);
+	bool pollingPreTransacResult(string orderId);
 
     GraphicLib glib;
 

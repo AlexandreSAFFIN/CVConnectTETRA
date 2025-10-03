@@ -382,6 +382,48 @@ bool Utils::sendMiseEnPaiementTransac(string beneficiaryId, long long int amount
 	return bRet;
 }
 
+bool Utils::pollingPreTransacResult(string orderId)
+{
+	bool bRet = false;
+	Response response;
+	cib::json::Document jsonBody;
+	cib::json::Document jsonParam;
+	cib::json::Document jsonResponse;
+
+	loadDataAsJson(FIC_PARAM, jsonParam);
+	if(jsonParam["shopId"] && jsonParam["shopId"] != "")
+	{
+
+		jsonBody["id"] = orderId;
+
+		// Effectuer la requête POST pour obtenir un nouveau token
+		response = createRequest("/PollingPreTransac", _POST, jsonBody.serialize());
+		if (response.getStatusCode() == 200)
+		{
+			jsonResponse.parse(response.getContent().data());
+			if(jsonResponse["PollingPreTransacResult"])
+			{
+				string etat = (string)jsonResponse["PollingPreTransacResult"]["etat"].as_string();
+				string beneficiaryId = (string)jsonResponse["PollingPreTransacResult"]["beneficiary_id"].as_string();
+
+				if(jsonResponse["PollingPreTransacResult"]["total"])
+				{
+					if(checkIfStringBullshitApiIsValid(etat) && checkIfStringBullshitApiIsValid(beneficiaryId))
+					{
+						jsonParam["beneficiaryId"] = beneficiaryId;
+						jsonParam["lastState"] = etat;
+						saveDataAsJson(FIC_PARAM, jsonParam);
+						bRet = true;
+					}
+				}
+
+			}
+		}
+	}
+
+	return bRet;
+}
+
 bool Utils::pollingTransacResult(string orderId)
 {
 	bool bRet = false;

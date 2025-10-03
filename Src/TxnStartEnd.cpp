@@ -52,7 +52,8 @@ int TxnStartEnd::start(const TLV_TREE_NODE inputData, TLV_TREE_NODE outputData)
 
 	cib::json::Document jsonParam;
 	loadDataAsJson(FIC_PARAM, jsonParam);
-	bool isParam = (bool)jsonParam["isConnected"].as_bool();
+	bool isParam = Utils::ref().isConnected;
+	isParam = true;
 	bool isANCV = false;
 
 	if(isParam)

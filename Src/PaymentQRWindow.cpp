@@ -161,8 +161,8 @@ void PaymentQRWindow::displayQrCode(long long int amount)
 	mainWindow.dispatch(0);
 	qrWindow.dispatch(0);
 	mainWindow.dispatch(0);
-	qrWindow.saveImage("file://flash/HOST/QRCODE.png", GL_MIME_IMAGE_PNG);
-
+//	qrWindow.saveImage("file://flash/HOST/QRCODE.png", GL_MIME_IMAGE_PNG);
+	qrWindow.saveImage("/CVCONNECT/QRCODE.png", GL_MIME_IMAGE_PNG);
 	sleep(1);
 
 	if(Ppad_IsConnected(PPAD_ID_0))
