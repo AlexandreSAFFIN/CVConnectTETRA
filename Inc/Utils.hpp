@@ -16,6 +16,7 @@
 #include <cstring>
 #include "BaseDrawWindow.hpp"
 #include "PaymentChoiceDrawWindow.hpp"
+#include "WaitingWindow.hpp"
 
 
 class Utils : public Singleton<Utils>
@@ -32,20 +33,24 @@ public:
 	void loadData();
 	void resetTerminal(const string &host);
 
-	int getTransactionState();
-	bool checkQrCodeHook();
 	Response createRequest(string path, eMethod method, const string &body);
-	string formatDateTime(const std::string& input);
+	string makePaymentIdWithMs();
 
-	bool launchDispatch();
-	void drawActiveWindow();
-	string getQrCodeTransaction(long long int price);
+	std::string getCaptureDate();
 
 	void copyLogoToPinPad();
 	ulong displayDualScreen(const std::string & title, const std::string & text, T_GL_DIALOG_ICON icon, T_GL_BUTTONS buttons, T_GL_DURATION duration);
 	string getIconsPath(string name);
 	bool checkLicense();
 	bool connectWithShopId(string shopId);
+	string makeId(int length = 10);
+	bool sendMiseEnPaiementTransac(string beneficiaryId, long long int amount);
+	bool checkIfStringBullshitApiIsValid(string value);
+	bool checkIfIntBullshitApiIsValid(int value);
+	bool terminateTransac(string orderId, bool isValid);
+	bool initQrCodePayment(long long int amount);
+	bool pollingTransacResult(string orderId);
+//	bool saveImageBase64ToPng(const std::string& imageBase64, const string outPath);
 
     GraphicLib glib;
 
@@ -61,7 +66,7 @@ public:
 	BaseDrawWindow* parameterOptionWindow;
 	PaymentChoiceDrawWindow* paymentChoiceWindow;
 	BaseDrawWindow* qrWindow;
-	BaseDrawWindow* waitingWindow;
+	WaitingWindow* waitingWindow;
 
 	gprs::GprsConfig m_gprs;
 

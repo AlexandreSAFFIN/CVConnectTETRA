@@ -190,18 +190,17 @@ void CvConnect::initApp()
 //			}
 //		}
 //
-//		std::ostringstream iconPath3;
-//		iconPath3 << "file://param/" << "DATA54F9250"<< ".tar/Icons/" << "ca2.pem";
-//
-//		sizeCsr = File::getSizeFile(iconPath3.str().c_str());
-//		if (sizeCsr > 0) {
-//			std::vector<char> bufferCsr(sizeCsr);
-//			loadData(iconPath3.str().c_str(), bufferCsr.data(), sizeCsr);
-//			int t = 0;
-//			if (t = disk::saveData("/CVCONNECT/ca2.pem", bufferCsr.data(), sizeCsr, 1) > 0) {
-//				int a = 0; // succès
-//			}
-//		}
+		std::ostringstream iconPath3;
+		iconPath3 << "file://param/" << "DATA54F9250"<< ".tar/Icons/" << "qrcode_tools.png";
+		int sizeCsr = File::getSizeFile(iconPath3.str().c_str());
+		if (sizeCsr > 0) {
+			std::vector<char> bufferCsr(sizeCsr);
+			loadData(iconPath3.str().c_str(), bufferCsr.data(), sizeCsr);
+			int t = 0;
+			if (t = disk::saveData("/CVCONNECT/QRCODE.png", bufferCsr.data(), sizeCsr, 1) > 0) {
+				int a = 0; // succès
+			}
+		}
 //
 //	SSL_PROFILE_HANDLE h = SSL_LoadProfile("CIB");
 //	Utils::ptr()->m_session.setSessionData("boancv.alpigreen.com", 443, Utils::ptr()->m_cntType, "CIB", Utils::ptr()->m_gprs);

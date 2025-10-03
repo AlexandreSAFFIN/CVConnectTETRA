@@ -254,7 +254,7 @@ void PaymentQRWindow::refreshInformation()
 			qrWindow.dispatch(0);
 			transactionImage.setVisible(true);
 
-			if(transactionStatus && Utils::ref().checkQrCodeHook())
+			if(transactionStatus)
 			{
 				p_transactionStatusLabel.setText("Transaction OK");
 				p_transactionImage->setSource("file://flash/HOST/valid.png");

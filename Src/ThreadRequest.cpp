@@ -11,7 +11,7 @@ ThreadRequest::ThreadRequest() : Thread()  {
 void ThreadRequest::run(){
 	do
 	{
-		PaymentQRWindow::error = Utils::ptr()->getTransactionState();
+//		PaymentQRWindow::error = Utils::ptr()->getTransactionState();
 	}while(canDispatch);
 }
 
