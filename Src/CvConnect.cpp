@@ -113,7 +113,7 @@ void CvConnect::initMenu()
 //	m_menu.addItem("Historique", this, &CfPay::initTransacWindow, "", 1);
 //
 //	m_menu.m_explorer.addIcon(APP_NAME, Utils::ptr()->getIconsPath("cfpaylogo"), true, 0);
-	m_menu.m_explorer.addIcon("ANCV", Utils::ptr()->getIconsPath("ancvlogomini"), false, 0);
+	m_menu.m_explorer.addIcon("ANCV", Utils::ptr()->getIconsPath("ancvLogo"), false, 0);
 
 
 }
@@ -121,7 +121,10 @@ void CvConnect::initMenu()
 void CvConnect::goMenu()
 {
 	SGL::ref().openApplicationWindow();
-	if(!Utils::ref().isConnected)
+	cib::json::Document jsonParam;
+	Utils::ref().checkLicense();
+	loadDataAsJson(FIC_PARAM, jsonParam);
+	if((string)jsonParam["shopId"].as_string() == "" || !Utils::ref().isConnected)
 	{
 		Utils::ptr()->connectionWindow->drawing();
 	}
@@ -153,7 +156,7 @@ void CvConnect::initDisk()
 			cib::json::Document jsonParam;
 			jsonParam["connectionType"] = (int)(connectionType::IP);
 			jsonParam["ANCVOnly"] = false;
-			jsonParam["shopid"] = "";
+			jsonParam["shopId"] = "";
 			jsonParam["host"] = HOST_PROD;
 			saveDataAsJson(FIC_PARAM, jsonParam);
 		}

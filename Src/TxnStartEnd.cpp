@@ -65,18 +65,21 @@ int TxnStartEnd::start(const TLV_TREE_NODE inputData, TLV_TREE_NODE outputData)
 	if((!(atoll((txn.amount).c_str()) > 2147483647) && txn.txnType == TXN_TRANSACTION_TYPE_DEBIT && isANCV))
 	{
 		PaymentQRWindow* pw;
-		if(Utils::ref().paymentChoiceWindow->getPM() == QRCODE)
+		if(Utils::ref().paymentChoiceWindow->getPM() == QRCODE && Utils::ref().initQrCodePayment(amount))
 		{
-			pw = new PaymentQRWindow(Utils::ref().glib,PadSGL::ref(), "MOYEN DE PAIEMENT", 555, "555");
+			pw = new PaymentQRWindow(Utils::ref().glib,PadSGL::ref(), "MOYEN DE PAIEMENT", amount, txn.amount);
 			pw->drawing();
+////			unsigned long readerDetected = TXN_TECHNO_READER_DETECTED;
+//			 m_transaction->updateTransactionInfo(outputData,1);
+//			 updateTransactionInfo(outputData, 1, NULL, NULL, NULL);
 			free(pw);
 		}
 		else
 		{
-			if(!PayIDWindow(Utils::ref().glib,PadSGL::ref(), "MOYEN DE PAIEMENT", 555).drawing())
+			if(!PayIDWindow(Utils::ref().glib,PadSGL::ref(), "MOYEN DE PAIEMENT", amount).drawing())
 			{
 				unsigned long readerDetected = TXN_TECHNO_READER_DETECTED;
-				updateTransactionInfo(outputData, 0, NULL, NULL, &readerDetected);
+				updateTransactionInfo(outputData, 44, NULL, NULL, &readerDetected);
 			}
 		}
 		//		bool resultQrCodeReading = m_transaction->showQRCode(amount);
@@ -92,8 +95,8 @@ int TxnStartEnd::start(const TLV_TREE_NODE inputData, TLV_TREE_NODE outputData)
 		//			updateTransactionInfo(outputData, 0, NULL, NULL, &readerDetected);
 		//		}
 
-		unsigned long readerDetected = TXN_TECHNO_READER_DETECTED;
-		updateTransactionInfo(outputData, 0, NULL, NULL, &readerDetected);
+//		unsigned long readerDetected = TXN_TECHNO_READER_DETECTED;
+//		updateTransactionInfo(outputData, 0, NULL, NULL, &readerDetected);
 	}
 
 

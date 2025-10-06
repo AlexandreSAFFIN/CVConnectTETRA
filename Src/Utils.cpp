@@ -72,17 +72,7 @@ static std::vector<unsigned char> base64Decode(const std::string& in)
     return out;
 }
 //
-//// --- enlève un éventuel préfixe "data:image/png;base64,..." ---
-static std::string stripDataUrlPrefix(const std::string& b64)
-{
-    // Cherche "base64," et renvoie la partie après
-    const std::string key = "base64,";
-    std::string::size_type pos = b64.find(key);
-    if (pos != std::string::npos) {
-        return b64.substr(pos + key.size());
-    }
-    return b64;
-}
+
 
 // --- Sauvegarde le PNG à partir d'un base64 (retourne true si OK) ---
 static bool saveImageBase64ToPng(const std::string& imageBase64, const char* outPath)
@@ -315,6 +305,7 @@ bool Utils::initQrCodePayment(long long int amount)
 	loadDataAsJson(FIC_PARAM, jsonParam);
 	if(jsonParam["shopId"] && jsonParam["shopId"] != "")
 	{
+		waitingWindow->drawing("Génération du QRCode", Waiting);
 		string id = makeId();
 		// Construction du corps de la requête avec les informations d'authentification
 		jsonBody["ParamInitAndGetQRPreTransac"] = json::Document(json::VALUE_IS_OBJECT);
@@ -342,6 +333,19 @@ bool Utils::initQrCodePayment(long long int amount)
 			{
 				bRet = saveImageBase64ToPng((string)jsonResponse["QRCodeReturned"]["InitAndGetQRPreTransacResult"]["ImageBase64"].as_string(), "file://flash/HOST/QRCODE.png");
 			}
+		}
+		if(!bRet)
+		{
+			string msg = "QrCode invalide";
+			if(response.getStatusCode() != 200)
+			{
+				string msg = "Erreur réseau";
+			}
+			waitingWindow->drawing(msg, Cancel);
+		}
+		else
+		{
+			waitingWindow->hidding();
 		}
 	}
 
@@ -549,9 +553,11 @@ bool Utils::checkLicense()
 	cib::json::Document jsonParam;
 	cib::json::Document jsonResponse;
 
+
 	loadDataAsJson(FIC_PARAM, jsonParam);
 	if(jsonParam["shopId"] && jsonParam["shopId"] != "")
 	{
+		Utils::waitingWindow->drawing("Opération en cours", Waiting);
 		// Construction du corps de la requête avec les informations d'authentification
 		jsonBody["RequestHasLicense"] = json::Document(json::VALUE_IS_OBJECT);
 		jsonBody["RequestHasLicense"]["serialNumber"] = Terminal::ref().SerialNumber;
@@ -567,7 +573,23 @@ bool Utils::checkLicense()
 			if(jsonResponse["ResponseHasValidLicense"] && (string)jsonResponse["ResponseHasValidLicense"]["checkLicenceResult"].as_string() == "VALID")
 			{
 				bRet = true;
+
 			}
+		}
+
+
+		if(!bRet)
+		{
+			string msg = "Une erreur réseau est survenue";
+			if(response.getStatusCode() == 200)
+			{
+				msg = "ShopID incorrect";
+				jsonParam["shopId"] = "";
+				isConnected = false;
+				saveDataAsJson(FIC_PARAM, jsonParam);
+			}
+
+			Utils::waitingWindow->drawing(msg, Cancel);
 		}
 	}
 
@@ -583,7 +605,7 @@ bool Utils::connectWithShopId(string shopId)
 	cib::json::Document jsonResponse;
 
 	loadDataAsJson(FIC_PARAM, jsonParam);
-		// Effectuer la requête POST pour obtenir un nouveau token
+	Utils::waitingWindow->drawing("Opération en cours", Waiting);
 	response = createRequest("/GetShopId/"+Terminal::ref().SerialNumber, _GET, "");
 	if (response.getStatusCode() == 200)
 	{
@@ -591,10 +613,24 @@ bool Utils::connectWithShopId(string shopId)
 		if(jsonResponse["ResponseGetShopId"] && jsonResponse["ResponseGetShopId"]["GetShopIdResult"])
 		{
 			jsonParam["shopId"] = (string)jsonResponse["ResponseGetShopId"]["GetShopIdResult"].as_string();
+			isConnected = true;
 			bRet = true;
 		}
 	}
 	saveDataAsJson(FIC_PARAM, jsonParam);
+	string msg = "ID client valide";
+	WaitingStep step = Valid;
+	if(!bRet)
+	{
+		step = Cancel;
+		msg = "Id Inconnu";
+		if(response.getStatusCode() != 200)
+		{
+			msg = "Une erreur réseaue est survenue";
+		}
+	}
+	Utils::waitingWindow->drawing("Opération en cours", step);
+
 	return bRet;
 }
 

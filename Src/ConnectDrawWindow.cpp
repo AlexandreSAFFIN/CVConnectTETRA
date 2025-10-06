@@ -115,19 +115,6 @@ void ConnectDrawWindow::onValidate()
 
 	Utils::ref().isConnected = Utils::ref().connectWithShopId(editText->getText());
 
-	if(Utils::ref().isConnected)
-	{
-		showSnackBar("CONNEXION REUSSI", true);
-
-	}
-	else
-	{
-		showSnackBar("ECHEC CONNEXION", false);
-	}
-
-	mainWindow.dispatch(0);
-	mainWindow.show();
-	sleep(1);
 	canDispatch = false;
 }
 
