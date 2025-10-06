@@ -319,6 +319,7 @@ $(OBJ_PATH)/PaymentQRWindow.o \
 $(OBJ_PATH)/WaitingWindow.o \
 $(OBJ_PATH)/PaymentPreTransacWindow.o \
 $(OBJ_PATH)/PinpadThread.o \
+$(OBJ_PATH)/YesNoWindow.o \
 
 #-------------------------------------------------------------------------------
 # Dependencies
@@ -593,6 +594,16 @@ $(OBJ_PATH)/PinpadThread.o: Src/PinpadThread.cpp $(DEPENDENCIES) $(EXTRA_DEPENDE
 	@echo "'Src/PinpadThread.cpp' compilation in progress..."
 	$(CC) $(CC_OPTS) -MMD -MP -o "$@" "$<" @$(INCLUDE_FILE_OPT)
 ifeq ($(MAKECMDGOALS), $(OBJ_PATH)/PinpadThread.o)
+	@echo "done!"
+endif
+
+ifneq ($(MAKECMDGOALS), clean)
+-include $(OBJ_PATH)/YesNoWindow.d
+endif
+$(OBJ_PATH)/YesNoWindow.o: Src/YesNoWindow.cpp $(DEPENDENCIES) $(EXTRA_DEPENDENCIES) $(INCLUDE_FILE_OPT)
+	@echo "'Src/YesNoWindow.cpp' compilation in progress..."
+	$(CC) $(CC_OPTS) -MMD -MP -o "$@" "$<" @$(INCLUDE_FILE_OPT)
+ifeq ($(MAKECMDGOALS), $(OBJ_PATH)/YesNoWindow.o)
 	@echo "done!"
 endif
 

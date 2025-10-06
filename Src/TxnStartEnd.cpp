@@ -16,6 +16,7 @@
 #include "PayIDWindow.hpp"
 #include "Utils.hpp"
 #include "PrintTicketWindow.hpp"
+#include "YesNoWindow.hpp"
 //                            #####################
 //                            #   TXN START END   #
 //                            #####################
@@ -102,7 +103,7 @@ int TxnStartEnd::start(const TLV_TREE_NODE inputData, TLV_TREE_NODE outputData)
 			free(Utils::ref().payIdWindow);
 		}
 
-		if(!(bool)jsonParam["ANCVOnly"].as_bool())
+		if(!(bool)jsonParam["ANCVOnly"].as_bool() || !(YesNoWindow(Utils::ref().glib, "",amountToComplete).drawing()))
 		{
 			 amountToComplete = 0;
 		}

@@ -21,6 +21,7 @@
 <file generated="false" name="Src/WaitingWindow.cpp" parentProject=""/>
 <file generated="false" name="Src/PaymentPreTransacWindow.cpp" parentProject=""/>
 <file generated="false" name="Src/PinpadThread.cpp" parentProject=""/>
+<file generated="false" name="Src/YesNoWindow.cpp" parentProject=""/>
 </virtualFolder>
 <archiveFilesVirtualFolder name="Archive Files">
 <archive dirParentProject="" directoryToArchive="Resources" name="Bin/Resources.tar"/>

@@ -233,6 +233,7 @@ void PaymentQRWindow::refreshInformation()
 
 				transactionStatusLabel.setText("Transaction OK");
 				transactionImage.setSource("file://flash/HOST/valid.png");
+				Utils::ref().terminateTransac(true, 1);
 				mainWindow.dispatch(0);
 				m_ppwindow.dispatch(0);
 			}
