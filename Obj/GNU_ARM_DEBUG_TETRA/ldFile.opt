@@ -28,6 +28,8 @@
 "Obj/GNU_ARM_DEBUG_TETRA/ThreadRequest.o"
 "Obj/GNU_ARM_DEBUG_TETRA/PaymentQRWindow.o"
 "Obj/GNU_ARM_DEBUG_TETRA/WaitingWindow.o"
+"Obj/GNU_ARM_DEBUG_TETRA/PaymentPreTransacWindow.o"
+"Obj/GNU_ARM_DEBUG_TETRA/PinpadThread.o"
 "--start-group"
 "D:/MyProjects/TETRA/cib_dll_t3/Bin/GNU_ARM_DEBUG_TETRA/libCibT3Dll.so"
 "C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/lib/Platform/LIBBATTERY.T3L"

@@ -6,14 +6,14 @@
 class ThreadRequest : public ingenico::os::Thread {
 public:
     // Constructeur
-	ThreadRequest();
+	ThreadRequest(bool isPreTransac);
 
     // Thread principal
     void run();
     void stop();
 private:
 	bool canDispatch;
-
+	bool isPreTransac;
 };
 
 

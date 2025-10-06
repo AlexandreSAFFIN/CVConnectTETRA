@@ -32,7 +32,7 @@ void PrintTicketWindow::processId(int id)
 	{
 		if(id == 1)
 		{
-			//TODO PRINT TICKET COMMERCANT
+			//PRINT TICKET
 		}
 		canDispatch = false;
 
@@ -46,11 +46,11 @@ PrintTicketWindow::PrintTicketWindow(GraphicLib& glib, string text) :
     createSnackBar();
 
     new TileButton(mainWindow,
-    		Utils::ref().getIconsPath("rounded"), Utils::ref().getIconsPath("pay"), "OUI",
+    		Utils::ref().getIconsPath("rounded"), Utils::ref().getIconsPath("ok_icon"), "OUI",
     		        8,150,1,this, &BaseDrawWindow::onClick);
 
     new TileButton(mainWindow,
-    		Utils::ref().getIconsPath("rounded"), Utils::ref().getIconsPath("qrcode"), "NON",
+    		Utils::ref().getIconsPath("rounded"), Utils::ref().getIconsPath("cancel_icon"), "NON",
     		        165,150,2,this, &BaseDrawWindow::onClick);
 
 
@@ -60,8 +60,9 @@ PrintTicketWindow::PrintTicketWindow(GraphicLib& glib, string text) :
 
 void PrintTicketWindow::refreshInformation()
 {
-	isClient = true;
+	isClient = false;
     mainWindow.show();
+    title->setText("TICKET COMMERCANT");
 }
 
 // Redéfinition de la méthode drawing

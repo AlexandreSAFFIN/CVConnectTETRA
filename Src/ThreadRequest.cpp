@@ -3,15 +3,24 @@
 #include "Utils.hpp"
 
 // Constructeur
-ThreadRequest::ThreadRequest() : Thread()  {
+ThreadRequest::ThreadRequest(bool isPreTransac) : Thread()  {
     canDispatch = true;
+    this->isPreTransac = isPreTransac;
+    PaymentQRWindow::error = 0;
 }
 
 // Thread principal
 void ThreadRequest::run(){
 	do
 	{
-//		PaymentQRWindow::error = Utils::ptr()->getTransactionState();
+		if(isPreTransac)
+		{
+			PaymentQRWindow::error = Utils::ptr()->pollingTransacResult();
+		}
+		else
+		{
+			PaymentQRWindow::error = Utils::ptr()->pollingPreTransacResult();
+		}
 	}while(canDispatch);
 }
 

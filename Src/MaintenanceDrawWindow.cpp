@@ -108,18 +108,18 @@ MaintenanceDrawWindow::MaintenanceDrawWindow(GraphicLib& glib, string text) :
     createSnackBar();
 
     new TileButton(mainWindow,
-        Utils::ref().getIconsPath("rounded"), Utils::ref().getIconsPath("pay"), "Maintenance",
+        Utils::ref().getIconsPath("rounded"), Utils::ref().getIconsPath("maintenance_icon"), "Maintenance",
         8,74,1, this, &BaseDrawWindow::onClick);
 
     new TileButton(mainWindow,
-    		Utils::ref().getIconsPath("rounded"), Utils::ref().getIconsPath("pay"), "Reseau",
+    		Utils::ref().getIconsPath("rounded"), Utils::ref().getIconsPath("reseau_icon"), "Reseau",
     		        8,230,2, this, &BaseDrawWindow::onClick);
 
     new TileButton(mainWindow,
-    		Utils::ref().getIconsPath("rounded"), Utils::ref().getIconsPath("pay"), "Option",160,74,3, this, &BaseDrawWindow::onClick);
+    		Utils::ref().getIconsPath("rounded"), Utils::ref().getIconsPath("parametre_icon"), "Option",160,74,3, this, &BaseDrawWindow::onClick);
 
     new TileButton(mainWindow,
-    		Utils::ref().getIconsPath("rounded"), Utils::ref().getIconsPath("pay"), "Update",160,230,4, this, &BaseDrawWindow::onClick);
+    		Utils::ref().getIconsPath("rounded"), Utils::ref().getIconsPath("ok_icon"), "Update",160,230,4, this, &BaseDrawWindow::onClick);
 
 
     mainWindow.registerMethod(GL_EVENT_KEY_DOWN, this, &MaintenanceDrawWindow::onKeyPress);

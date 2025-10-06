@@ -55,6 +55,7 @@ ConnectDrawWindow::ConnectDrawWindow(GraphicLib& glib, string text) :
     editText->setBackColor(GL_COLOR_WHITE);
     editText->setForeColor(GL_COLOR_BLACK);
     editText->setTextAlign(GL_ALIGN_CENTER);
+    editText->setBorders(2,2,2,2,GL_UNIT_PIXEL, GL_COLOR_BLACK);
 
     Label spacerRight(row);
     spacerRight.setItem(2, 0);
@@ -112,10 +113,20 @@ void ConnectDrawWindow::onValidate()
 {
 
 	Utils::ref().isConnected = false;
-
+	mainWindow.hide();
+	mainWindow.dispatch(0);
 	Utils::ref().isConnected = Utils::ref().connectWithShopId(editText->getText());
+	Utils::ref().isConnected = true;
+	if(!Utils::ref().isConnected)
+	{
+		mainWindow.show();
+		mainWindow.dispatch(0);
+	}
+	else
+	{
+		canDispatch = false;
+	}
 
-	canDispatch = false;
 }
 
 bool ConnectDrawWindow::onKeyPress(ingenico::graphics::Message &message) {

@@ -1,5 +1,5 @@
 #ifndef PAYIDDRAWWINDOW_HPP
-#define PAYIDTDRAWINDOW_HPP
+#define PAYIDDRAWWINDOW_HPP
 
 #include "BaseDrawWindow.hpp"
 #include "TileButton.hpp"
@@ -29,7 +29,7 @@ public:
     bool drawing();
     bool onClick(Message&);
     void refreshInformation();
-
+    void dispatchPpWindow();
     bool onKeyPress(ingenico::graphics::Message &message);
     void onValidate();
 };

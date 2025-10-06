@@ -26,7 +26,7 @@ TileButton::TileButton(ingenico::graphics::Widget& parent,
     const int buttonWidth = 140;
     const int buttonHeight = 140;
     const int labelHeight = 30;
-    const int iconSize = 54;
+    const int iconSize = 74;
 
     back = new Picture(parent, "");
     back->setTransformation(GL_TRANSFORMATION_NONE);
@@ -51,11 +51,12 @@ TileButton::TileButton(ingenico::graphics::Widget& parent,
     label = new Label(parent, "");
     label->setText(labelTxt);
     label->setTextAlign(GL_ALIGN_CENTER);
-    label->setForeColor(GL_COLOR_BLACK);
+    label->setForeColor(GL_COLOR_WHITE);
     label->setPosition(x, y + buttonHeight - labelHeight - 10, GL_UNIT_PIXEL);
     label->setSize(buttonWidth, labelHeight, GL_UNIT_PIXEL);
     label->setForeAlign(GL_ALIGN_CENTER);
     label->setFontScale(GL_SCALE_MEDIUM);
+    label->setFontStyle(GL_FONT_STYLE_BOLD);
     label->setFontName("Arial");
     // Icon (54px, centré dans l'espace restant)
     const int availableHeight = buttonHeight - labelHeight;
@@ -66,6 +67,7 @@ TileButton::TileButton(ingenico::graphics::Widget& parent,
     icon->setSource(iconPng);
     icon->setSize(iconSize, iconSize, GL_UNIT_PIXEL);
     icon->setPosition(iconX, iconY, GL_UNIT_PIXEL);
+    icon->setTransformation(GL_TRANSFORMATION_STRETCH_ALL);
 
 }
 

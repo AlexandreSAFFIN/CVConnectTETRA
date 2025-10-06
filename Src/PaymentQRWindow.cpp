@@ -83,20 +83,6 @@ PaymentQRWindow::PaymentQRWindow(GraphicLib& glib, GraphicLib& pLib, string text
     createSnackBar();
 }
 
-void PaymentQRWindow::generateQrCodeImage()
-{
-
-//	qrCodeViewer->setValue(qrCodeContent.c_str(), qrCodeContent.length());
-//	qrCodeViewer->setMimeType(GL_MIME_BARCODE_QR);
-//	qrCodeViewer->setParam(GL_BARCODE_QR_MARGIN, 1);
-//	qrCodeViewer->setPosition(0, 0, GL_UNIT_PIXEL);
-//	qrCodeViewer->setTransformation(GL_TRANSFORMATION_STRETCH_ALL);
-//	qrCodeViewer->setSize(160, 160, GL_UNIT_PIXEL);
-//	qrWindow.setSize(160,160, GL_UNIT_PIXEL);
-//	qrWindow.setPosition(80, 105, GL_UNIT_PIXEL);
-//	qrWindow.setTextAlign(GL_ALIGN_CENTER); // Centré
-}
-
 // Redéfinition de la méthode drawing
 bool PaymentQRWindow::drawing()
 {
@@ -111,12 +97,15 @@ bool PaymentQRWindow::drawing()
 	canDispatch = true;
 	statePayment = WaitingScanning;
 	hideSnackBar();
-	generateQrCodeImage();
 	transactionStatusLabel.setText("Scannez le QrCode");
 	p_transactionStatusLabel.setText("Scannez le QrCode");
 	m_ppwindow.show();
 
 	displayQrCode(amount);
+
+	threadRequest = new ThreadRequest(true);
+	threadRequest->start();
+
 	refreshInformation();
 
     while(canDispatch)
@@ -175,87 +164,65 @@ void PaymentQRWindow::displayQrCode(long long int amount)
 	}
 }
 
+void PaymentQRWindow::treatPollingReturn()
+{
+	if(error > 0 || timer >= 100000)
+	{
+		if(error == 201)
+		{
+			statePayment = ProcessInProgress;
+			timer = 0;
+		}
+		else if(error == 202)
+		{
+			transactionStatus = true;
+			statePayment = Finish;
+			timer = 0;
+		}
+		else if(error == 203 || timer >= 100000)
+		{
+			transactionStatus = false;
+			statePayment = CanclByPinpad;
+			timer = 0;
+		}
+		else if(error == 204)
+		{
+			transactionStatus = false;
+			statePayment = Finish;
+			timer = 0;
+		}
+		else if(error == 205)
+		{
+			transactionStatus = false;
+			statePayment = Finish;
+			timer = 0;
+		}
+
+		usleep(150000);
+		timer+=15;
+	}
+}
 void PaymentQRWindow::refreshInformation()
 {
 	T_GL_SIZE psize = m_ppwindow.getGraphicLib().getScreenSize();
-
+	treatPollingReturn();
 	switch (statePayment) {
 		case WaitingScanning:
 			p_transactionImage->setVisible(true);
-			if(threadRequest == NULL)
-			{
-				threadRequest = new ThreadRequest();
-				threadRequest->start();
-			}
-			usleep(150000);
-			timer+=15;
-			//ECHEC TRANSACTION
-			if(timer >= 100000 || error >= 400)
-			{
-				transactionStatus = false;
-				statePayment = Finish;
-				threadRequest->stop();
-				threadRequest->join();
-				threadRequest = NULL;
-				timer=0;
-			}
-			if(error == 200)
-			{
-				threadRequest->stop();
-				threadRequest->join();
-				threadRequest = NULL;
-				statePayment = ProcessInProgress;
-				timer=0;
-			}
 			break;
-
 		case ProcessInProgress:
-			if(timer == 0)
+			transactionStatusLabel.setText("Transaction en cours...");
+			if(Ppad_IsConnected(PPAD_ID_0))
 			{
-//				qrWindow.setVisible(false);
-//				qrWindow.dispatch(0);
-
-				transactionStatusLabel.setText("Transaction en cours...");
-				if(Ppad_IsConnected(PPAD_ID_0))
-				{
-					p_transactionImage->setSize(100, 100, GL_UNIT_PIXEL); // Taille suffisante pour le QR code ou autre image
-					p_transactionImage->setPosition((psize.width-100)/2, (psize.height-100)/2, GL_UNIT_PIXEL); // Centré en dessous des labels
-					p_transactionImage->setSource("file://flash/HOST/waiting.png");
-					p_transactionStatusLabel.setText("Transaction en cours...");
-					m_ppwindow.dispatch(0);
-				}
-			}
-			usleep(150000);
-			timer+=15;
-			//CANCEL
-			if(timer >= 100000  || error >= 400)
-			{
-				threadRequest->stop();
-				threadRequest = NULL;
-				transactionStatus = false;
-				statePayment = Finish;
-				timer = 0;
-			}
-			else if(error == 200)
-			{
-				if(threadRequest != NULL)
-				{
-					threadRequest->stop();
-					threadRequest->join();
-					threadRequest = NULL;
-				}
-				transactionStatus = true;
-				statePayment = Finish;
-				timer=0;
+				p_transactionImage->setSize(100, 100, GL_UNIT_PIXEL); // Taille suffisante pour le QR code ou autre image
+				p_transactionImage->setPosition((psize.width-100)/2, (psize.height-100)/2, GL_UNIT_PIXEL); // Centré en dessous des labels
+				p_transactionImage->setSource("file://flash/HOST/waiting.png");
+				p_transactionStatusLabel.setText("Transaction en cours...");
+				m_ppwindow.dispatch(0);
 			}
 			break;
 
 		case Finish:
-
-//			qrWindow.setVisible(false);
-//			qrWindow.dispatch(0);
-			transactionImage.setVisible(true);
-
 			if(transactionStatus)
 			{
 				p_transactionStatusLabel.setText("Transaction OK");
@@ -293,17 +260,33 @@ void PaymentQRWindow::refreshInformation()
 			canDispatch = false;
 
 			break;
+		case CanclByPinpad:
+			p_transactionStatusLabel.setText("Transaction Annulé");
+			p_transactionImage->setSource("file://flash/HOST/cancel.png");
+			p_transactionImage->setSize(100, 100, GL_UNIT_PIXEL); // Taille suffisante pour le QR code ou autre image
+			p_transactionImage->setPosition((psize.width - 100)/2, (psize.height)/2-60, GL_UNIT_PIXEL); // Centré en dessous des labels
+
+			transactionStatusLabel.setText("Echec de la transaction");
+			transactionImage.setSource("file://flash/HOST/cancel.png");
+			mainWindow.dispatch(0);
+			m_ppwindow.dispatch(0);
+
+
+			if(threadRequest)
+			{
+				threadRequest->stop();
+				threadRequest->join();
+				threadRequest = NULL;
+			}
+			Utils::ref().terminateTransac(false, 0);
+			canDispatch = false;
+
+			break;
 
 		default:
-			// Gérer un cas inattendu si nécessaire
 			transactionStatusLabel.setText("État inconnu.");
 			break;
 	    }
-}
-
-void PaymentQRWindow::setQrCodeContent(string content)
-{
-	qrCodeContent = content;
 }
 
 bool PaymentQRWindow::onKeyPress(ingenico::graphics::Message &message) {

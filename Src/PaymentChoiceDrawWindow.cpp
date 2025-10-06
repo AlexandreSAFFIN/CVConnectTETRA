@@ -34,8 +34,8 @@ void PaymentChoiceDrawWindow::processId(int id)
 		else
 		{
 			isQRChoice = true;
-			button1->setTextAndIcon("QRCODE", Utils::ref().getIconsPath("pay"));
-			button2->setTextAndIcon("ID CLIENT", Utils::ref().getIconsPath("pay"));
+			button1->setTextAndIcon("QRCODE", Utils::ref().getIconsPath("qr_icon"));
+			button2->setTextAndIcon("ID CLIENT", Utils::ref().getIconsPath("maintenance_icon"));
 			title->setText("OPTION PAIEMENT");
 		}
 	}
@@ -58,11 +58,11 @@ PaymentChoiceDrawWindow::PaymentChoiceDrawWindow(GraphicLib& glib, string text) 
     createSnackBar();
 
     button1 = new TileButton(mainWindow,
-    		Utils::ref().getIconsPath("rounded"), Utils::ref().getIconsPath("pay"), "CB",
+    		Utils::ref().getIconsPath("rounded"), Utils::ref().getIconsPath("cb_icon"), "CB",
     		        8,150,1,this, &BaseDrawWindow::onClick);
 
     button2 = new TileButton(mainWindow,
-    		Utils::ref().getIconsPath("rounded"), Utils::ref().getIconsPath("qrcode"), "ANCV",
+    		Utils::ref().getIconsPath("rounded"), Utils::ref().getIconsPath("ancv_icon"), "ANCV",
     		        165,150,2,this, &BaseDrawWindow::onClick);
 
 
@@ -74,8 +74,8 @@ void PaymentChoiceDrawWindow::refreshInformation()
 {
 	paymentChoice = CB;
 	isQRChoice = false;
-	button1->setTextAndIcon("CB", Utils::ref().getIconsPath("pay"));
-	button2->setTextAndIcon("ANCV", Utils::ref().getIconsPath("pay"));
+	button1->setTextAndIcon("CB", Utils::ref().getIconsPath("cb_icon"));
+	button2->setTextAndIcon("ANCV", Utils::ref().getIconsPath("ancv_icon"));
 	title->setText("MOYEN DE PAIEMENT");
     mainWindow.show();
 }
@@ -118,8 +118,8 @@ bool PaymentChoiceDrawWindow::onKeyPress(ingenico::graphics::Message &message) {
         	if(isQRChoice)
         	{
         		isQRChoice = false;
-    			button1->setTextAndIcon("CB", Utils::ref().getIconsPath("pay"));
-    			button2->setTextAndIcon("ANCV", Utils::ref().getIconsPath("pay"));
+    			button1->setTextAndIcon("CB", Utils::ref().getIconsPath("cb_icon"));
+    			button2->setTextAndIcon("ANCV", Utils::ref().getIconsPath("ancv_icon"));
     			title->setText("MOYEN DE PAIEMENT");
         	}
         	else

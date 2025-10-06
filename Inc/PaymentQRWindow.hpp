@@ -10,6 +10,8 @@ enum StatePayment {
     WaitingScanning,   // En attente de scanner
     ProcessInProgress, // Processus en cours
     Finish,             // Transaction terminée
+	CanclByPinpad,
+	ToLowAmount,
 };
 
 class PaymentQRWindow : public BaseDrawWindow {
@@ -27,10 +29,9 @@ public:
     bool onKeyPress(ingenico::graphics::Message &message);
     bool onClick(Message& msg);
 
-    void setQrCodeContent(string content);
+//    void setQrCodeContent(string content);
     void onCancelClick(Message& msg);
-    void generateQrCodeImage();
-
+    void treatPollingReturn();
 private:
 
     long long int amount;

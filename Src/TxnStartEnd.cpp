@@ -12,8 +12,10 @@
 #include "AppResources.hpp"
 #include "PaymentChoiceDrawWindow.hpp"
 #include "PaymentQRWindow.hpp"
+#include "PaymentPreTransacWindow.hpp"
 #include "PayIDWindow.hpp"
 #include "Utils.hpp"
+#include "PrintTicketWindow.hpp"
 //                            #####################
 //                            #   TXN START END   #
 //                            #####################
@@ -55,6 +57,9 @@ int TxnStartEnd::start(const TLV_TREE_NODE inputData, TLV_TREE_NODE outputData)
 	bool isParam = Utils::ref().isConnected;
 	isParam = true;
 	bool isANCV = false;
+	int amountToComplete = 0;
+	unsigned long readerDetected = TXN_TECHNO_READER_DETECTED;
+
 
 	if(isParam)
 	{
@@ -64,39 +69,46 @@ int TxnStartEnd::start(const TLV_TREE_NODE inputData, TLV_TREE_NODE outputData)
 	long long int amount = atoll((txn.amount).c_str());
 	if((!(atoll((txn.amount).c_str()) > 2147483647) && txn.txnType == TXN_TRANSACTION_TYPE_DEBIT && isANCV))
 	{
+		jsonParam["amountToPay"] = amount;
+		saveDataAsJson(FIC_PARAM, jsonParam);
 		PaymentQRWindow* pw;
-		if(Utils::ref().paymentChoiceWindow->getPM() == QRCODE && Utils::ref().initQrCodePayment(amount))
+		if(Utils::ref().paymentChoiceWindow->getPM() == QRCODE)
 		{
-			pw = new PaymentQRWindow(Utils::ref().glib,PadSGL::ref(), "MOYEN DE PAIEMENT", amount, txn.amount);
-			pw->drawing();
-////			unsigned long readerDetected = TXN_TECHNO_READER_DETECTED;
-//			 m_transaction->updateTransactionInfo(outputData,1);
-//			 updateTransactionInfo(outputData, 1, NULL, NULL, NULL);
-			free(pw);
+			if(Utils::ref().initQrCodePayment(amount))
+			{
+				pw = new PaymentQRWindow(Utils::ref().glib,PadSGL::ref(), "MOYEN DE PAIEMENT", amount, txn.amount);
+				if(pw->drawing())
+				{
+					loadDataAsJson(FIC_PARAM, jsonParam);
+					amountToComplete = (int)jsonParam["toComplete"].as_int();
+					PrintTicketWindow(Utils::ref().glib, "IMPRESSION TICKET").drawing();
+				}
+				free(pw);
+			}
 		}
 		else
 		{
-			if(!PayIDWindow(Utils::ref().glib,PadSGL::ref(), "MOYEN DE PAIEMENT", amount).drawing())
+			Utils::ref().payIdWindow = new PayIDWindow(Utils::ref().glib,PadSGL::ref(), "MOYEN DE PAIEMENT", amount);
+			if(Utils::ref().payIdWindow->drawing())
 			{
-				unsigned long readerDetected = TXN_TECHNO_READER_DETECTED;
-				updateTransactionInfo(outputData, 44, NULL, NULL, &readerDetected);
+				PaymentPreTransacWindow* ppw = new PaymentPreTransacWindow(Utils::ref().glib, PadSGL::ref(), "PAIEMENT ANCV");
+				if(ppw->drawing())
+				{
+					loadDataAsJson(FIC_PARAM, jsonParam);
+					amountToComplete = (int)jsonParam["toComplete"].as_int();
+					PrintTicketWindow(Utils::ref().glib, "IMPRESSION TICKET").drawing();
+				}
 			}
+			free(Utils::ref().payIdWindow);
 		}
-		//		bool resultQrCodeReading = m_transaction->showQRCode(amount);
-		//		const string currency = (string)jsonParam["Acceptor"]["devise"].as_string();
-		//		if (resultQrCodeReading)
-		//		{
-		//			unsigned long readerDetected = TXN_TECHNO_NONE;
-		//			updateTransactionInfo(outputData, amount, &currency, NULL, &readerDetected);
-		//		}
-		//		else
-		//		{
-		//			unsigned long readerDetected = TXN_TECHNO_READER_DETECTED;
-		//			updateTransactionInfo(outputData, 0, NULL, NULL, &readerDetected);
-		//		}
 
-//		unsigned long readerDetected = TXN_TECHNO_READER_DETECTED;
-//		updateTransactionInfo(outputData, 0, NULL, NULL, &readerDetected);
+		if(!(bool)jsonParam["ANCVOnly"].as_bool())
+		{
+			 amountToComplete = 0;
+		}
+
+		m_transaction->updateTransactionInfo(outputData,0);
+		updateTransactionInfo(outputData, amountToComplete, NULL, NULL, &readerDetected);
 	}
 
 

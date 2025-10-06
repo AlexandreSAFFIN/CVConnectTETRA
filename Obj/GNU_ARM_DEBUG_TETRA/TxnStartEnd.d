@@ -257,9 +257,11 @@ Obj/GNU_ARM_DEBUG_TETRA/TxnStartEnd.o: Src/TxnStartEnd.cpp \
  Inc/Transaction.hpp Inc/Transaction.hpp Inc/AppResources.hpp \
  Inc/PaymentChoiceDrawWindow.hpp Inc/BaseDrawWindow.hpp \
  Inc/TileButton.hpp Inc/PaymentQRWindow.hpp Inc/ThreadRequest.hpp \
+ Inc/PaymentPreTransacWindow.hpp Inc/PaymentQRWindow.hpp \
  Inc/PayIDWindow.hpp Inc/Utils.hpp \
  C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/inc/c/Platform/GOAL/GL_File.h \
- Inc/PaymentChoiceDrawWindow.hpp Inc/WaitingWindow.hpp
+ Inc/PaymentChoiceDrawWindow.hpp Inc/WaitingWindow.hpp \
+ Inc/PayIDWindow.hpp Inc/PrintTicketWindow.hpp
 
 Inc/TxnStartEnd.hpp:
 
@@ -789,6 +791,10 @@ Inc/PaymentQRWindow.hpp:
 
 Inc/ThreadRequest.hpp:
 
+Inc/PaymentPreTransacWindow.hpp:
+
+Inc/PaymentQRWindow.hpp:
+
 Inc/PayIDWindow.hpp:
 
 Inc/Utils.hpp:
@@ -798,3 +804,7 @@ C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/inc/c/Platf
 Inc/PaymentChoiceDrawWindow.hpp:
 
 Inc/WaitingWindow.hpp:
+
+Inc/PayIDWindow.hpp:
+
+Inc/PrintTicketWindow.hpp:

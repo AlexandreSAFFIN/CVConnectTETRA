@@ -108,14 +108,14 @@ Utils::Utils()
 }
 
 
-int Utils::connect()
+int Utils::connect(bool isANCV)
 {
 	int iRet = LL_ERROR_OK;
 
 	if(LL_GetStatus(m_session.getSessionHandle()) != LL_STATUS_CONNECTED)
 	{
 		m_session.setSessionData(m_host, 443, m_cntType, "CIB", m_gprs);
-		if ((iRet = m_session.configAndConnect()) != LL_ERROR_OK)
+		if ((iRet = m_session.configAndConnect()) != LL_ERROR_OK && !isANCV)
 		{
 			SGL::ref().dialogMessage("Erreur", "Connexion impossible", GL_ICON_ERROR, GL_BUTTON_VALID, GL_TIME_SECOND);
 		}
@@ -265,11 +265,11 @@ bool Utils::checkIfIntBullshitApiIsValid(int value)
 }
 
 
-Response Utils::createRequest(string path, eMethod method, const string &body)
+Response Utils::createRequest(string path, eMethod method, const string &body, bool isANCVRequest)
 {
 	Request request = m_session.getRequest();
-	waitingWindow->drawing();
-	if (this->connect() == LL_ERROR_OK)
+
+	if (this->connect(isANCVRequest) == LL_ERROR_OK)
 	{
 		request.editRequest(method, path, body);
 		if (method == _POST)
@@ -286,11 +286,14 @@ Response Utils::createRequest(string path, eMethod method, const string &body)
 		case 401:
 			break;
 		default:
-			SGL::ref().dialogMessage("Communication", "Une erreur est survenue", GL_ICON_WARNING, GL_BUTTON_VALID, GL_TIME_SECOND);
+			if(!isANCVRequest)
+			{
+				SGL::ref().dialogMessage("Communication", "Une erreur est survenue", GL_ICON_WARNING, GL_BUTTON_VALID, GL_TIME_SECOND);
+			}
 			break;
 		}
 	}
-	waitingWindow->hidding();
+
 	return m_session.getResponse();
 }
 
@@ -398,9 +401,9 @@ bool Utils::sendMiseEnPaiementTransac(string beneficiaryId, long long int amount
 	return bRet;
 }
 
-bool Utils::pollingPreTransacResult(string orderId)
+int Utils::pollingPreTransacResult()
 {
-	bool bRet = false;
+	int iRet = 0;
 	Response response;
 	cib::json::Document jsonBody;
 	cib::json::Document jsonParam;
@@ -410,7 +413,7 @@ bool Utils::pollingPreTransacResult(string orderId)
 	if(jsonParam["shopId"] && jsonParam["shopId"] != "")
 	{
 
-		jsonBody["id"] = orderId;
+		jsonBody["id"] = jsonBody["orderId"];
 
 		// Effectuer la requête POST pour obtenir un nouveau token
 		response = createRequest("/PollingPreTransac", _POST, jsonBody.serialize());
@@ -429,7 +432,35 @@ bool Utils::pollingPreTransacResult(string orderId)
 						jsonParam["beneficiaryId"] = beneficiaryId;
 						jsonParam["lastState"] = etat;
 						saveDataAsJson(FIC_PARAM, jsonParam);
-						bRet = true;
+						if(etat == "SCANNED")
+						{
+							iRet = 201;
+						}
+						else if(etat == "VALIDATED")
+						{
+							iRet = 202;
+							if((int)jsonResponse["PollingPreTransacResult"]["total"].as_int() < (int)jsonParam["amountToPay"].as_int()
+												&& (bool)!jsonParam["ANCVOnly"].as_bool() )
+							{
+								jsonParam["toComplete"] = (int)jsonParam["amountToPay"].as_int() - (int)jsonResponse["PollingPreTransacResult"]["total"].as_int();
+							}
+							else if((int)jsonResponse["PollingPreTransacResult"]["total"].as_int() < (int)jsonParam["amountToPay"].as_int())
+							{
+								iRet = 203;
+							}
+						}
+						else if(etat == "ABORTED")
+						{
+							iRet = 203;
+						}
+						else if(etat == "TIMEOUT")
+						{
+							iRet = 204;
+						}
+						else if(etat == "ERROR")
+						{
+							iRet = 205;
+						}
 					}
 				}
 
@@ -437,12 +468,12 @@ bool Utils::pollingPreTransacResult(string orderId)
 		}
 	}
 
-	return bRet;
+	return iRet;
 }
 
-bool Utils::pollingTransacResult(string orderId)
+int Utils::pollingTransacResult()
 {
-	bool bRet = false;
+	int iRet = 0;
 	Response response;
 	cib::json::Document jsonBody;
 	cib::json::Document jsonParam;
@@ -452,7 +483,7 @@ bool Utils::pollingTransacResult(string orderId)
 	if(jsonParam["shopId"] && jsonParam["shopId"] != "")
 	{
 
-		jsonBody["id"] = orderId;
+		jsonBody["id"] = jsonBody["orderId"];
 
 		// Effectuer la requête POST pour obtenir un nouveau token
 		response = createRequest("/PollingTransac", _POST, jsonBody.serialize());
@@ -471,7 +502,36 @@ bool Utils::pollingTransacResult(string orderId)
 						jsonParam["beneficiaryId"] = beneficiaryId;
 						jsonParam["lastState"] = etat;
 						saveDataAsJson(FIC_PARAM, jsonParam);
-						bRet = true;
+						if(etat == "SCANNED")
+						{
+							iRet = 201;
+						}
+						else if(etat == "VALIDATED")
+						{
+							iRet = 202;
+							if((int)jsonResponse["ResponsePollingTransac"]["PollingTransacResult"]["total"].as_int() < (int)jsonParam["amountToPay"].as_int()
+												&& (bool)!jsonParam["ANCVOnly"].as_bool() )
+							{
+								jsonParam["toComplete"] = (int)jsonParam["amountToPay"].as_int() - (int)jsonResponse["PollingPreTransacResult"]["total"].as_int();
+							}
+							else if((int)jsonResponse["ResponsePollingTransac"]["PollingTransacResult"]["total"].as_int() < (int)jsonParam["amountToPay"].as_int())
+							{
+								iRet = 203;
+							}
+						}
+						else if(etat == "ABORTED")
+						{
+							iRet = 203;
+						}
+						else if(etat == "TIMEOUT")
+						{
+							iRet = 204;
+						}
+						else if(etat == "ERROR")
+						{
+							iRet = 205;
+						}
+
 					}
 				}
 
@@ -479,10 +539,10 @@ bool Utils::pollingTransacResult(string orderId)
 		}
 	}
 
-	return bRet;
+	return iRet;
 }
 
-bool Utils::terminateTransac(string orderId, bool isValid)
+bool Utils::terminateTransac(bool isValid, int isPre)
 {
 	bool bRet = false;
 	Response response;
@@ -497,7 +557,7 @@ bool Utils::terminateTransac(string orderId, bool isValid)
 		{
 			jsonBody["ParamValidateTransaction"] = json::Document(json::VALUE_IS_OBJECT);
 			jsonBody["ParamValidateTransaction"]["id"] = jsonParam["orderId"];
-			jsonBody["ParamValidateTransaction"]["pre_or_transac"] = 1;
+			jsonBody["ParamValidateTransaction"]["pre_or_transac"] = isPre;
 			jsonBody["ParamValidateTransaction"]["paidWithCB"] = 0;
 
 			response = createRequest("/ValidateTransaction", _POST, jsonBody.serialize());
@@ -506,9 +566,9 @@ bool Utils::terminateTransac(string orderId, bool isValid)
 		{
 			jsonBody["ParamValidateTransaction"] = json::Document(json::VALUE_IS_OBJECT);
 			jsonBody["ParamValidateTransaction"]["id"] = jsonParam["orderId"];
-			jsonBody["ParamValidateTransaction"]["pre_or_transac"] = 1;
+			jsonBody["ParamValidateTransaction"]["pre_or_transac"] = isPre;
 			jsonBody["ParamValidateTransaction"]["reason"] = "ABORTED_MERCHANT";
-			jsonBody["ParamValidateTransaction"]["cancelOrigine"] = 0;
+			jsonBody["ParamValidateTransaction"]["cancelOrigine"] = 1;
 
 			response = createRequest("/AnnuleTransacPreTransac", _POST, jsonBody.serialize());
 		}
@@ -566,7 +626,7 @@ bool Utils::checkLicense()
 		jsonBody["RequestHasLicense"]["shopId"] = (string)jsonParam["shopId"].as_string();
 
 		// Effectuer la requête POST pour obtenir un nouveau token
-		response = createRequest("/checkLicence", _POST, jsonBody.serialize());
+		response = createRequest("/checkLicence", _POST, jsonBody.serialize(), true);
 		if (response.getStatusCode() == 200)
 		{
 			jsonResponse.parse(response.getContent().data());
@@ -606,7 +666,7 @@ bool Utils::connectWithShopId(string shopId)
 
 	loadDataAsJson(FIC_PARAM, jsonParam);
 	Utils::waitingWindow->drawing("Opération en cours", Waiting);
-	response = createRequest("/GetShopId/"+Terminal::ref().SerialNumber, _GET, "");
+	response = createRequest("/GetShopId/"+Terminal::ref().SerialNumber, _GET, "", true);
 	if (response.getStatusCode() == 200)
 	{
 		jsonResponse.parse(response.getContent().data());
@@ -626,10 +686,10 @@ bool Utils::connectWithShopId(string shopId)
 		msg = "Id Inconnu";
 		if(response.getStatusCode() != 200)
 		{
-			msg = "Une erreur réseaue est survenue";
+			msg = "Une erreur réseau est survenue";
 		}
 	}
-	Utils::waitingWindow->drawing("Opération en cours", step);
+	Utils::waitingWindow->drawing(msg, step);
 
 	return bRet;
 }

@@ -317,6 +317,8 @@ $(OBJ_PATH)/PrintTicketWindow.o \
 $(OBJ_PATH)/ThreadRequest.o \
 $(OBJ_PATH)/PaymentQRWindow.o \
 $(OBJ_PATH)/WaitingWindow.o \
+$(OBJ_PATH)/PaymentPreTransacWindow.o \
+$(OBJ_PATH)/PinpadThread.o \
 
 #-------------------------------------------------------------------------------
 # Dependencies
@@ -571,6 +573,26 @@ $(OBJ_PATH)/WaitingWindow.o: Src/WaitingWindow.cpp $(DEPENDENCIES) $(EXTRA_DEPEN
 	@echo "'Src/WaitingWindow.cpp' compilation in progress..."
 	$(CC) $(CC_OPTS) -MMD -MP -o "$@" "$<" @$(INCLUDE_FILE_OPT)
 ifeq ($(MAKECMDGOALS), $(OBJ_PATH)/WaitingWindow.o)
+	@echo "done!"
+endif
+
+ifneq ($(MAKECMDGOALS), clean)
+-include $(OBJ_PATH)/PaymentPreTransacWindow.d
+endif
+$(OBJ_PATH)/PaymentPreTransacWindow.o: Src/PaymentPreTransacWindow.cpp $(DEPENDENCIES) $(EXTRA_DEPENDENCIES) $(INCLUDE_FILE_OPT)
+	@echo "'Src/PaymentPreTransacWindow.cpp' compilation in progress..."
+	$(CC) $(CC_OPTS) -MMD -MP -o "$@" "$<" @$(INCLUDE_FILE_OPT)
+ifeq ($(MAKECMDGOALS), $(OBJ_PATH)/PaymentPreTransacWindow.o)
+	@echo "done!"
+endif
+
+ifneq ($(MAKECMDGOALS), clean)
+-include $(OBJ_PATH)/PinpadThread.d
+endif
+$(OBJ_PATH)/PinpadThread.o: Src/PinpadThread.cpp $(DEPENDENCIES) $(EXTRA_DEPENDENCIES) $(INCLUDE_FILE_OPT)
+	@echo "'Src/PinpadThread.cpp' compilation in progress..."
+	$(CC) $(CC_OPTS) -MMD -MP -o "$@" "$<" @$(INCLUDE_FILE_OPT)
+ifeq ($(MAKECMDGOALS), $(OBJ_PATH)/PinpadThread.o)
 	@echo "done!"
 endif
 

@@ -17,7 +17,7 @@
 #include "BaseDrawWindow.hpp"
 #include "PaymentChoiceDrawWindow.hpp"
 #include "WaitingWindow.hpp"
-
+#include "PayIDWindow.hpp"
 
 class Utils : public Singleton<Utils>
 {
@@ -27,13 +27,13 @@ public:
 	//! \brief Destructor.
 	virtual ~Utils(){};
 
-	int connect();
+	int connect(bool isANCV = false);
 	bool getCertificate();
 	void disconnect();
 	void loadData();
 	void resetTerminal(const string &host);
 
-	Response createRequest(string path, eMethod method, const string &body);
+	Response createRequest(string path, eMethod method, const string &body, bool isANCVRequest = false);
 	string makePaymentIdWithMs();
 
 	std::string getCaptureDate();
@@ -47,10 +47,10 @@ public:
 	bool sendMiseEnPaiementTransac(string beneficiaryId, long long int amount);
 	bool checkIfStringBullshitApiIsValid(string value);
 	bool checkIfIntBullshitApiIsValid(int value);
-	bool terminateTransac(string orderId, bool isValid);
+	bool terminateTransac(bool isValid, int isPre);
 	bool initQrCodePayment(long long int amount);
-	bool pollingTransacResult(string orderId);
-	bool pollingPreTransacResult(string orderId);
+	int pollingTransacResult();
+	int pollingPreTransacResult();
 
     GraphicLib glib;
 
@@ -67,7 +67,7 @@ public:
 	PaymentChoiceDrawWindow* paymentChoiceWindow;
 	BaseDrawWindow* qrWindow;
 	WaitingWindow* waitingWindow;
-
+	PayIDWindow* payIdWindow;
 	gprs::GprsConfig m_gprs;
 
 };

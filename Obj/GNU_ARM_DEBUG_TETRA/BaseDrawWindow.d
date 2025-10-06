@@ -257,7 +257,7 @@ Obj/GNU_ARM_DEBUG_TETRA/BaseDrawWindow.o: Src/BaseDrawWindow.cpp \
  Inc/Utils.hpp Inc/AppResources.hpp \
  C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/inc/c/Platform/GOAL/GL_File.h \
  Inc/BaseDrawWindow.hpp Inc/PaymentChoiceDrawWindow.hpp \
- Inc/TileButton.hpp Inc/WaitingWindow.hpp
+ Inc/TileButton.hpp Inc/WaitingWindow.hpp Inc/PayIDWindow.hpp
 
 Inc/BaseDrawWindow.hpp:
 
@@ -784,3 +784,5 @@ Inc/PaymentChoiceDrawWindow.hpp:
 Inc/TileButton.hpp:
 
 Inc/WaitingWindow.hpp:
+
+Inc/PayIDWindow.hpp:

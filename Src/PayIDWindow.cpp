@@ -4,7 +4,7 @@
 #include "cib/disk/Disk.hpp"
 #include "TileButton.hpp"
 #include "string.h"
-
+#include "PinpadThread.hpp"
 
 bool PayIDWindow::onClick(Message& msg)
 {
@@ -115,6 +115,12 @@ PayIDWindow::PayIDWindow(GraphicLib& glib,GraphicLib& pplib, string text, long l
     p_edit->setBorders(2,2,2,2,GL_UNIT_PIXEL, GL_COLOR_BLACK);
 }
 
+void PayIDWindow::dispatchPpWindow()
+{
+	m_ppwindow.dispatch(100);  // Boucle pour gérer les événements
+	m_ppwindow.show();
+}
+
 
 void PayIDWindow::refreshInformation()
 {
@@ -139,24 +145,19 @@ bool PayIDWindow::drawing()
 {
 	refreshInformation();
     canDispatch = true;
-
-    eventWindow = new Window(SGL::ref());
-	eventWindow->registerMethod(GL_EVENT_KEY_DOWN, this, &PayIDWindow::onKeyPress);
+    PinpadThread* th = new PinpadThread();
+	mainWindow.registerMethod(GL_EVENT_KEY_DOWN, this, &PayIDWindow::onKeyPress);
 	m_ppwindow.registerMethod(GL_EVENT_KEY_DOWN, this, &PayIDWindow::onKeyPress);
-
-	eventWindow->setSize(1,1,GL_UNIT_PIXEL);
-
     mainWindow.show();  // Afficher la fenêtre principale
 //    topLayout.show();
     hideSnackBar();
     m_ppwindow.show();
+	th->start();
     while (canDispatch) {
 //    	topLayout.show();
         mainWindow.dispatch(100);  // Boucle pour gérer les événements
-		eventWindow->dispatch(0);
-	    m_ppwindow.dispatch(0);
-		m_ppwindow.show();
 
+		mainWindow.show();
         if(isShowSnackbar)
         {
         	timer+=100;
@@ -166,20 +167,22 @@ bool PayIDWindow::drawing()
         	}
         }
     }
-
+	th->stop();
+	th->join();
 	m_ppwindow.hide();
 	m_ppwindow.dispatch(0);
 	mainWindow.hide();
 	mainWindow.dispatch(0);
-	eventWindow->destroy();
+	mainWindow.unregisterMethod(GL_EVENT_KEY_DOWN, this, &PayIDWindow::onKeyPress);
 	m_ppwindow.unregisterMethod(GL_EVENT_KEY_DOWN, this, &PayIDWindow::onKeyPress);
     return transactionStatus;
 }
 
 void PayIDWindow::onValidate()
 {
-	//TODO PLAY REQUEST TO PAY WITH ID
-	transactionStatus = true;
+	cib::json::Document jsonParam;
+	loadDataAsJson(FIC_PARAM, jsonParam);
+	transactionStatus = Utils::ref().sendMiseEnPaiementTransac((string)jsonParam["beneficiaryId"].as_string(),amount);
 
 	canDispatch = false;
 }
