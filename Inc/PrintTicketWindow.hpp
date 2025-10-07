@@ -3,16 +3,17 @@
 
 #include "BaseDrawWindow.hpp"
 #include "TileButton.hpp"
+#include "AncvPrintTicket.hpp"
 
 
 class PrintTicketWindow : public BaseDrawWindow {
 protected:
 	bool isClient;
+	AncvConnectData dataToPrint;
 public:
     // Constructeur
-	PrintTicketWindow(GraphicLib& glib, string title);
+	PrintTicketWindow(GraphicLib& glib, string title, AncvConnectData& data);
 
-    // Redéfinition de la méthode drawing
     bool drawing();
     bool onClick(Message&);
     void refreshInformation();

@@ -18,6 +18,7 @@
 #include "PaymentChoiceDrawWindow.hpp"
 #include "WaitingWindow.hpp"
 #include "PayIDWindow.hpp"
+#include "AncvPrintTicket.hpp"
 
 class Utils : public Singleton<Utils>
 {
@@ -51,6 +52,7 @@ public:
 	bool initQrCodePayment(long long int amount);
 	int pollingTransacResult();
 	int pollingPreTransacResult();
+	void fillTicketTransacData(AncvConnectData &data);
 
     GraphicLib glib;
 

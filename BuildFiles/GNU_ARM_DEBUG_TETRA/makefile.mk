@@ -320,6 +320,8 @@ $(OBJ_PATH)/WaitingWindow.o \
 $(OBJ_PATH)/PaymentPreTransacWindow.o \
 $(OBJ_PATH)/PinpadThread.o \
 $(OBJ_PATH)/YesNoWindow.o \
+$(OBJ_PATH)/PrintTicket.o \
+$(OBJ_PATH)/AncvPrintTicket.o \
 
 #-------------------------------------------------------------------------------
 # Dependencies
@@ -604,6 +606,26 @@ $(OBJ_PATH)/YesNoWindow.o: Src/YesNoWindow.cpp $(DEPENDENCIES) $(EXTRA_DEPENDENC
 	@echo "'Src/YesNoWindow.cpp' compilation in progress..."
 	$(CC) $(CC_OPTS) -MMD -MP -o "$@" "$<" @$(INCLUDE_FILE_OPT)
 ifeq ($(MAKECMDGOALS), $(OBJ_PATH)/YesNoWindow.o)
+	@echo "done!"
+endif
+
+ifneq ($(MAKECMDGOALS), clean)
+-include $(OBJ_PATH)/PrintTicket.d
+endif
+$(OBJ_PATH)/PrintTicket.o: Src/PrintTicket.cpp $(DEPENDENCIES) $(EXTRA_DEPENDENCIES) $(INCLUDE_FILE_OPT)
+	@echo "'Src/PrintTicket.cpp' compilation in progress..."
+	$(CC) $(CC_OPTS) -MMD -MP -o "$@" "$<" @$(INCLUDE_FILE_OPT)
+ifeq ($(MAKECMDGOALS), $(OBJ_PATH)/PrintTicket.o)
+	@echo "done!"
+endif
+
+ifneq ($(MAKECMDGOALS), clean)
+-include $(OBJ_PATH)/AncvPrintTicket.d
+endif
+$(OBJ_PATH)/AncvPrintTicket.o: Src/AncvPrintTicket.cpp $(DEPENDENCIES) $(EXTRA_DEPENDENCIES) $(INCLUDE_FILE_OPT)
+	@echo "'Src/AncvPrintTicket.cpp' compilation in progress..."
+	$(CC) $(CC_OPTS) -MMD -MP -o "$@" "$<" @$(INCLUDE_FILE_OPT)
+ifeq ($(MAKECMDGOALS), $(OBJ_PATH)/AncvPrintTicket.o)
 	@echo "done!"
 endif
 

@@ -15,6 +15,7 @@
 #include <cctype>
 #include <cstring>
 #include <sys/time.h>
+#include "AncvPrintTicket.hpp"
 
 using namespace cib;
 using namespace cib::communication::http;
@@ -304,6 +305,7 @@ bool Utils::initQrCodePayment(long long int amount)
 	cib::json::Document jsonBody;
 	cib::json::Document jsonParam;
 	cib::json::Document jsonResponse;
+	string date = getCaptureDate();
 
 	loadDataAsJson(FIC_PARAM, jsonParam);
 	if(jsonParam["shopId"] && jsonParam["shopId"] != "")
@@ -313,7 +315,7 @@ bool Utils::initQrCodePayment(long long int amount)
 		// Construction du corps de la requête avec les informations d'authentification
 		jsonBody["ParamInitAndGetQRPreTransac"] = json::Document(json::VALUE_IS_OBJECT);
 		jsonBody["ParamInitAndGetQRPreTransac"]["shopId"] = (string)jsonParam["shopId"].as_string();
-		jsonBody["ParamInitAndGetQRPreTransac"]["expirationDate"] = getCaptureDate();
+		jsonBody["ParamInitAndGetQRPreTransac"]["expirationDate"] = date;
 		jsonBody["ParamInitAndGetQRPreTransac"]["order"] = json::Document(json::VALUE_IS_OBJECT);
 		jsonBody["ParamInitAndGetQRPreTransac"]["order"]["ClaANCVReturnedOrder"] = json::Document(json::VALUE_IS_OBJECT);
 		jsonBody["ParamInitAndGetQRPreTransac"]["order"]["ClaANCVReturnedOrder"]["id"] = id;
@@ -367,6 +369,7 @@ bool Utils::sendMiseEnPaiementTransac(string beneficiaryId, long long int amount
 	if(jsonParam["shopId"] && jsonParam["shopId"] != "")
 	{
 		string id = makeId();
+		string date = getCaptureDate();
 		// Construction du corps de la requête avec les informations d'authentification
 		jsonBody["ParamInitAndMiseEnPaiement"] = json::Document(json::VALUE_IS_OBJECT);
 		jsonBody["ParamInitAndMiseEnPaiement"]["beneficiaryId"] = beneficiaryId;
@@ -383,7 +386,7 @@ bool Utils::sendMiseEnPaiementTransac(string beneficiaryId, long long int amount
 		jsonBody["ParamInitAndMiseEnPaiement"]["paymentMethod"]["ClaANCVReturnedPaymentMethod"] = json::Document(json::VALUE_IS_OBJECT);
 		jsonBody["ParamInitAndMiseEnPaiement"]["paymentMethod"]["ClaANCVReturnedPaymentMethod"]["tspdMode"] = "001";
 		jsonBody["ParamInitAndMiseEnPaiement"]["paymentMethod"]["ClaANCVReturnedPaymentMethod"]["captureMode"] = "NORMAL";
-		jsonBody["ParamInitAndMiseEnPaiement"]["paymentMethod"]["ClaANCVReturnedPaymentMethod"]["captureDate"] = getCaptureDate();
+		jsonBody["ParamInitAndMiseEnPaiement"]["paymentMethod"]["ClaANCVReturnedPaymentMethod"]["captureDate"] = date;
 		// Effectuer la requête POST pour obtenir un nouveau token
 		response = createRequest("/InitAndMiseEnPaiementTransac", _POST, jsonBody.serialize());
 		if (response.getStatusCode() == 200)
@@ -392,6 +395,7 @@ bool Utils::sendMiseEnPaiementTransac(string beneficiaryId, long long int amount
 			if(jsonResponse["MitEnPaiement"] && (string)jsonResponse["MitEnPaiement"]["InitAndMiseEnPaiementTransacResult"].as_string() == "OK")
 			{
 				jsonParam["orderId"] = id;
+				jsonParam["orderDate"] = date;
 				saveDataAsJson(FIC_PARAM, jsonParam);
 				bRet = true;
 			}
@@ -725,6 +729,7 @@ string Utils::getIconsPath(string name)
 void Utils::copyLogoToPinPad()
 {
 	GL_File_Copy(Utils::ptr()->getIconsPath("valid").c_str(), "file://flash/HOST/valid.png");
+	GL_File_Copy(Utils::ptr()->getIconsPath("waitingicon").c_str(), "file://flash/HOST/waiting.png");
 	GL_File_Copy(Utils::ptr()->getIconsPath("cancelicon").c_str(), "file://flash/HOST/cancel.png");
 	GL_File_Copy(Utils::ptr()->getIconsPath("ancvlogomini").c_str(), "file://flash/HOST/logo.png");
 	GL_File_Copy(Utils::ptr()->getIconsPath("backgroundtpe").c_str(), "file://flash/HOST/background.png");
@@ -744,5 +749,38 @@ void Utils::copyLogoToPinPad()
 		SGL::ref().injectResource("file://flash/HOST/background.png");
 		PadSGL::ref().injectResource("file://flash/HOST/background.png");
 	}
+}
+
+void Utils::fillTicketTransacData(AncvConnectData &data)
+{
+	cib::json::Document jsonParam;
+	loadDataAsJson(FIC_PARAM, jsonParam);
+
+	int amount = (int)jsonParam["totalAmount"].as_int();
+	int toComplete = (int)jsonParam["toComplete"].as_int();
+	int rest = amount - toComplete;
+
+	double total = amount / 100.0;
+	std::ostringstream oss;
+	oss << std::fixed << std::setprecision(2) << total;
+	std::string amountStr = oss.str();
+
+	double eurosToComplete = toComplete / 100.0;
+	std::ostringstream oss2;
+	oss2 << std::fixed << std::setprecision(2) << eurosToComplete;
+	std::string amountStr2 = oss2.str();
+
+	double restDiv = rest / 100.0;
+	std::ostringstream oss3;
+	oss3 << std::fixed << std::setprecision(2) << restDiv;
+	std::string amountStr3 = oss3.str();
+
+
+	data.beneficiaryId = (string)jsonParam["beneficiaryId"].as_string();
+	data.transactionId = (string)jsonParam["orderId"].as_string();
+	data.dateOverride = (string)jsonParam["orderDate"].as_string();
+	data.total = amountStr;
+	data.payments.push_back(std::make_pair(std::string("CB"),   amountStr3 + " EUR"));
+	data.payments.push_back(std::make_pair(std::string("ANCV"),  amountStr2 + " EUR"));
 }
 

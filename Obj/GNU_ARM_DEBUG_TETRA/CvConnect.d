@@ -265,6 +265,7 @@ Obj/GNU_ARM_DEBUG_TETRA/CvConnect.o: Src/CvConnect.cpp Inc/CvConnect.hpp \
  C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/inc/c/Platform/GOAL/GL_File.h \
  Inc/BaseDrawWindow.hpp Inc/PaymentChoiceDrawWindow.hpp \
  Inc/TileButton.hpp Inc/WaitingWindow.hpp Inc/PayIDWindow.hpp \
+ Inc/AncvPrintTicket.hpp Inc/PrintTicket.hpp \
  C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/inc/c/Platform/GOAL/GL_GraphicLib.h \
  C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/inc/c/Platform/GOAL/GL_Types.h \
  C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/inc/c/Platform/GOAL/GL_Widget.h \
@@ -854,6 +855,10 @@ Inc/TileButton.hpp:
 Inc/WaitingWindow.hpp:
 
 Inc/PayIDWindow.hpp:
+
+Inc/AncvPrintTicket.hpp:
+
+Inc/PrintTicket.hpp:
 
 C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/inc/c/Platform/GOAL/GL_GraphicLib.h:
 

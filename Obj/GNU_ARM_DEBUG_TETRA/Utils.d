@@ -257,7 +257,8 @@ Obj/GNU_ARM_DEBUG_TETRA/Utils.o: Src/Utils.cpp Inc/Utils.hpp \
  C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/inc/c/Platform/GOAL/GL_File.h \
  Inc/BaseDrawWindow.hpp Inc/AppResources.hpp \
  Inc/PaymentChoiceDrawWindow.hpp Inc/TileButton.hpp Inc/WaitingWindow.hpp \
- Inc/PayIDWindow.hpp
+ Inc/PayIDWindow.hpp Inc/AncvPrintTicket.hpp Inc/PrintTicket.hpp \
+ Inc/AncvPrintTicket.hpp
 
 Inc/Utils.hpp:
 
@@ -784,3 +785,9 @@ Inc/TileButton.hpp:
 Inc/WaitingWindow.hpp:
 
 Inc/PayIDWindow.hpp:
+
+Inc/AncvPrintTicket.hpp:
+
+Inc/PrintTicket.hpp:
+
+Inc/AncvPrintTicket.hpp:

@@ -4,6 +4,7 @@
 #include "cib/disk/Disk.hpp"
 #include "TileButton.hpp"
 #include "string.h"
+#include "AncvPrintTicket.hpp"
 
 
 bool PrintTicketWindow::onClick(Message& msg)
@@ -22,7 +23,8 @@ void PrintTicketWindow::processId(int id)
 	{
 		if(id == 1)
 		{
-			//TODO PRINT TICKET COMMERCANT
+			CvConnectTicket* t = new CvConnectTicket(dataToPrint);
+			t->printNow();
 		}
 
 		title->setText("TICKET CLIENT");
@@ -32,17 +34,19 @@ void PrintTicketWindow::processId(int id)
 	{
 		if(id == 1)
 		{
-			//PRINT TICKET
+			dataToPrint.ticketType = "TICKET CLIENT";
+			CvConnectTicket* t = new CvConnectTicket(dataToPrint);
+			t->printNow();
 		}
 		canDispatch = false;
 
 	}
 }
 
-PrintTicketWindow::PrintTicketWindow(GraphicLib& glib, string text) :
+PrintTicketWindow::PrintTicketWindow(GraphicLib& glib, string text, AncvConnectData& data) :
     BaseDrawWindow(glib, text)
 {
-
+	dataToPrint = data;
     createSnackBar();
 
     new TileButton(mainWindow,

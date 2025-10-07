@@ -17,6 +17,7 @@
 #include "Utils.hpp"
 #include "PrintTicketWindow.hpp"
 #include "YesNoWindow.hpp"
+#include "AncvPrintTicket.hpp"
 //                            #####################
 //                            #   TXN START END   #
 //                            #####################
@@ -52,7 +53,7 @@ int TxnStartEnd::start(const TLV_TREE_NODE inputData, TLV_TREE_NODE outputData)
 	TransactionInfo txn;
 	getTransactionInfo(inputData, txn);
 	m_transaction = new Transaction();
-
+	m_transaction->isANCVTransac = false;
 	cib::json::Document jsonParam;
 	loadDataAsJson(FIC_PARAM, jsonParam);
 	bool isParam = Utils::ref().isConnected;
@@ -70,6 +71,7 @@ int TxnStartEnd::start(const TLV_TREE_NODE inputData, TLV_TREE_NODE outputData)
 	long long int amount = atoll((txn.amount).c_str());
 	if((!(atoll((txn.amount).c_str()) > 2147483647) && txn.txnType == TXN_TRANSACTION_TYPE_DEBIT && isANCV))
 	{
+		m_transaction->isANCVTransac = true;
 		jsonParam["amountToPay"] = amount;
 		saveDataAsJson(FIC_PARAM, jsonParam);
 		PaymentQRWindow* pw;
@@ -82,7 +84,6 @@ int TxnStartEnd::start(const TLV_TREE_NODE inputData, TLV_TREE_NODE outputData)
 				{
 					loadDataAsJson(FIC_PARAM, jsonParam);
 					amountToComplete = (int)jsonParam["toComplete"].as_int();
-					PrintTicketWindow(Utils::ref().glib, "IMPRESSION TICKET").drawing();
 				}
 				free(pw);
 			}
@@ -97,7 +98,6 @@ int TxnStartEnd::start(const TLV_TREE_NODE inputData, TLV_TREE_NODE outputData)
 				{
 					loadDataAsJson(FIC_PARAM, jsonParam);
 					amountToComplete = (int)jsonParam["toComplete"].as_int();
-					PrintTicketWindow(Utils::ref().glib, "IMPRESSION TICKET").drawing();
 				}
 			}
 			free(Utils::ref().payIdWindow);
@@ -106,6 +106,8 @@ int TxnStartEnd::start(const TLV_TREE_NODE inputData, TLV_TREE_NODE outputData)
 		if(!(bool)jsonParam["ANCVOnly"].as_bool() || !(YesNoWindow(Utils::ref().glib, "",amountToComplete).drawing()))
 		{
 			 amountToComplete = 0;
+			 jsonParam["toComplete"] = 0;
+			 saveDataAsJson(FIC_PARAM, jsonParam);
 		}
 
 		m_transaction->updateTransactionInfo(outputData,0);
@@ -200,7 +202,12 @@ int TxnStartEnd::end(const TLV_TREE_NODE inputData, TLV_TREE_NODE outputData)
 	// Get transaction final status
 	unsigned long status, readerUsed, appId;
 	string appName;
+	AncvConnectData dataToPrint;
 	getTransactionStatus(inputData, status, readerUsed, appName, appId);
-
+	if(status == (TXN_STATUS_TXN_APPROVED || status == TXN_STATUS_TECHNO_NOT_SUPPORTED) && m_transaction->isANCVTransac)
+	{
+		Utils::ref().fillTicketTransacData(dataToPrint);
+		PrintTicketWindow(Utils::ref().glib, "IMPRESSION TICKET", dataToPrint).drawing();
+	}
 	return TXN_SR_OK;
 }
