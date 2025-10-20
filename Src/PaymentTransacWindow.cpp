@@ -1,4 +1,4 @@
-#include <PaymentPreTransacWindow.hpp>
+#include <PaymentTransacWindow.hpp>
 #include "Utils.hpp"
 #include <sstream>
 #include <unistd.h>
@@ -68,7 +68,7 @@ PaymentPreTransacWindow::PaymentPreTransacWindow(GraphicLib& glib, GraphicLib& p
 
 	transactionImage.setSize(160, 160, GL_UNIT_PIXEL);  // Taille du logo
 	transactionImage.setPosition((size.width-160)/2, (size.height-160)/2-45, GL_UNIT_PIXEL);  // Position du logo à gauche
-	transactionImage.setSource("file://flash/HOST/QRCODE.png");  // Chemin vers l'image du logo
+	transactionImage.setSource(Utils::ref().getIconsPath("waiting_icon"));  // Chemin vers l'image du logo
 	transactionImage.setTransformation(GL_TRANSFORMATION_STRETCH_ALL);
 	p_logoimg.setSource("file://flash/HOST/logo.png");
 	p_logoimg.setSize(65,65, GL_UNIT_PIXEL);
@@ -120,13 +120,12 @@ bool PaymentPreTransacWindow::drawing()
     eventWindow->destroy();
     m_ppwindow.unregisterMethod(GL_EVENT_KEY_DOWN, this, &PaymentPreTransacWindow::onKeyPress);
     return transactionStatus;
-
 }
 
 
 void PaymentPreTransacWindow::treatPollingReturn()
 {
-	if(error > 0 || timer >= 100000)
+	if(error > 0 || timer >= Utils::ref().timeout)
 	{
 		if(error == 201)
 		{
@@ -158,9 +157,10 @@ void PaymentPreTransacWindow::treatPollingReturn()
 			timer = 0;
 		}
 
-		usleep(150000);
-		timer+=15;
 	}
+
+	usleep(150000);
+	timer+=15;
 }
 void PaymentPreTransacWindow::refreshInformation()
 {
@@ -193,7 +193,13 @@ void PaymentPreTransacWindow::refreshInformation()
 
 				transactionStatusLabel.setText("Transaction OK");
 				transactionImage.setSource("file://flash/HOST/valid.png");
-				Utils::ref().terminateTransac(true, 0);
+				if(threadRequest)
+				{
+					threadRequest->stop();
+					threadRequest->join();
+					threadRequest = NULL;
+				}
+//				Utils::ref().terminateTransac(true, 1);
 				mainWindow.dispatch(0);
 				m_ppwindow.dispatch(0);
 			}
@@ -239,7 +245,7 @@ void PaymentPreTransacWindow::refreshInformation()
 				threadRequest->join();
 				threadRequest = NULL;
 			}
-			Utils::ref().terminateTransac(false,0);
+			Utils::ref().terminateTransac(false,1);
 			canDispatch = false;
 
 			break;

@@ -1,5 +1,5 @@
 Obj/GNU_ARM_DEBUG_TETRA/TxnStartEnd.o: Src/TxnStartEnd.cpp \
- Inc/TxnStartEnd.hpp Inc/AppResources.hpp \
+ Inc/PaymentTransacWindow.hpp Inc/ThreadRequest.hpp Inc/AppResources.hpp \
  D:/MyProjects/TETRA/cib_dll_t3/ExpInc/cib/graphics/Graphics.hpp \
  D:/MyProjects/TETRA/cib_dll_t3/ExpInc/Implementation.hpp \
  C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/inc/c/Platform/Communication/LinkLayer.h \
@@ -254,17 +254,18 @@ Obj/GNU_ARM_DEBUG_TETRA/TxnStartEnd.o: Src/TxnStartEnd.cpp \
  D:/MyProjects/TETRA/cib_dll_t3/ExpInc/cib/disk/Disk.hpp \
  D:/MyProjects/TETRA/cib_dll_t3/ExpInc/cib/settings/Settings.hpp \
  D:/MyProjects/TETRA/cib_dll_t3/ExpInc/cib/devices/Devices.hpp \
+ Inc/BaseDrawWindow.hpp Inc/PaymentQRWindow.hpp Inc/TxnStartEnd.hpp \
  Inc/Transaction.hpp Inc/Transaction.hpp Inc/AppResources.hpp \
- Inc/PaymentChoiceDrawWindow.hpp Inc/BaseDrawWindow.hpp \
- Inc/TileButton.hpp Inc/PaymentQRWindow.hpp Inc/ThreadRequest.hpp \
- Inc/PaymentPreTransacWindow.hpp Inc/PaymentQRWindow.hpp \
- Inc/PayIDWindow.hpp Inc/Utils.hpp \
+ Inc/PaymentChoiceDrawWindow.hpp Inc/TileButton.hpp \
+ Inc/PaymentQRWindow.hpp Inc/PayIDWindow.hpp Inc/Utils.hpp \
  C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/inc/c/Platform/GOAL/GL_File.h \
  Inc/PaymentChoiceDrawWindow.hpp Inc/WaitingWindow.hpp \
  Inc/PayIDWindow.hpp Inc/AncvPrintTicket.hpp Inc/PrintTicket.hpp \
  Inc/PrintTicketWindow.hpp Inc/YesNoWindow.hpp Inc/AncvPrintTicket.hpp
 
-Inc/TxnStartEnd.hpp:
+Inc/PaymentTransacWindow.hpp:
+
+Inc/ThreadRequest.hpp:
 
 Inc/AppResources.hpp:
 
@@ -776,6 +777,12 @@ D:/MyProjects/TETRA/cib_dll_t3/ExpInc/cib/settings/Settings.hpp:
 
 D:/MyProjects/TETRA/cib_dll_t3/ExpInc/cib/devices/Devices.hpp:
 
+Inc/BaseDrawWindow.hpp:
+
+Inc/PaymentQRWindow.hpp:
+
+Inc/TxnStartEnd.hpp:
+
 Inc/Transaction.hpp:
 
 Inc/Transaction.hpp:
@@ -784,15 +791,7 @@ Inc/AppResources.hpp:
 
 Inc/PaymentChoiceDrawWindow.hpp:
 
-Inc/BaseDrawWindow.hpp:
-
 Inc/TileButton.hpp:
-
-Inc/PaymentQRWindow.hpp:
-
-Inc/ThreadRequest.hpp:
-
-Inc/PaymentPreTransacWindow.hpp:
 
 Inc/PaymentQRWindow.hpp:
 

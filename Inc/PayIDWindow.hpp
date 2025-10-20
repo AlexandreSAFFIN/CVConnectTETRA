@@ -31,6 +31,7 @@ public:
     void refreshInformation();
     void dispatchPpWindow();
     bool onKeyPress(ingenico::graphics::Message &message);
+    bool onKeyPressPinpad(ingenico::graphics::Message &message) ;
     void onValidate();
 };
 

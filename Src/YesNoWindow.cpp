@@ -25,7 +25,7 @@ void YesNoWindow::processId(int id)
 YesNoWindow::YesNoWindow(GraphicLib& glib, string text, unsigned long long amountToComplete) :
     BaseDrawWindow(glib, text)
 {
-
+	textToDisplay = text;
     createSnackBar();
 
 	double euros = amountToComplete / 100.0;
@@ -53,8 +53,10 @@ YesNoWindow::YesNoWindow(GraphicLib& glib, string text, unsigned long long amoun
 void YesNoWindow::refreshInformation()
 {
 	isOk = false;
-    mainWindow.show();
-    title->setText("TICKET COMMERCANT");
+	if(!textToDisplay.empty())
+	{
+		title->setText(textToDisplay);
+	}
 }
 
 // Redéfinition de la méthode drawing

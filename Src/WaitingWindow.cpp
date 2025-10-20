@@ -49,6 +49,7 @@ WaitingWindow::WaitingWindow(GraphicLib& glib, string text) :
 
 void WaitingWindow::refreshInformation()
 {
+
     mainWindow.show();
 }
 

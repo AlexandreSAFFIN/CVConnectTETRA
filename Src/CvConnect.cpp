@@ -36,45 +36,6 @@ CvConnect::~CvConnect()
 
 
 
-void CvConnect::maintenance()
-{
-	string code;
-	string package;
-
-	SGL::ref().openApplicationWindow();
-	SGL::ref().dialogText("Maintenance", "Code maintenance", "/d/d/d/d/d", code, GL_TIME_INFINITE);
-	switch (atoi(code.c_str()))
-	{
-	case 3383: // DEVE
-		SSL_DeleteProfile("CIB");
-		SSL_DeleteProfile("ANCV");
-		Utils::ref().resetTerminal(HOST_DEV);
-		SGL::ref().dialogMessage("Maintenance", "Environnement de DEV", GL_ICON_INFORMATION, GL_BUTTON_VALID, GL_TIME_INFINITE);
-		break;
-
-	case 7763: // PROD
-		SSL_DeleteProfile("CIB");
-		SSL_DeleteProfile("ANCV");
-		Utils::ref().resetTerminal(HOST_PROD);
-		SGL::ref().dialogMessage("Maintenance", "Environnement de PROD", GL_ICON_INFORMATION, GL_BUTTON_VALID, GL_TIME_INFINITE);
-		break;
-	case 7753: // SSLD
-		ssllib_open();
-		if (SSL_DeleteProfile("CIB") == SSL_PROFILE_EOK)
-		{
-			SSL_DeleteProfile("ANCV");
-			SGL::ref().dialogMessage("Maintenance", "Certificat SSL supprime avec succes", GL_ICON_INFORMATION, GL_BUTTON_VALID, GL_TIME_INFINITE);
-		}
-		else
-		{
-			SGL::ref().dialogMessage("Maintenance", "Echec de suppression du certificat SSL", GL_ICON_ERROR, GL_BUTTON_VALID, GL_TIME_INFINITE);
-		}
-		ssllib_close();
-		break;
-	}
-	SGL::ref().closeApplicationWindow();
-}
-
 void CvConnect::addTransacDescriptors()
 {
 	StartEndInterface::add_descriptor(*manifest);
@@ -83,20 +44,20 @@ void CvConnect::addTransacDescriptors()
 void CvConnect::reset()
 {
 	string code;
-		SGL::ref().openApplicationWindow();
-		SGL::ref().dialogText("Maintenance", "Code maintenance", "/d/d/d/d/d", code, GL_TIME_INFINITE);
-		switch (atoi(code.c_str()))
-		{
-		case 23729:
-			SGL::ref().closeApplicationWindow();
-			Utils::ptr()->resetTerminal(HOST_PROD);
-			break;
-		default:
-			SGL::ref().dialogMessage("Maintenance", "Code invalide", GL_ICON_ERROR, GL_BUTTON_VALID, GL_TIME_INFINITE);
-			SGL::ref().closeApplicationWindow();
-			break;
+	SGL::ref().openApplicationWindow();
+	SGL::ref().dialogText("Maintenance", "Code maintenance", "/d/d/d/d/d", code, GL_TIME_INFINITE);
+	switch (atoi(code.c_str()))
+	{
+	case 23729:
+		SGL::ref().closeApplicationWindow();
+		Utils::ptr()->resetTerminal(HOST_PROD);
+		break;
+	default:
+		SGL::ref().dialogMessage("Maintenance", "Code invalide", GL_ICON_ERROR, GL_BUTTON_VALID, GL_TIME_INFINITE);
+		SGL::ref().closeApplicationWindow();
+		break;
 
-		}
+	}
 
 }
 
@@ -124,6 +85,7 @@ void CvConnect::goMenu()
 	cib::json::Document jsonParam;
 	Utils::ref().checkLicense();
 	loadDataAsJson(FIC_PARAM, jsonParam);
+//	Utils::ref().isConnected = true;
 	if((string)jsonParam["shopId"].as_string() == "" || !Utils::ref().isConnected)
 	{
 		Utils::ptr()->connectionWindow->drawing();
@@ -171,38 +133,11 @@ void CvConnect::initApp()
 	initDisk();
 	Utils::ptr()->copyLogoToPinPad();
 	Utils::ptr()->loadData();
-	Utils::ptr()->m_session.setSessionData("boancv.alpigreen.com", 443, Utils::ptr()->m_cntType, "CIB", Utils::ptr()->m_gprs);
 	Utils::ptr()->parameterWindow = new MaintenanceDrawWindow(SGL::ref(), "PARAMETRAGE");
 	Utils::ptr()->parameterOptionWindow = new ANCVDrawWindow(SGL::ref(), "OPTION ANCV");
 	Utils::ptr()->connectionWindow = new ConnectDrawWindow(SGL::ref(), "AUTHENTIFICATION");
 	Utils::ptr()->paymentChoiceWindow = new PaymentChoiceDrawWindow(SGL::ref(), "CHOIX DU PAIEMENT");
 	Utils::ptr()->waitingWindow = new WaitingWindow(SGL::ref(), "OPERATION EN COURS\nMERCI DE PATIENTER");
 	Utils::ptr()->isConnected = Utils::ref().checkLicense();
-
-
-//	std::ostringstream iconPath2;
-//		iconPath2 << "file://param/" << "DATA54F9250"<< ".tar/Icons/" << "ca1.pem";
-//
-//		int sizeCsr = File::getSizeFile(iconPath2.str().c_str());
-//		if (sizeCsr > 0) {
-//			std::vector<char> bufferCsr(sizeCsr);
-//			loadData(iconPath2.str().c_str(), bufferCsr.data(), sizeCsr);
-//
-//			if (disk::saveData("/CVCONNECT/ca1.pem", bufferCsr.data(), sizeCsr, 1) > 0) {
-//				int a = 0; // succès
-//			}
-//		}
-//
-
-//	Utils::ref().testQR64();
-
-
-//
-//	SSL_PROFILE_HANDLE h = SSL_LoadProfile("CIB");
-//	Utils::ptr()->m_session.setSessionData("boancv.alpigreen.com", 443, Utils::ptr()->m_cntType, "CIB", Utils::ptr()->m_gprs);
-//	Utils::ref().createRequest("/Webservices/rest/FO//GetShopId/123456789", _POST, "" );
-
-//	addProfileCaOnly("ANCVE", "/CVCONNECT/client.pem",  "/CVCONNECT/ca1.pem","/CVCONNECT/caC.pem");
-
 
 }

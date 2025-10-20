@@ -18,7 +18,6 @@ public:
 	void getLicence();
 	void updateApp();
 	void update(string familyName);
-	void maintenance();
 	void launchTransaction();
 	void getTransactionResult(int status, TLV_TREE_NODE outputData);
 	void addTransacDescriptors();

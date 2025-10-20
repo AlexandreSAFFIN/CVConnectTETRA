@@ -3,6 +3,7 @@
 #include "AppResources.hpp"
 #include "cib/disk/Disk.hpp"
 #include "TileButton.hpp"
+#include "HistoricDrawWindow.hpp"
 #include "string.h"
 
 
@@ -21,7 +22,7 @@ bool ANCVDrawWindow::onClick(Message& msg)
 	}
 	else
 	{
-
+		HistoricDrawWindow(Utils::ref().glib, "HISTORIQUE").drawing();
 	}
 	return true;
 }
@@ -36,11 +37,11 @@ ANCVDrawWindow::ANCVDrawWindow(GraphicLib& glib, string text) :
     string bg_completion = "rounded_red";
 
     btnCompletion = new TileButton(mainWindow,
-        Utils::ref().getIconsPath(bg_completion), Utils::ref().getIconsPath("pay"), "Complétion",
+        Utils::ref().getIconsPath(bg_completion), Utils::ref().getIconsPath("completion_icon"), "Complétion",
         8,150, 1, this, &BaseDrawWindow::onClick);
 
     new TileButton(mainWindow,
-    		Utils::ref().getIconsPath("rounded"), Utils::ref().getIconsPath("pay"), "Historique",
+    		Utils::ref().getIconsPath("rounded"), Utils::ref().getIconsPath("waiting_icon"), "Historique",
     		        165,150, 2,this, &BaseDrawWindow::onClick);
 
 
@@ -54,7 +55,7 @@ void ANCVDrawWindow::refreshInformation()
     cib::json::Document jsonParam;
     loadDataAsJson(FIC_PARAM, jsonParam);
     string bg = "rounded_green";
-    if((bool)jsonParam["ANCVOnly"] == 0 || !(bool)jsonParam["ANCVOnly"].as_bool())
+    if((bool)jsonParam["ANCVOnly"].as_bool())
     {
     	bg = "rounded_red";
     }

@@ -19,11 +19,12 @@
 <file generated="false" name="Src/ThreadRequest.cpp" parentProject=""/>
 <file generated="false" name="Src/PaymentQRWindow.cpp" parentProject=""/>
 <file generated="false" name="Src/WaitingWindow.cpp" parentProject=""/>
-<file generated="false" name="Src/PaymentPreTransacWindow.cpp" parentProject=""/>
 <file generated="false" name="Src/PinpadThread.cpp" parentProject=""/>
 <file generated="false" name="Src/YesNoWindow.cpp" parentProject=""/>
 <file generated="false" name="Src/PrintTicket.cpp" parentProject=""/>
 <file generated="false" name="Src/AncvPrintTicket.cpp" parentProject=""/>
+<file generated="false" name="Src/HistoricDrawWindow.cpp" parentProject=""/>
+<file generated="false" name="Src/PaymentTransacWindow.cpp" parentProject=""/>
 </virtualFolder>
 <archiveFilesVirtualFolder name="Archive Files">
 <archive dirParentProject="" directoryToArchive="Resources" name="Bin/Resources.tar"/>

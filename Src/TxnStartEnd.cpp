@@ -7,12 +7,12 @@
  * \details 053116-BK : File created.
  */
 
+#include <PaymentTransacWindow.hpp>
 #include "TxnStartEnd.hpp"
 #include "Transaction.hpp"
 #include "AppResources.hpp"
 #include "PaymentChoiceDrawWindow.hpp"
 #include "PaymentQRWindow.hpp"
-#include "PaymentPreTransacWindow.hpp"
 #include "PayIDWindow.hpp"
 #include "Utils.hpp"
 #include "PrintTicketWindow.hpp"
@@ -54,15 +54,23 @@ int TxnStartEnd::start(const TLV_TREE_NODE inputData, TLV_TREE_NODE outputData)
 	getTransactionInfo(inputData, txn);
 	m_transaction = new Transaction();
 	m_transaction->isANCVTransac = false;
+	m_transaction->isCB = true;
+
 	cib::json::Document jsonParam;
 	loadDataAsJson(FIC_PARAM, jsonParam);
+
 	bool isParam = Utils::ref().isConnected;
-	isParam = true;
+	if(!isParam)
+	{
+		Utils::ref().checkLicense();
+	}
+	Utils::ref().timeout = 3000;
+
+//	isParam = true;
 	bool isANCV = false;
 	int amountToComplete = 0;
+
 	unsigned long readerDetected = TXN_TECHNO_READER_DETECTED;
-
-
 	if(isParam)
 	{
 		isANCV = Utils::ref().paymentChoiceWindow->drawing();
@@ -71,8 +79,8 @@ int TxnStartEnd::start(const TLV_TREE_NODE inputData, TLV_TREE_NODE outputData)
 	long long int amount = atoll((txn.amount).c_str());
 	if((!(atoll((txn.amount).c_str()) > 2147483647) && txn.txnType == TXN_TRANSACTION_TYPE_DEBIT && isANCV))
 	{
-		m_transaction->isANCVTransac = true;
 		jsonParam["amountToPay"] = amount;
+		jsonParam["toComplete"] = 0;
 		saveDataAsJson(FIC_PARAM, jsonParam);
 		PaymentQRWindow* pw;
 		if(Utils::ref().paymentChoiceWindow->getPM() == QRCODE)
@@ -84,6 +92,9 @@ int TxnStartEnd::start(const TLV_TREE_NODE inputData, TLV_TREE_NODE outputData)
 				{
 					loadDataAsJson(FIC_PARAM, jsonParam);
 					amountToComplete = (int)jsonParam["toComplete"].as_int();
+					m_transaction->isANCVTransac = true;
+					m_transaction->isCB = false;
+					m_transaction->isPre = 0;
 				}
 				free(pw);
 			}
@@ -98,22 +109,34 @@ int TxnStartEnd::start(const TLV_TREE_NODE inputData, TLV_TREE_NODE outputData)
 				{
 					loadDataAsJson(FIC_PARAM, jsonParam);
 					amountToComplete = (int)jsonParam["toComplete"].as_int();
+					m_transaction->isANCVTransac = true;
+					m_transaction->isCB = false;
+					m_transaction->isPre = 1;
 				}
 			}
 			free(Utils::ref().payIdWindow);
 		}
 
-		if(!(bool)jsonParam["ANCVOnly"].as_bool() || !(YesNoWindow(Utils::ref().glib, "",amountToComplete).drawing()))
+		if(m_transaction->isANCVTransac)
 		{
-			 amountToComplete = 0;
-			 jsonParam["toComplete"] = 0;
-			 saveDataAsJson(FIC_PARAM, jsonParam);
+			if(!(bool)jsonParam["ANCVOnly"].as_bool() && amountToComplete > 0)
+			{
+				if(!YesNoWindow(Utils::ref().glib, "",amountToComplete).drawing())
+				{
+					amountToComplete = 0;
+					m_transaction->isANCVTransac = false;
+					Utils::ref().terminateTransac(false, m_transaction->isPre);
+				}
+				else
+				{
+					m_transaction->isCB = true;
+				}
+			}
 		}
 
-		m_transaction->updateTransactionInfo(outputData,0);
+		m_transaction->updateTransactionInfo(outputData,amountToComplete);
 		updateTransactionInfo(outputData, amountToComplete, NULL, NULL, &readerDetected);
 	}
-
 
 	return TXN_SR_OK;
 }
@@ -204,10 +227,31 @@ int TxnStartEnd::end(const TLV_TREE_NODE inputData, TLV_TREE_NODE outputData)
 	string appName;
 	AncvConnectData dataToPrint;
 	getTransactionStatus(inputData, status, readerUsed, appName, appId);
-	if(status == (TXN_STATUS_TXN_APPROVED || status == TXN_STATUS_TECHNO_NOT_SUPPORTED) && m_transaction->isANCVTransac)
+	cib::json::Document jsonParam;
+	loadDataAsJson(FIC_PARAM, jsonParam);
+
+	if((status == TXN_STATUS_TXN_APPROVED && m_transaction->isCB && m_transaction->isANCVTransac) ||  (m_transaction->isANCVTransac && (int)jsonParam["toComplete"].as_int() == 0))
 	{
-		Utils::ref().fillTicketTransacData(dataToPrint);
-		PrintTicketWindow(Utils::ref().glib, "IMPRESSION TICKET", dataToPrint).drawing();
+		Utils::ref().waitingWindow->drawing("Validation en cours", Waiting);
+		if(Utils::ref().terminateTransac(true, m_transaction->isPre))
+		{
+			Utils::ref().waitingWindow->hidding();
+			Utils::ref().fillTicketTransacData(dataToPrint);
+			PrintTicketWindow(Utils::ref().glib, "IMPRESSION TICKET", dataToPrint).drawing();
+		}
+		else
+		{
+			Utils::ref().waitingWindow->drawing("Transaction Annulé", Cancel);
+		}
 	}
+	else if(m_transaction->isCB && m_transaction->isANCVTransac)
+	{
+		Utils::ref().waitingWindow->drawing("Annulation en cours", Waiting);
+		Utils::ref().terminateTransac(false, m_transaction->isPre);
+		Utils::ref().waitingWindow->hidding();
+		Utils::ref().waitingWindow->drawing("Transaction Annulé", Cancel);
+
+	}
+
 	return TXN_SR_OK;
 }

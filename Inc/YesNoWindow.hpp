@@ -8,6 +8,7 @@
 class YesNoWindow : public BaseDrawWindow {
 protected:
 	bool isOk;
+	string textToDisplay;
 public:
     // Constructeur
 	YesNoWindow(GraphicLib& glib, string title, unsigned long long);

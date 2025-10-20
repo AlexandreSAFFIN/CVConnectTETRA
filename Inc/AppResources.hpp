@@ -21,7 +21,6 @@
 #define HOST_PROD "boancv.alpigreen.com"
 #define HOST_DEV "jbstagingancv.azurewebsites.net"
 
-
 //! Events detected
 #define EVENT_NONE 0
 #define EVENT_END 1

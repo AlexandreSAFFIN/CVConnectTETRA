@@ -7,6 +7,8 @@ class Transaction
 {
 public:
 	bool isANCVTransac;
+	bool isCB;
+	int isPre;
 	//! \brief Transaction constructor.
 	Transaction();
 	//! \brief Transaction destructor.

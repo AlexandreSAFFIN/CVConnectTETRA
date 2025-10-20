@@ -116,7 +116,7 @@ void ConnectDrawWindow::onValidate()
 	mainWindow.hide();
 	mainWindow.dispatch(0);
 	Utils::ref().isConnected = Utils::ref().connectWithShopId(editText->getText());
-	Utils::ref().isConnected = true;
+//	Utils::ref().isConnected = true;
 	if(!Utils::ref().isConnected)
 	{
 		mainWindow.show();

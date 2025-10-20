@@ -258,7 +258,7 @@ Obj/GNU_ARM_DEBUG_TETRA/Utils.o: Src/Utils.cpp Inc/Utils.hpp \
  Inc/BaseDrawWindow.hpp Inc/AppResources.hpp \
  Inc/PaymentChoiceDrawWindow.hpp Inc/TileButton.hpp Inc/WaitingWindow.hpp \
  Inc/PayIDWindow.hpp Inc/AncvPrintTicket.hpp Inc/PrintTicket.hpp \
- Inc/AncvPrintTicket.hpp
+ Inc/AncvPrintTicket.hpp Inc/YesNoWindow.hpp
 
 Inc/Utils.hpp:
 
@@ -791,3 +791,5 @@ Inc/AncvPrintTicket.hpp:
 Inc/PrintTicket.hpp:
 
 Inc/AncvPrintTicket.hpp:
+
+Inc/YesNoWindow.hpp:

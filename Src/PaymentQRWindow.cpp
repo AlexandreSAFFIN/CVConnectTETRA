@@ -64,12 +64,12 @@ PaymentQRWindow::PaymentQRWindow(GraphicLib& glib, GraphicLib& pLib, string text
 	// Image de transaction
 	p_transactionImage = new Picture(m_ppwindow);
 	p_transactionImage->setSize(100, 100, GL_UNIT_PIXEL); // Taille suffisante pour le QR code ou autre image
-	p_transactionImage->setPosition((psize.width-100)/2, (psize.height-100)/2-20, GL_UNIT_PIXEL); // Centré en dessous des labels
+	p_transactionImage->setPosition((psize.width-100)/2, (psize.height-100)/2-15, GL_UNIT_PIXEL); // Centré en dessous des labels
 	p_transactionImage->setTransformation(GL_TRANSFORMATION_STRETCH_ALL);
 	p_transactionImage->setTextAlign(GL_ALIGN_CENTER); // Centré
 
-	transactionImage.setSize(160, 160, GL_UNIT_PIXEL);  // Taille du logo
-	transactionImage.setPosition((size.width-160)/2, (size.height-160)/2-45, GL_UNIT_PIXEL);  // Position du logo à gauche
+	transactionImage.setSize(180, 180, GL_UNIT_PIXEL);  // Taille du logo
+	transactionImage.setPosition((size.width-160)/2-15, (size.height-160)/2-70, GL_UNIT_PIXEL);  // Position du logo à gauche
 	transactionImage.setSource("file://flash/HOST/QRCODE.png");  // Chemin vers l'image du logo
 	transactionImage.setTransformation(GL_TRANSFORMATION_STRETCH_ALL);
 	p_logoimg.setSource("file://flash/HOST/logo.png");
@@ -77,8 +77,6 @@ PaymentQRWindow::PaymentQRWindow(GraphicLib& glib, GraphicLib& pLib, string text
 	p_logoimg.setPosition(5,115, GL_UNIT_PIXEL);
 	p_logoimg.setTransformation(GL_TRANSFORMATION_NONE);
 //	qrCodeViewer = new Barcode(qrWindow);
-
-
 
     createSnackBar();
 }
@@ -166,7 +164,7 @@ void PaymentQRWindow::displayQrCode(long long int amount)
 
 void PaymentQRWindow::treatPollingReturn()
 {
-	if(error > 0 || timer >= 100000)
+	if(error > 0 || timer >= Utils::ref().timeout)
 	{
 		if(error == 201)
 		{
@@ -198,9 +196,9 @@ void PaymentQRWindow::treatPollingReturn()
 			timer = 0;
 		}
 
-		usleep(150000);
-		timer+=15;
 	}
+	usleep(100000);
+	timer+=10;
 }
 void PaymentQRWindow::refreshInformation()
 {
@@ -233,7 +231,13 @@ void PaymentQRWindow::refreshInformation()
 
 				transactionStatusLabel.setText("Transaction OK");
 				transactionImage.setSource("file://flash/HOST/valid.png");
-				Utils::ref().terminateTransac(true, 1);
+				if(threadRequest)
+				{
+					threadRequest->stop();
+					threadRequest->join();
+					threadRequest = NULL;
+				}
+//				Utils::ref().terminateTransac(true, 0);
 				mainWindow.dispatch(0);
 				m_ppwindow.dispatch(0);
 			}
@@ -279,6 +283,7 @@ void PaymentQRWindow::refreshInformation()
 				threadRequest->join();
 				threadRequest = NULL;
 			}
+
 			Utils::ref().terminateTransac(false, 0);
 			canDispatch = false;
 
@@ -313,7 +318,7 @@ void PaymentQRWindow::onCancelClick(Message& msg)
 	if(statePayment == WaitingScanning || statePayment == ProcessInProgress)
 	{
 		transactionStatus = false;
-		statePayment = Finish;
+		statePayment = CanclByPinpad;
 	}
 
 }

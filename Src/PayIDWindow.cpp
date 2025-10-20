@@ -147,7 +147,7 @@ bool PayIDWindow::drawing()
     canDispatch = true;
     PinpadThread* th = new PinpadThread();
 	mainWindow.registerMethod(GL_EVENT_KEY_DOWN, this, &PayIDWindow::onKeyPress);
-	m_ppwindow.registerMethod(GL_EVENT_KEY_DOWN, this, &PayIDWindow::onKeyPress);
+	m_ppwindow.registerMethod(GL_EVENT_KEY_DOWN, this, &PayIDWindow::onKeyPressPinpad);
     mainWindow.show();  // Afficher la fenêtre principale
 //    topLayout.show();
     hideSnackBar();
@@ -174,7 +174,7 @@ bool PayIDWindow::drawing()
 	mainWindow.hide();
 	mainWindow.dispatch(0);
 	mainWindow.unregisterMethod(GL_EVENT_KEY_DOWN, this, &PayIDWindow::onKeyPress);
-	m_ppwindow.unregisterMethod(GL_EVENT_KEY_DOWN, this, &PayIDWindow::onKeyPress);
+	m_ppwindow.unregisterMethod(GL_EVENT_KEY_DOWN, this, &PayIDWindow::onKeyPressPinpad);
     return transactionStatus;
 }
 
@@ -190,7 +190,31 @@ void PayIDWindow::onValidate()
 bool PayIDWindow::onKeyPress(ingenico::graphics::Message &message) {
         // Handle key press event here
         int key = message.getKey();
+        cib::json::Document jsonParam;
+		loadDataAsJson(FIC_PARAM, jsonParam);
+		jsonParam["beneficiaryId"] = editText->getText();
+        saveDataAsJson(FIC_PARAM, jsonParam);
+
         if (key == GL_KEY_CANCEL)
+        {
+        	canDispatch = false;
+        }
+        else if(key == GL_KEY_VALID)
+        {
+        	onValidate();
+        }
+        return true;
+}
+
+bool PayIDWindow::onKeyPressPinpad(ingenico::graphics::Message &message) {
+        // Handle key press event here
+        int key = message.getKey();
+        cib::json::Document jsonParam;
+		loadDataAsJson(FIC_PARAM, jsonParam);
+		jsonParam["beneficiaryId"] = p_edit->getText();
+        saveDataAsJson(FIC_PARAM, jsonParam);
+
+		if (key == GL_KEY_CANCEL)
         {
         	canDispatch = false;
         }

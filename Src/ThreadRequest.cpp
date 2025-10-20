@@ -1,5 +1,6 @@
 #include <PaymentQRWindow.hpp>
 #include "ThreadRequest.hpp"
+#include "PaymentTransacWindow.hpp"
 #include "Utils.hpp"
 
 // Constructeur
@@ -15,13 +16,13 @@ void ThreadRequest::run(){
 	{
 		if(isPreTransac)
 		{
-			PaymentQRWindow::error = Utils::ptr()->pollingTransacResult();
+			PaymentQRWindow::error = Utils::ptr()->pollingPreTransacResult();
 		}
 		else
 		{
-			PaymentQRWindow::error = Utils::ptr()->pollingPreTransacResult();
+			PaymentPreTransacWindow::error = Utils::ptr()->pollingTransacResult();
 		}
-	}while(canDispatch);
+	}while(canDispatch && (PaymentPreTransacWindow::error != 202 && PaymentQRWindow::error != 202));
 }
 
 void ThreadRequest::stop()

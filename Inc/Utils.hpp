@@ -44,15 +44,17 @@ public:
 	string getIconsPath(string name);
 	bool checkLicense();
 	bool connectWithShopId(string shopId);
+	bool getHistoric(string dateFrom, string dateTo);
 	string makeId(int length = 10);
 	bool sendMiseEnPaiementTransac(string beneficiaryId, long long int amount);
-	bool checkIfStringBullshitApiIsValid(string value);
-	bool checkIfIntBullshitApiIsValid(int value);
 	bool terminateTransac(bool isValid, int isPre);
 	bool initQrCodePayment(long long int amount);
 	int pollingTransacResult();
 	int pollingPreTransacResult();
 	void fillTicketTransacData(AncvConnectData &data);
+	void copyFromResources(string filepathResources, string filepathToCopy);
+	int createSSLProfile(string nameProfile,int count, ... );
+	string getTodayDate();
 
     GraphicLib glib;
 
@@ -61,6 +63,9 @@ public:
 	string m_host;
 
 	bool isConnected;
+	bool isLicence;
+	long timeout;
+
 	bool isFirstConnection;
 
 	BaseDrawWindow* parameterWindow;

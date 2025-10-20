@@ -54,6 +54,39 @@ bool MaintenanceDrawWindow::onClickNetwork()
 
 bool MaintenanceDrawWindow::onClickMaintenance()
 {
+	string code;
+	string package;
+
+//	SGL::ref().openApplicationWindow();
+	SGL::ref().dialogText("Maintenance", "Code maintenance", "/d/d/d/d/d", code, GL_TIME_INFINITE);
+	switch (atoi(code.c_str()))
+	{
+	case 3383: // DEVE
+		SSL_DeleteProfile("ANCV");
+		Utils::ref().resetTerminal(HOST_DEV);
+		SGL::ref().dialogMessage("Maintenance", "Environnement de DEV", GL_ICON_INFORMATION, GL_BUTTON_VALID, GL_TIME_INFINITE);
+		break;
+
+	case 7763: // PROD
+		SSL_DeleteProfile("ANCV");
+		Utils::ref().resetTerminal(HOST_PROD);
+		SGL::ref().dialogMessage("Maintenance", "Environnement de PROD", GL_ICON_INFORMATION, GL_BUTTON_VALID, GL_TIME_INFINITE);
+		break;
+	case 7753: // SSLD
+		ssllib_open();
+		if (SSL_DeleteProfile("ANCV") == SSL_PROFILE_EOK)
+		{
+			SSL_DeleteProfile("ANCV");
+			SGL::ref().dialogMessage("Maintenance", "Certificat SSL supprime avec succes", GL_ICON_INFORMATION, GL_BUTTON_VALID, GL_TIME_INFINITE);
+		}
+		else
+		{
+			SGL::ref().dialogMessage("Maintenance", "Echec de suppression du certificat SSL", GL_ICON_ERROR, GL_BUTTON_VALID, GL_TIME_INFINITE);
+		}
+		ssllib_close();
+		break;
+	}
+//	SGL::ref().closeApplicationWindow();
     return true;  // Événement géré
 }
 
