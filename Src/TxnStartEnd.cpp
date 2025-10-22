@@ -135,7 +135,7 @@ int TxnStartEnd::start(const TLV_TREE_NODE inputData, TLV_TREE_NODE outputData)
 		}
 
 		m_transaction->updateTransactionInfo(outputData,amountToComplete);
-		updateTransactionInfo(outputData, amountToComplete, NULL, NULL, &readerDetected);
+		updateTransactionInfo(outputData, amountToComplete, NULL, NULL, NULL);
 	}
 
 	return TXN_SR_OK;

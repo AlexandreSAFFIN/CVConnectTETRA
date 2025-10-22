@@ -780,7 +780,7 @@ int Utils::pollingPreTransacResult()
 						iRet = 203;
 					}
 				}
-				else if(etat == "ABORTED")
+				else if(etat == "ABORTED" || etat == "REJECTED")
 				{
 					iRet = 203;
 				}
@@ -792,10 +792,6 @@ int Utils::pollingPreTransacResult()
 				{
 					iRet = 205;
 				}
-			}
-			else
-			{
-				iRet = 205;
 			}
 
 		}
@@ -871,10 +867,6 @@ int Utils::pollingTransacResult()
 						iRet = 205;
 					}
 
-				}
-				else
-				{
-					iRet = 205;
 				}
 			}
 			else
