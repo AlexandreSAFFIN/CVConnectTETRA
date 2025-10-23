@@ -585,7 +585,7 @@ Response Utils::createRequest(string path, eMethod method, const string &body, b
 
 			if((!((string)jsonParam["shopId"].as_string()).empty()))
 			{
-				request.addHeader("jbsurfauthorize", buildJbSurfAuthorize_noSSL(Terminal::ref().SerialNumber, (string)jsonParam["shopId"].as_string()));
+				request.addHeader("jbsurfauthorize", buildJbSurfAuthorize_noSSL(Terminal::ref().SerialNumber.substr(Terminal::ref().SerialNumber.size() - 8), (string)jsonParam["shopId"].as_string()));
 			}
 		}
 
@@ -627,7 +627,7 @@ bool Utils::initQrCodePayment(long long int amount)
 
 		jsonBody["shopId"] = (string)jsonParam["shopId"].as_string();
 		jsonBody["expirationDate"] = date;
-		jsonBody["serialnumber"] = Terminal::ref().SerialNumber;
+		jsonBody["serialnumber"] = Terminal::ref().SerialNumber.substr(Terminal::ref().SerialNumber.size() - 8);
 		jsonBody["order"] = json::Document(json::VALUE_IS_OBJECT);
 		jsonBody["order"]["id"] = id;
 		jsonBody["order"]["paymentId"] = makePaymentIdWithMs();
@@ -689,7 +689,7 @@ bool Utils::sendMiseEnPaiementTransac(string beneficiaryId, long long int amount
 		// Construction du corps de la requête avec les informations d'authentification
 		jsonBody["beneficiaryId"] = beneficiaryId;
 		jsonBody["shopId"] = (string)jsonParam["shopId"].as_string();
-		jsonBody["serialnumber"] = Terminal::ref().SerialNumber;
+		jsonBody["serialnumber"] = Terminal::ref().SerialNumber.substr(Terminal::ref().SerialNumber.size() - 8);
 		jsonBody["order"] = json::Document(json::VALUE_IS_OBJECT);
 		jsonBody["order"]["id"] = id;
 		jsonBody["order"]["paymentId"] = makePaymentIdWithMs();
@@ -847,6 +847,7 @@ int Utils::pollingTransacResult()
 							int valTotal = (int)jsonParam["amountToPay"].as_int();
 							int valPaid = (int)jsonResponse["PollingTransacResult"]["total"].as_int();
 							jsonParam["toComplete"] = valTotal - valPaid;
+
 							saveDataAsJson(FIC_PARAM, jsonParam);
 						}
 						else if((int)jsonResponse["PollingTransacResult"]["total"].as_int() < (int)jsonParam["amountToPay"].as_int())
@@ -879,7 +880,7 @@ int Utils::pollingTransacResult()
 	return iRet;
 }
 
-bool Utils::terminateTransac(bool isValid, int isPre)
+bool Utils::terminateTransac(bool isValid, int isPre, int paidWithCB)
 {
 	bool bRet = false;
 	Response response;
@@ -894,7 +895,7 @@ bool Utils::terminateTransac(bool isValid, int isPre)
 		{
 			jsonBody["id"] = jsonParam["orderId"];
 			jsonBody["pre_or_transac"] = isPre;
-			jsonBody["paidWithCB"] = 0;
+			jsonBody["paidWithCB"] = paidWithCB;
 
 			response = createRequest("/Webservices/rest/FO/wcfANCVPeriph.svc/ValidateTransaction", _POST, jsonBody.serialize());
 		}
@@ -941,7 +942,7 @@ bool Utils::connectWithShopId(string shopId)
 
 	Utils::waitingWindow->drawing("Opération en cours", Waiting);
 	// Construction du corps de la requête avec les informations d'authentification
-	jsonBody["serialNumber"] = Terminal::ref().SerialNumber;
+	jsonBody["serialNumber"] = Terminal::ref().SerialNumber.substr(Terminal::ref().SerialNumber.size() - 8);
 	jsonBody["typePeriph"] = Terminal::ref().TerminalType;
 //	jsonBody["RequestHasLicense"]["serialNumber"] = "23136053";
 //	jsonBody["RequestHasLicense"]["typePeriph"] = "M71";
@@ -997,7 +998,7 @@ bool Utils::checkLicense()
 
 		//TODO REMOVE
 	//	response = createRequest("/Webservices/rest/FO/wcfANCVPeriph.svc/GetShopId/23136053", _GET, "", true);
-		response = createRequest("/Webservices/rest/FO/wcfANCVPeriph.svc/GetShopId/"+Terminal::ref().SerialNumber, _GET, "", true);
+		response = createRequest("/Webservices/rest/FO/wcfANCVPeriph.svc/GetShopId/"+Terminal::ref().SerialNumber.substr(Terminal::ref().SerialNumber.size() - 8), _GET, "", true);
 
 		if (response.getStatusCode() == 200)
 		{
@@ -1058,7 +1059,7 @@ bool Utils::getHistoric(string dateFrom, string dateTo)
 		parseDdMmYyyy(dateFrom, tmFrom);
 		parseDdMmYyyy(dateTo, tmTo);
 
-		jsonBody["serialNumber"] = Terminal::ref().SerialNumber;
+		jsonBody["serialNumber"] = Terminal::ref().SerialNumber.substr(Terminal::ref().SerialNumber.size() - 8);
 		jsonBody["dateFrom"] = formatIso(tmFrom,false);
 		jsonBody["dateTo"] = formatIso(tmTo,true);
 

@@ -189,7 +189,7 @@ void PaymentPreTransacWindow::refreshInformation()
 				p_transactionImage->setSource("file://flash/HOST/valid.png");
 
 				p_transactionImage->setSize(100, 100, GL_UNIT_PIXEL); // Taille suffisante pour le QR code ou autre image
-				p_transactionImage->setPosition((psize.width-100)/2, (psize.height-15)/2, GL_UNIT_PIXEL); // Centré en dessous des labels
+				p_transactionImage->setPosition((psize.width-100)/2, (psize.height-100)/2, GL_UNIT_PIXEL); // Centré en dessous des labels
 
 				transactionStatusLabel.setText("Transaction OK");
 				transactionImage.setSource("file://flash/HOST/valid.png");
@@ -245,7 +245,7 @@ void PaymentPreTransacWindow::refreshInformation()
 				threadRequest->join();
 				threadRequest = NULL;
 			}
-			Utils::ref().terminateTransac(false,1);
+			Utils::ref().terminateTransac(false,1,0);
 			canDispatch = false;
 
 			break;

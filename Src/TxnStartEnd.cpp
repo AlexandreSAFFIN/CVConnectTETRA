@@ -70,7 +70,6 @@ int TxnStartEnd::start(const TLV_TREE_NODE inputData, TLV_TREE_NODE outputData)
 	bool isANCV = false;
 	int amountToComplete = 0;
 
-	unsigned long readerDetected = TXN_TECHNO_READER_DETECTED;
 	if(isParam)
 	{
 		isANCV = Utils::ref().paymentChoiceWindow->drawing();
@@ -125,7 +124,9 @@ int TxnStartEnd::start(const TLV_TREE_NODE inputData, TLV_TREE_NODE outputData)
 				{
 					amountToComplete = 0;
 					m_transaction->isANCVTransac = false;
-					Utils::ref().terminateTransac(false, m_transaction->isPre);
+					Utils::ref().waitingWindow->drawing("Annulation en cours", Waiting);
+					Utils::ref().terminateTransac(false, m_transaction->isPre, amountToComplete);
+					Utils::ref().waitingWindow->hidding();
 				}
 				else
 				{
@@ -134,8 +135,16 @@ int TxnStartEnd::start(const TLV_TREE_NODE inputData, TLV_TREE_NODE outputData)
 			}
 		}
 
-		m_transaction->updateTransactionInfo(outputData,amountToComplete);
-		updateTransactionInfo(outputData, amountToComplete, NULL, NULL, NULL);
+		if(amountToComplete > 0)
+		{
+			m_transaction->updateTransactionInfo(outputData,amountToComplete);
+			updateTransactionInfo(outputData, amountToComplete, NULL, NULL, NULL);
+		}
+		else
+		{
+			unsigned long readerDetected = TXN_TECHNO_READER_DETECTED;
+			updateTransactionInfo(outputData, 0, NULL, NULL, &readerDetected);
+		}
 	}
 
 	return TXN_SR_OK;
@@ -233,7 +242,7 @@ int TxnStartEnd::end(const TLV_TREE_NODE inputData, TLV_TREE_NODE outputData)
 	if((status == TXN_STATUS_TXN_APPROVED && m_transaction->isCB && m_transaction->isANCVTransac) ||  (m_transaction->isANCVTransac && (int)jsonParam["toComplete"].as_int() == 0))
 	{
 		Utils::ref().waitingWindow->drawing("Validation en cours", Waiting);
-		if(Utils::ref().terminateTransac(true, m_transaction->isPre))
+		if(Utils::ref().terminateTransac(true, m_transaction->isPre, (int)jsonParam["toComplete"].as_int()))
 		{
 			Utils::ref().waitingWindow->hidding();
 			Utils::ref().fillTicketTransacData(dataToPrint);
@@ -247,7 +256,7 @@ int TxnStartEnd::end(const TLV_TREE_NODE inputData, TLV_TREE_NODE outputData)
 	else if(m_transaction->isCB && m_transaction->isANCVTransac)
 	{
 		Utils::ref().waitingWindow->drawing("Annulation en cours", Waiting);
-		Utils::ref().terminateTransac(false, m_transaction->isPre);
+		Utils::ref().terminateTransac(false, m_transaction->isPre, 0);
 		Utils::ref().waitingWindow->hidding();
 		Utils::ref().waitingWindow->drawing("Transaction Annulé", Cancel);
 

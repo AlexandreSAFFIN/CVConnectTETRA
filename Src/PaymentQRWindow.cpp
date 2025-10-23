@@ -40,6 +40,7 @@ PaymentQRWindow::PaymentQRWindow(GraphicLib& glib, GraphicLib& pLib, string text
 	transactionStatusLabel.setPosition(0, 280, GL_UNIT_PIXEL);
 	transactionStatusLabel.setTextAlign(GL_ALIGN_CENTER);
 	transactionStatusLabel.setForeColor(GL_COLOR_BLACK);
+
 	// Label de paiement
 	p_paymentLabel.setText(title->getText());
 	p_paymentLabel.setFontName("Arial");
@@ -227,7 +228,7 @@ void PaymentQRWindow::refreshInformation()
 				p_transactionImage->setSource("file://flash/HOST/valid.png");
 
 				p_transactionImage->setSize(100, 100, GL_UNIT_PIXEL); // Taille suffisante pour le QR code ou autre image
-				p_transactionImage->setPosition((psize.width-100)/2, (psize.height-15)/2, GL_UNIT_PIXEL); // Centré en dessous des labels
+				p_transactionImage->setPosition((psize.width-100)/2, (psize.height-100)/2, GL_UNIT_PIXEL);
 
 				transactionStatusLabel.setText("Transaction OK");
 				transactionImage.setSource("file://flash/HOST/valid.png");
@@ -284,7 +285,7 @@ void PaymentQRWindow::refreshInformation()
 				threadRequest = NULL;
 			}
 
-			Utils::ref().terminateTransac(false, 0);
+			Utils::ref().terminateTransac(false, 0, 0);
 			canDispatch = false;
 
 			break;

@@ -47,7 +47,7 @@ public:
 	bool getHistoric(string dateFrom, string dateTo);
 	string makeId(int length = 10);
 	bool sendMiseEnPaiementTransac(string beneficiaryId, long long int amount);
-	bool terminateTransac(bool isValid, int isPre);
+	bool terminateTransac(bool isValid, int isPre, int paidWithCB);
 	bool initQrCodePayment(long long int amount);
 	int pollingTransacResult();
 	int pollingPreTransacResult();
