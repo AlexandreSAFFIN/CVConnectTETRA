@@ -8,10 +8,9 @@
 class YesNoWindow : public BaseDrawWindow {
 protected:
 	bool isOk;
-	string textToDisplay;
 public:
     // Constructeur
-	YesNoWindow(GraphicLib& glib, string title, unsigned long long);
+	YesNoWindow(GraphicLib& glib, string text, string title);
 
     // Redéfinition de la méthode drawing
     bool drawing();

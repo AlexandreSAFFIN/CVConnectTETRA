@@ -3,7 +3,7 @@
 #include "AppResources.hpp"
 #include "cib/disk/Disk.hpp"
 #include "TileButton.hpp"
-
+#include "ANCVDrawWindow.hpp"
 
 bool MaintenanceDrawWindow::onClickNetwork()
 {
@@ -92,7 +92,8 @@ bool MaintenanceDrawWindow::onClickMaintenance()
 
 bool MaintenanceDrawWindow::onClickANCV()
 {
-	Utils::ptr()->parameterOptionWindow->drawing();
+	ANCVDrawWindow(SGL::ref(), "OPTION ANCV").drawing();
+	canDispatch = !Utils::ref().isSavedTransac;
     return true;
 }
 

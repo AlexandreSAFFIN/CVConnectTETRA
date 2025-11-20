@@ -19,6 +19,8 @@
 #include "WaitingWindow.hpp"
 #include "PayIDWindow.hpp"
 #include "AncvPrintTicket.hpp"
+#include "SavedTransaction.hpp"
+
 
 class Utils : public Singleton<Utils>
 {
@@ -55,6 +57,9 @@ public:
 	void copyFromResources(string filepathResources, string filepathToCopy);
 	int createSSLProfile(string nameProfile,int count, ... );
 	string getTodayDate();
+	void saveTransacInProgress(SavedTransaction data);
+	SavedTransaction getSaveTransac();
+	void launchTransactionWithANCVParam(SavedTransaction savedTransaction);
 
     GraphicLib glib;
 
@@ -65,12 +70,13 @@ public:
 	bool isConnected;
 	bool isLicence;
 	long timeout;
+	bool isSavedTransac;
 
-	bool isFirstConnection;
+	ingenico::service::Service m_serviceTransac;
+	cib::transaction::TransactionLauncher m_transaction;
 
 	BaseDrawWindow* parameterWindow;
 	BaseDrawWindow* connectionWindow;
-	BaseDrawWindow* parameterOptionWindow;
 	PaymentChoiceDrawWindow* paymentChoiceWindow;
 	BaseDrawWindow* qrWindow;
 	WaitingWindow* waitingWindow;

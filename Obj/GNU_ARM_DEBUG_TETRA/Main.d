@@ -254,7 +254,8 @@ Obj/GNU_ARM_DEBUG_TETRA/Main.o: Src/Main.cpp Inc/CvConnect.hpp \
  D:/MyProjects/TETRA/cib_dll_t3/ExpInc/cib/disk/Disk.hpp \
  D:/MyProjects/TETRA/cib_dll_t3/ExpInc/cib/settings/Settings.hpp \
  D:/MyProjects/TETRA/cib_dll_t3/ExpInc/cib/devices/Devices.hpp \
- Inc/TxnStartEnd.hpp Inc/Transaction.hpp Inc/AppResources.hpp
+ Inc/TxnStartEnd.hpp Inc/Transaction.hpp Inc/SavedTransaction.hpp \
+ Inc/AppResources.hpp
 
 Inc/CvConnect.hpp:
 
@@ -771,5 +772,7 @@ D:/MyProjects/TETRA/cib_dll_t3/ExpInc/cib/devices/Devices.hpp:
 Inc/TxnStartEnd.hpp:
 
 Inc/Transaction.hpp:
+
+Inc/SavedTransaction.hpp:
 
 Inc/AppResources.hpp:

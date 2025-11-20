@@ -171,7 +171,7 @@ void PaymentPreTransacWindow::refreshInformation()
 			p_transactionImage->setVisible(true);
 			break;
 		case ProcessInProgress:
-			transactionStatusLabel.setText("Transaction en cours...");
+			transactionStatusLabel.setText("Traitement du paiement");
 			if(Ppad_IsConnected(PPAD_ID_0))
 			{
 				p_transactionImage->setSize(100, 100, GL_UNIT_PIXEL); // Taille suffisante pour le QR code ou autre image
@@ -280,7 +280,7 @@ void PaymentPreTransacWindow::onCancelClick(Message& msg)
 	if(statePayment == WaitingScanning || statePayment == ProcessInProgress)
 	{
 		transactionStatus = false;
-		statePayment = Finish;
+		statePayment = CanclByPinpad;
 	}
 
 }

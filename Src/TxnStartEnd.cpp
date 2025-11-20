@@ -64,46 +64,55 @@ int TxnStartEnd::start(const TLV_TREE_NODE inputData, TLV_TREE_NODE outputData)
 	{
 		Utils::ref().checkLicense();
 	}
+
 	Utils::ref().timeout = 3000;
 
-//	isParam = true;
 	bool isANCV = false;
 	int amountToComplete = 0;
 
-	if(isParam)
-	{
-		isANCV = Utils::ref().paymentChoiceWindow->drawing();
-	}
-
 	long long int amount = atoll((txn.amount).c_str());
-	if((!(atoll((txn.amount).c_str()) > 2147483647) && txn.txnType == TXN_TRANSACTION_TYPE_DEBIT && isANCV))
+	SavedTransaction s = Utils::ref().getSaveTransac();
+
+	if(!Utils::ref().isSavedTransac && !s.orderId.empty())
 	{
-		jsonParam["amountToPay"] = amount;
-		jsonParam["toComplete"] = 0;
-		saveDataAsJson(FIC_PARAM, jsonParam);
-		PaymentQRWindow* pw;
-		if(Utils::ref().paymentChoiceWindow->getPM() == QRCODE)
+		double euros = s.totalAmount / 100.0;
+		std::ostringstream oss;
+		oss << std::fixed << std::setprecision(2) << euros;
+		std::string amountStr = oss.str();
+
+		string paymentText = amountStr + " EUR";
+
+		if(YesNoWindow(Utils::ref().glib, paymentText, "REPRENDRE\nLA TRANSACTION ?").drawing())
 		{
-			if(Utils::ref().initQrCodePayment(amount))
-			{
-				pw = new PaymentQRWindow(Utils::ref().glib,PadSGL::ref(), "MOYEN DE PAIEMENT", amount, txn.amount);
-				if(pw->drawing())
-				{
-					loadDataAsJson(FIC_PARAM, jsonParam);
-					amountToComplete = (int)jsonParam["toComplete"].as_int();
-					m_transaction->isANCVTransac = true;
-					m_transaction->isCB = false;
-					m_transaction->isPre = 0;
-				}
-				free(pw);
-			}
+			Utils::ref().isSavedTransac = true;
 		}
 		else
 		{
-			Utils::ref().payIdWindow = new PayIDWindow(Utils::ref().glib,PadSGL::ref(), "MOYEN DE PAIEMENT", amount);
-			if(Utils::ref().payIdWindow->drawing())
+			jsonParam["orderId"] = s.orderId;
+
+			bool isValidation = (s.state == PAID_OK);
+			Utils::ref().waitingWindow->drawing(isValidation ? "VALIDATION DE\nLA DERNIERE TRANSACTION" : "ANNULATION DE\nLA DERNIERE TRANSACTION", Waiting);
+
+			bool terminateOk = Utils::ref().terminateTransac(isValidation, s.isPre, s.cbAmount);
+
+			Utils::ref().waitingWindow->drawing(terminateOk ? "OPERATION REUSSI" : "OPERATION ECHOUEE",  terminateOk ? Valid : Cancel);
+		}
+	}
+
+	if(Utils::ref().isSavedTransac)
+	{
+		BaseDrawWindow* ppw;
+		switch(s.state)
+		{
+		case POLLING :
+			jsonParam["orderId"] = s.orderId;
+			jsonParam["amountToPay"] = s.totalAmount;
+			jsonParam["paymentId"] = "";
+			jsonParam["orderDate"] = s.timestamp;
+			saveDataAsJson(FIC_PARAM, jsonParam);
+			if(s.isPre)
 			{
-				PaymentPreTransacWindow* ppw = new PaymentPreTransacWindow(Utils::ref().glib, PadSGL::ref(), "PAIEMENT ANCV");
+				ppw = new PaymentPreTransacWindow(Utils::ref().glib, PadSGL::ref(), "PAIEMENT ANCV");
 				if(ppw->drawing())
 				{
 					loadDataAsJson(FIC_PARAM, jsonParam);
@@ -113,30 +122,62 @@ int TxnStartEnd::start(const TLV_TREE_NODE inputData, TLV_TREE_NODE outputData)
 					m_transaction->isPre = 1;
 				}
 			}
-			free(Utils::ref().payIdWindow);
-		}
-
-		if(m_transaction->isANCVTransac)
-		{
-			if(!(bool)jsonParam["ANCVOnly"].as_bool() && amountToComplete > 0)
+			else
 			{
-				if(!YesNoWindow(Utils::ref().glib, "",amountToComplete).drawing())
+				ppw = new PaymentQRWindow(Utils::ref().glib,PadSGL::ref(), "MOYEN DE PAIEMENT", amount, txn.amount);
+				if(ppw->drawing())
 				{
-					amountToComplete = 0;
-					m_transaction->isANCVTransac = false;
-					Utils::ref().waitingWindow->drawing("Annulation en cours", Waiting);
-					Utils::ref().terminateTransac(false, m_transaction->isPre, amountToComplete);
-					Utils::ref().waitingWindow->hidding();
-				}
-				else
-				{
-					m_transaction->isCB = true;
+					loadDataAsJson(FIC_PARAM, jsonParam);
+					amountToComplete = (int)jsonParam["toComplete"].as_int();
+					m_transaction->isANCVTransac = true;
+					m_transaction->isCB = false;
+					m_transaction->isPre = 0;
 				}
 			}
+			break;
+
+		case VALIDATED :
+			jsonParam["orderId"] = s.orderId;
+			jsonParam["amountToPay"] = s.totalAmount;
+			jsonParam["paymentId"] = s.paymentId;
+			jsonParam["orderDate"] = s.timestamp;
+			jsonParam["toComplete"] = s.cbAmount;
+			saveDataAsJson(FIC_PARAM, jsonParam);
+
+			if(s.isPre)
+			{
+				loadDataAsJson(FIC_PARAM, jsonParam);
+				amountToComplete = (int)jsonParam["toComplete"].as_int();
+				m_transaction->isANCVTransac = true;
+				m_transaction->isCB = false;
+				m_transaction->isPre = 1;
+
+			}
+			else
+			{
+				loadDataAsJson(FIC_PARAM, jsonParam);
+				amountToComplete = (int)jsonParam["toComplete"].as_int();
+				m_transaction->isANCVTransac = true;
+				m_transaction->isCB = false;
+				m_transaction->isPre = 0;
+			}
+			break;
+
+		case PAID_OK :
+		case PAID_KO :
+			jsonParam["orderId"] = s.orderId;
+			jsonParam["amountToPay"] = s.totalAmount;
+			jsonParam["paymentId"] = "";
+			jsonParam["orderDate"] = s.timestamp;
+			jsonParam["toComplete"] = s.cbAmount;
+			amountToComplete = 0;
+			saveDataAsJson(FIC_PARAM, jsonParam);
+			break;
 		}
 
 		if(amountToComplete > 0)
 		{
+			m_transaction->isCB = true;
 			m_transaction->updateTransactionInfo(outputData,amountToComplete);
 			updateTransactionInfo(outputData, amountToComplete, NULL, NULL, NULL);
 		}
@@ -145,7 +186,97 @@ int TxnStartEnd::start(const TLV_TREE_NODE inputData, TLV_TREE_NODE outputData)
 			unsigned long readerDetected = TXN_TECHNO_READER_DETECTED;
 			updateTransactionInfo(outputData, 0, NULL, NULL, &readerDetected);
 		}
+
+		if(s.state != PAID_KO && s.state != PAID_OK)
+		{
+			Utils::ref().isSavedTransac = false;
+		}
+
 	}
+	else if(isParam && Utils::ref().connect(true) == LL_ERROR_OK)
+	{
+		isANCV = Utils::ref().paymentChoiceWindow->drawing();
+
+		if((!(atoll((txn.amount).c_str()) > 2147483647) && txn.txnType == TXN_TRANSACTION_TYPE_DEBIT && isANCV && Utils::ref().connect(true) == LL_ERROR_OK))
+		{
+			jsonParam["amountToPay"] = amount;
+			jsonParam["toComplete"] = 0;
+			saveDataAsJson(FIC_PARAM, jsonParam);
+			PaymentQRWindow* pw;
+			if(Utils::ref().paymentChoiceWindow->getPM() == QRCODE)
+			{
+				if(Utils::ref().initQrCodePayment(amount))
+				{
+					pw = new PaymentQRWindow(Utils::ref().glib,PadSGL::ref(), "MOYEN DE PAIEMENT", amount, txn.amount);
+					if(pw->drawing())
+					{
+						loadDataAsJson(FIC_PARAM, jsonParam);
+						amountToComplete = (int)jsonParam["toComplete"].as_int();
+						m_transaction->isANCVTransac = true;
+						m_transaction->isCB = false;
+						m_transaction->isPre = 0;
+					}
+					free(pw);
+				}
+			}
+			else
+			{
+				Utils::ref().payIdWindow = new PayIDWindow(Utils::ref().glib,PadSGL::ref(), "MOYEN DE PAIEMENT", amount);
+				if(Utils::ref().payIdWindow->drawing())
+				{
+					PaymentPreTransacWindow* ppw = new PaymentPreTransacWindow(Utils::ref().glib, PadSGL::ref(), "PAIEMENT ANCV");
+					if(ppw->drawing())
+					{
+						loadDataAsJson(FIC_PARAM, jsonParam);
+						amountToComplete = (int)jsonParam["toComplete"].as_int();
+						m_transaction->isANCVTransac = true;
+						m_transaction->isCB = false;
+						m_transaction->isPre = 1;
+					}
+				}
+				free(Utils::ref().payIdWindow);
+			}
+
+			if(m_transaction->isANCVTransac)
+			{
+				if(!(bool)jsonParam["ANCVOnly"].as_bool() && amountToComplete > 0)
+				{
+					double euros = amountToComplete / 100.0;
+					std::ostringstream oss;
+					oss << std::fixed << std::setprecision(2) << euros;
+					std::string amountStr = oss.str();
+
+					string paymentText = "A COMPLETER\n" + amountStr + " EUR";
+
+					if(!YesNoWindow(Utils::ref().glib, "",paymentText).drawing())
+					{
+						amountToComplete = 0;
+						m_transaction->isANCVTransac = false;
+						Utils::ref().waitingWindow->drawing("Annulation en cours", Waiting);
+						Utils::ref().terminateTransac(false, m_transaction->isPre, amountToComplete);
+						Utils::ref().waitingWindow->hidding();
+					}
+					else
+					{
+						m_transaction->isCB = true;
+					}
+				}
+			}
+
+			if(amountToComplete > 0)
+			{
+				m_transaction->updateTransactionInfo(outputData,amountToComplete);
+				updateTransactionInfo(outputData, amountToComplete, NULL, NULL, NULL);
+			}
+			else
+			{
+				unsigned long readerDetected = TXN_TECHNO_READER_DETECTED;
+				updateTransactionInfo(outputData, 0, NULL, NULL, &readerDetected);
+			}
+		}
+	}
+
+
 
 	return TXN_SR_OK;
 }
@@ -237,9 +368,18 @@ int TxnStartEnd::end(const TLV_TREE_NODE inputData, TLV_TREE_NODE outputData)
 	AncvConnectData dataToPrint;
 	getTransactionStatus(inputData, status, readerUsed, appName, appId);
 	cib::json::Document jsonParam;
+	SavedTransaction transac;
 	loadDataAsJson(FIC_PARAM, jsonParam);
 
-	if((status == TXN_STATUS_TXN_APPROVED && m_transaction->isCB && m_transaction->isANCVTransac) ||  (m_transaction->isANCVTransac && (int)jsonParam["toComplete"].as_int() == 0))
+	transac = Utils::ref().getSaveTransac();
+
+	if(!Utils::ref().isSavedTransac && m_transaction->isANCVTransac)
+	{
+		transac.state = status == TXN_STATUS_TXN_APPROVED ? PAID_OK : PAID_KO;
+		Utils::ref().saveTransacInProgress(transac);
+	}
+
+	if(((status == TXN_STATUS_TXN_APPROVED && transac.state == PAID_OK) && m_transaction->isCB && m_transaction->isANCVTransac) ||  (m_transaction->isANCVTransac && (int)jsonParam["toComplete"].as_int() == 0))
 	{
 		Utils::ref().waitingWindow->drawing("Validation en cours", Waiting);
 		if(Utils::ref().terminateTransac(true, m_transaction->isPre, (int)jsonParam["toComplete"].as_int()))

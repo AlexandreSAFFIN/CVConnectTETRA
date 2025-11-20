@@ -4,6 +4,7 @@
 #include "AppResources.hpp"
 #include "cib/transaction/Transaction.hpp"
 #include "TxnStartEnd.hpp"
+#include "SavedTransaction.hpp"
 //! Class to create the training application
 class CvConnect : public Application
 {
@@ -23,12 +24,12 @@ public:
 	void addTransacDescriptors();
 	void goMenu();
 	void initMenu();
+	Error onMenuClicked(SoftwareSelectedEvent& link);
 	void reset();
 	void initTransacInterfaces();
 	void initTransacWindow();
 	void initDisk();
 	void initApp();
-	ingenico::os::Error onSoftwareSelected(ingenico::service::Link &link);
 
 
 protected:
@@ -41,7 +42,6 @@ protected:
 	string appFamily;
 	string appName;
 
-	cib::transaction::TransactionLauncher m_transaction;
 };
 
 #endif // Walleety_hpp_INCLUDED

@@ -17,6 +17,7 @@
 #include <sys/time.h>
 #include "AncvPrintTicket.hpp"
 #include "YesNoWindow.hpp"
+#include "SavedTransaction.hpp"
 
 using namespace cib;
 using namespace cib::communication::http;
@@ -650,6 +651,10 @@ bool Utils::initQrCodePayment(long long int amount)
 				jsonParam["paymentId"] = (string)jsonBody["order"]["paymentId"].as_string();
 				jsonParam["orderDate"] = date;
 				saveDataAsJson(FIC_PARAM, jsonParam);
+
+				SavedTransaction transac = SavedTransaction(POLLING, date, (string)jsonParam["orderId"].as_string(),(string)jsonParam["paymentId"].as_string(), 0, amount, 0, 0);
+				Utils::ref().saveTransacInProgress(transac);
+
 				bRet = saveImageBase64ToPng((string)jsonResponse["InitAndGetQRPreTransacResult"]["ImageBase64"].as_string(), "file://flash/HOST/QRCODE.png");
 			}
 		}
@@ -711,6 +716,10 @@ bool Utils::sendMiseEnPaiementTransac(string beneficiaryId, long long int amount
 				jsonParam["orderDate"] = date;
 				jsonParam["paymentId"] = (string)jsonBody["order"]["paymentId"].as_string();
 				saveDataAsJson(FIC_PARAM, jsonParam);
+
+				SavedTransaction transac = SavedTransaction(POLLING, date, (string)jsonParam["orderId"].as_string(),(string)jsonParam["paymentId"].as_string(), 1, amount, 0, 0);
+				Utils::ref().saveTransacInProgress(transac);
+
 				bRet = true;
 			}
 		}
@@ -760,7 +769,7 @@ int Utils::pollingPreTransacResult()
 				jsonParam["beneficiaryId"] = beneficiaryId;
 				jsonParam["lastState"] = etat;
 				saveDataAsJson(FIC_PARAM, jsonParam);
-				if(etat == "SCANNED")
+				if(etat == "AUTHORIZED" || etat == "AUTHORIZING")
 				{
 					iRet = 201;
 				}
@@ -774,17 +783,23 @@ int Utils::pollingPreTransacResult()
 						int valPaid = (int)jsonResponse["PollingPreTransacResult"]["total"].as_int();
 						jsonParam["toComplete"] = valTotal - valPaid;
 						saveDataAsJson(FIC_PARAM, jsonParam);
+
+						SavedTransaction transac = 	Utils::ref().getSaveTransac();
+						transac.state = VALIDATED;
+						transac.cbAmount = valTotal - valPaid;
+						transac.paidAmount = valPaid;
+						Utils::ref().saveTransacInProgress(transac);
 					}
 					else if((int)jsonResponse["PollingPreTransacResult"]["total"].as_int() < (int)jsonParam["amountToPay"].as_int())
 					{
 						iRet = 203;
 					}
 				}
-				else if(etat == "ABORTED" || etat == "REJECTED")
+				else if(etat == "ABORTED" || etat == "REJECTED" || etat == "CANCELED")
 				{
 					iRet = 203;
 				}
-				else if(etat == "TIMEOUT")
+				else if(etat == "EXPIRED")
 				{
 					iRet = 204;
 				}
@@ -834,7 +849,7 @@ int Utils::pollingTransacResult()
 					jsonParam["beneficiaryId"] = beneficiaryId;
 					jsonParam["lastState"] = etat;
 					saveDataAsJson(FIC_PARAM, jsonParam);
-					if(etat == "SCANNED")
+					if(etat == "AUTHORIZED" || etat == "AUTHORIZING")
 					{
 						iRet = 201;
 					}
@@ -849,17 +864,23 @@ int Utils::pollingTransacResult()
 							jsonParam["toComplete"] = valTotal - valPaid;
 
 							saveDataAsJson(FIC_PARAM, jsonParam);
+
+							SavedTransaction transac = 	Utils::ref().getSaveTransac();
+							transac.state = VALIDATED;
+							transac.cbAmount = valTotal - valPaid;
+							transac.paidAmount = valPaid;
+							Utils::ref().saveTransacInProgress(transac);
 						}
 						else if((int)jsonResponse["PollingTransacResult"]["total"].as_int() < (int)jsonParam["amountToPay"].as_int())
 						{
 							iRet = 203;
 						}
 					}
-					else if(etat == "ABORTED" || etat == "REJECTED")
+					else if(etat == "ABORTED" || etat == "REJECTED" || etat == "CANCELED" || etat == "INITIALIZED")
 					{
 						iRet = 203;
 					}
-					else if(etat == "TIMEOUT")
+					else if(etat == "EXPIRED")
 					{
 						iRet = 204;
 					}
@@ -912,8 +933,13 @@ bool Utils::terminateTransac(bool isValid, int isPre, int paidWithCB)
 		if (response.getStatusCode() == 200)
 		{
 			jsonResponse.parse(response.getContent().data());
+
+			jsonParam["SavedTransac"] =  json::Document(json::VALUE_IS_OBJECT);
+			saveDataAsJson(FIC_PARAM, jsonParam);
+
 			if(isValid)
 			{
+
 				if((bool)jsonResponse["ValidateTransactionResult"].as_bool() && jsonResponse["beneficiary_id"] == (string)jsonParam["beneficiaryId"].as_string())
 				{
 					bRet = (bool)jsonResponse["ValidateTransactionResult"].as_bool();
@@ -1093,7 +1119,7 @@ bool Utils::getHistoric(string dateFrom, string dateTo)
 
 	}
 
-	if(bRet && YesNoWindow(glib, "IMPRIMER TOTAUX",0).drawing())
+	if(bRet && YesNoWindow(glib, "","IMPRIMER TOTAUX").drawing())
 	{
 		CvConnectTicket* t = new CvConnectTicket();
 		t->printPaymentSummary(dateFrom, dateTo);
@@ -1240,8 +1266,56 @@ void Utils::copyFromResources(string filepathResources, string filepathToCopy)
 		char* buffer = (char*)malloc(sizeCsr);
 		loadDataParam(path.str().c_str(), buffer, sizeCsr);
 
-		disk::saveData(filepathToCopy, buffer, sizeCsr, 1) > 0;
+		disk::saveData(filepathToCopy, buffer, sizeCsr, 1);
 	}
 
 }
 
+void Utils::saveTransacInProgress(SavedTransaction data)
+{
+	cib::json::Document jsonParam;
+	loadDataAsJson(FIC_PARAM, jsonParam);
+
+	jsonParam["SavedTrasac"] = json::Document(json::VALUE_IS_OBJECT);
+    jsonParam["SavedTransac"]["timestamp"]   = data.timestamp;
+    jsonParam["SavedTransac"]["orderId"]     = data.orderId;
+    jsonParam["SavedTransac"]["isPre"]       = data.isPre;
+    jsonParam["SavedTransac"]["totalAmount"] = data.totalAmount;
+    jsonParam["SavedTransac"]["cbAmount"]    = data.cbAmount;
+    jsonParam["SavedTransac"]["state"]    = data.state;
+    jsonParam["SavedTransac"]["paidAmount"]  = data.paidAmount;
+    jsonParam["SavedTransac"]["paymentId"]  = data.paymentId;
+
+    saveDataAsJson(FIC_PARAM, jsonParam);
+}
+
+SavedTransaction Utils::getSaveTransac()
+{
+	cib::json::Document jsonParam;
+	loadDataAsJson(FIC_PARAM, jsonParam);
+
+	SavedTransaction s = SavedTransaction();
+
+	if(!jsonParam["SavedTransac"]["orderId"].as_string().empty())
+	{
+		s.timestamp = (string)jsonParam["SavedTransac"]["timestamp"].as_string();
+		s.orderId = (string)jsonParam["SavedTransac"]["orderId"].as_string();
+		s.isPre = (int)jsonParam["SavedTransac"]["isPre"].as_int();
+		s.totalAmount = (int)jsonParam["SavedTransac"]["totalAmount"].as_int();
+		s.cbAmount = (int)jsonParam["SavedTransac"]["cbAmount"].as_int();
+		s.state = (SavedTransacState)jsonParam["SavedTransac"]["state"].as_int();
+		s.paidAmount = (int)jsonParam["SavedTransac"]["paidAmount"].as_int();
+		s.paymentId = (string)jsonParam["SavedTransac"]["paymentId"].as_string();
+	}
+
+
+	return s;
+}
+
+
+void Utils::launchTransactionWithANCVParam(SavedTransaction savedTransaction)
+{
+	isSavedTransac = true;
+	m_transaction.setAmount(savedTransaction.totalAmount);
+	m_transaction.launchTransaction();
+}

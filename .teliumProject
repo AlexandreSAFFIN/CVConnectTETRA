@@ -25,6 +25,7 @@
 <file generated="false" name="Src/AncvPrintTicket.cpp" parentProject=""/>
 <file generated="false" name="Src/HistoricDrawWindow.cpp" parentProject=""/>
 <file generated="false" name="Src/PaymentTransacWindow.cpp" parentProject=""/>
+<file generated="false" name="Src/SavedTransaction.cpp" parentProject=""/>
 </virtualFolder>
 <archiveFilesVirtualFolder name="Archive Files">
 <archive dirParentProject="" directoryToArchive="Resources" name="Bin/Resources.tar"/>

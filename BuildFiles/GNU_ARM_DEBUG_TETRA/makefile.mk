@@ -323,6 +323,7 @@ $(OBJ_PATH)/PrintTicket.o \
 $(OBJ_PATH)/AncvPrintTicket.o \
 $(OBJ_PATH)/HistoricDrawWindow.o \
 $(OBJ_PATH)/PaymentTransacWindow.o \
+$(OBJ_PATH)/SavedTransaction.o \
 
 #-------------------------------------------------------------------------------
 # Dependencies
@@ -637,6 +638,16 @@ $(OBJ_PATH)/PaymentTransacWindow.o: Src/PaymentTransacWindow.cpp $(DEPENDENCIES)
 	@echo "'Src/PaymentTransacWindow.cpp' compilation in progress..."
 	$(CC) $(CC_OPTS) -MMD -MP -o "$@" "$<" @$(INCLUDE_FILE_OPT)
 ifeq ($(MAKECMDGOALS), $(OBJ_PATH)/PaymentTransacWindow.o)
+	@echo "done!"
+endif
+
+ifneq ($(MAKECMDGOALS), clean)
+-include $(OBJ_PATH)/SavedTransaction.d
+endif
+$(OBJ_PATH)/SavedTransaction.o: Src/SavedTransaction.cpp $(DEPENDENCIES) $(EXTRA_DEPENDENCIES) $(INCLUDE_FILE_OPT)
+	@echo "'Src/SavedTransaction.cpp' compilation in progress..."
+	$(CC) $(CC_OPTS) -MMD -MP -o "$@" "$<" @$(INCLUDE_FILE_OPT)
+ifeq ($(MAKECMDGOALS), $(OBJ_PATH)/SavedTransaction.o)
 	@echo "done!"
 endif
 

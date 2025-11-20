@@ -20,6 +20,12 @@ bool ANCVDrawWindow::onClick(Message& msg)
 		saveDataAsJson(FIC_PARAM, jsonParam);
 		refreshInformation();
 	}
+	else if(id == 3)
+	{
+		canDispatch = false;
+		Utils::ref().parameterWindow->canDispatch = false;
+		Utils::ref().launchTransactionWithANCVParam(Utils::ref().getSaveTransac());
+	}
 	else
 	{
 		HistoricDrawWindow(Utils::ref().glib, "HISTORIQUE").drawing();
@@ -36,14 +42,30 @@ ANCVDrawWindow::ANCVDrawWindow(GraphicLib& glib, string text) :
     createSnackBar();
     string bg_completion = "rounded_red";
 
-    btnCompletion = new TileButton(mainWindow,
-        Utils::ref().getIconsPath(bg_completion), Utils::ref().getIconsPath("completion_icon"), "Complétion",
-        8,150, 1, this, &BaseDrawWindow::onClick);
+    if(Utils::ref().getSaveTransac().orderId.empty())
+    {
+		btnCompletion = new TileButton(mainWindow,
+			Utils::ref().getIconsPath(bg_completion), Utils::ref().getIconsPath("completion_icon"), "Complétion",
+			8,150, 1, this, &BaseDrawWindow::onClick);
 
-    new TileButton(mainWindow,
-    		Utils::ref().getIconsPath("rounded"), Utils::ref().getIconsPath("waiting_icon"), "Historique",
-    		        165,150, 2,this, &BaseDrawWindow::onClick);
+		new TileButton(mainWindow,
+				Utils::ref().getIconsPath("rounded"), Utils::ref().getIconsPath("waiting_icon"), "Historique",
+						165,150, 2,this, &BaseDrawWindow::onClick);
+    }
+    else
+    {
+        btnCompletion = new TileButton(mainWindow,
+            Utils::ref().getIconsPath(bg_completion), Utils::ref().getIconsPath("completion_icon"), "Complétion",
+            8,74, 1, this, &BaseDrawWindow::onClick);
 
+        new TileButton(mainWindow,
+        		Utils::ref().getIconsPath("rounded"), Utils::ref().getIconsPath("waiting_icon"), "Historique",
+        		        165,74, 2,this, &BaseDrawWindow::onClick);
+
+        new TileButton(mainWindow,
+        		Utils::ref().getIconsPath("rounded"), Utils::ref().getIconsPath("ok_icon"), "Relancer",8,230,3, this, &BaseDrawWindow::onClick);
+
+    }
 
 
     mainWindow.registerMethod(GL_EVENT_KEY_DOWN, this, &ANCVDrawWindow::onKeyPress);

@@ -22,20 +22,12 @@ void YesNoWindow::processId(int id)
 		canDispatch = false;
 }
 
-YesNoWindow::YesNoWindow(GraphicLib& glib, string text, unsigned long long amountToComplete) :
+YesNoWindow::YesNoWindow(GraphicLib& glib, string text, string title):
     BaseDrawWindow(glib, text)
 {
-	textToDisplay = text;
     createSnackBar();
 
-	double euros = amountToComplete / 100.0;
-	std::ostringstream oss;
-	oss << std::fixed << std::setprecision(2) << euros;
-	std::string amountStr = oss.str();
-
-	string paymentText = "A COMPLETER\n" + amountStr + " EUR";
-
-	title->setText(paymentText);
+	this->title->setText(title);
 
     new TileButton(mainWindow,
     		Utils::ref().getIconsPath("rounded"), Utils::ref().getIconsPath("ok_icon"), "OUI",
@@ -53,10 +45,6 @@ YesNoWindow::YesNoWindow(GraphicLib& glib, string text, unsigned long long amoun
 void YesNoWindow::refreshInformation()
 {
 	isOk = false;
-	if(!textToDisplay.empty())
-	{
-		title->setText(textToDisplay);
-	}
 }
 
 // Redéfinition de la méthode drawing

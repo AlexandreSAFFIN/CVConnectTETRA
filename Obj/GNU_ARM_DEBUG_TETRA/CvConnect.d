@@ -254,7 +254,7 @@ Obj/GNU_ARM_DEBUG_TETRA/CvConnect.o: Src/CvConnect.cpp Inc/CvConnect.hpp \
  D:/MyProjects/TETRA/cib_dll_t3/ExpInc/cib/disk/Disk.hpp \
  D:/MyProjects/TETRA/cib_dll_t3/ExpInc/cib/settings/Settings.hpp \
  D:/MyProjects/TETRA/cib_dll_t3/ExpInc/cib/devices/Devices.hpp \
- Inc/TxnStartEnd.hpp Inc/Transaction.hpp \
+ Inc/TxnStartEnd.hpp Inc/Transaction.hpp Inc/SavedTransaction.hpp \
  C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/inc/cpp/ingenico/emulation.hpp \
  C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/inc/cpp/ingenico/emulation/BridgeService.pb.h \
  C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/inc/cpp/ingenico/emulation/BridgeTplus.pb.h \
@@ -827,6 +827,8 @@ D:/MyProjects/TETRA/cib_dll_t3/ExpInc/cib/devices/Devices.hpp:
 Inc/TxnStartEnd.hpp:
 
 Inc/Transaction.hpp:
+
+Inc/SavedTransaction.hpp:
 
 C:/Program\ Files/TeliumSDK/SDK11.20.0.PatchA/SDKT3/HW_TETRA/gnu_473/inc/cpp/ingenico/emulation.hpp:
 

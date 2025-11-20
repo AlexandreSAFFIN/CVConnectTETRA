@@ -10,6 +10,8 @@
 #include "WaitingWindow.hpp"
 #include "PaymentChoiceDrawWindow.hpp"
 #include "SSL_.h"
+#include "TlvTree.h"
+#include <memory>   // important !
 
 #define APP_NAME "CvConnect"
 
@@ -61,23 +63,21 @@ void CvConnect::reset()
 
 }
 
+/** Callback called when the explorer menu clicked
+@param link information on menu clicked
+@return error code */
+Error CvConnect::onMenuClicked(SoftwareSelectedEvent & link)
+{
+	// Instanciate event used in the decodage
+	SoftwareSelectedEvent::Instance evt = SoftwareSelectedEvent::instantiate();
+	return SUCCESS;
+}
+
 void CvConnect::initMenu()
 {
-
 	m_menu.setAppName("ANCV");
-//	m_menu.addItem("MAJ version", this, &CfPay::updateApp, "", 1);
-//	m_menu.addItem("Initialisation/Maintenance", this, &CfPay::maintenance, "", 0);
-	m_menu.addItem("ANCV", this, &CvConnect::goMenu, "", 0);
-//	m_menu.addItem("Initialisation/Associer par USB", this, &CfPay::mountUSB, "", 2);
-//	m_menu.addItem("Initialisation/Dissocier marchand", this, &CfPay::reset, "", 3);
-//	m_menu.addItem("Initialisation/Type connexion", this, &CfPay::connectionType, "", 4);
-//	m_menu.addItem("Historique", this, &CfPay::initTransacWindow, "", 1);
-//
-//	m_menu.m_explorer.addIcon(APP_NAME, Utils::ptr()->getIconsPath("cfpaylogo"), true, 0);
-	m_menu.m_explorer.addIcon("ANCV", Utils::ptr()->getIconsPath("ancvLogo"), true, 0);
-	m_menu.m_explorer.bindOnSoftwareSelectedEvent(this, &CvConnect::goMenu);
-
-
+	m_menu.addItem("Initialisation", this, &CvConnect::goMenu, "", 0);
+	m_menu.m_explorer.addIcon("ANCV", Utils::ptr()->getIconsPath("ancvLogo"), false, 1);
 }
 
 void CvConnect::goMenu()
@@ -91,7 +91,6 @@ void CvConnect::goMenu()
 	{
 		Utils::ptr()->connectionWindow->drawing();
 	}
-
 	if(Utils::ref().isConnected)
 	{
 		Utils::ptr()->parameterWindow->drawing();
@@ -105,7 +104,7 @@ void CvConnect::initTransacInterfaces()
 	events.push_back(std::make_pair(SE_END, TXN_SERVICES_HIGH_PRIORITY));
 	m_startEndInterface = new StartEndPayment(*m_service, *new TxnStartEnd());
 	interfaces.push_back(m_startEndInterface);
-
+	Utils::ref().m_transaction.attachToService(*m_service);
 	this->registerInterface(interfaces, events);
 }
 
@@ -121,6 +120,8 @@ void CvConnect::initDisk()
 			jsonParam["ANCVOnly"] = false;
 			jsonParam["shopId"] = "";
 			jsonParam["host"] = HOST_PROD;
+			SavedTransaction transac = SavedTransaction();
+			Utils::ref().saveTransacInProgress(transac);
 			saveDataAsJson(FIC_PARAM, jsonParam);
 		}
 	}
@@ -135,10 +136,9 @@ void CvConnect::initApp()
 	Utils::ptr()->copyLogoToPinPad();
 	Utils::ptr()->loadData();
 	Utils::ptr()->parameterWindow = new MaintenanceDrawWindow(SGL::ref(), "PARAMETRAGE");
-	Utils::ptr()->parameterOptionWindow = new ANCVDrawWindow(SGL::ref(), "OPTION ANCV");
 	Utils::ptr()->connectionWindow = new ConnectDrawWindow(SGL::ref(), "AUTHENTIFICATION");
 	Utils::ptr()->paymentChoiceWindow = new PaymentChoiceDrawWindow(SGL::ref(), "CHOIX DU PAIEMENT");
 	Utils::ptr()->waitingWindow = new WaitingWindow(SGL::ref(), "OPERATION EN COURS\nMERCI DE PATIENTER");
 	Utils::ptr()->isConnected = Utils::ref().checkLicense();
-
+	Utils::ptr()->isSavedTransac = false;
 }
