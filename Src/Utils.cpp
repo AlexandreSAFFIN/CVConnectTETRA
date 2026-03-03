@@ -845,7 +845,6 @@ int Utils::pollingTransacResult()
 
 				if(etat != "error")
 				{
-
 					jsonParam["beneficiaryId"] = beneficiaryId;
 					jsonParam["lastState"] = etat;
 					saveDataAsJson(FIC_PARAM, jsonParam);

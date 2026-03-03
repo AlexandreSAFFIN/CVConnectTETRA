@@ -75,7 +75,6 @@ public:
 	ingenico::service::Service m_serviceTransac;
 	cib::transaction::TransactionLauncher m_transaction;
 
-	BaseDrawWindow* parameterWindow;
 	BaseDrawWindow* connectionWindow;
 	PaymentChoiceDrawWindow* paymentChoiceWindow;
 	BaseDrawWindow* qrWindow;

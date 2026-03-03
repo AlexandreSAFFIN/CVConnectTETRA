@@ -23,6 +23,7 @@ public:
 	void getTransactionResult(int status, TLV_TREE_NODE outputData);
 	void addTransacDescriptors();
 	void goMenu();
+	void onClickNetwork();
 	void initMenu();
 	Error onMenuClicked(SoftwareSelectedEvent& link);
 	void reset();

@@ -87,14 +87,7 @@ void CvConnect::goMenu()
 	Utils::ref().checkLicense();
 	loadDataAsJson(FIC_PARAM, jsonParam);
 //	Utils::ref().isConnected = true;
-	if((string)jsonParam["shopId"].as_string() == "" || !Utils::ref().isConnected)
-	{
-		Utils::ptr()->connectionWindow->drawing();
-	}
-	if(Utils::ref().isConnected)
-	{
-		Utils::ptr()->parameterWindow->drawing();
-	}
+	MaintenanceDrawWindow(SGL::ref(), "PARAMETRAGE").drawing();
 }
 
 void CvConnect::initTransacInterfaces()
@@ -135,7 +128,6 @@ void CvConnect::initApp()
 	initDisk();
 	Utils::ptr()->copyLogoToPinPad();
 	Utils::ptr()->loadData();
-	Utils::ptr()->parameterWindow = new MaintenanceDrawWindow(SGL::ref(), "PARAMETRAGE");
 	Utils::ptr()->connectionWindow = new ConnectDrawWindow(SGL::ref(), "AUTHENTIFICATION");
 	Utils::ptr()->paymentChoiceWindow = new PaymentChoiceDrawWindow(SGL::ref(), "CHOIX DU PAIEMENT");
 	Utils::ptr()->waitingWindow = new WaitingWindow(SGL::ref(), "OPERATION EN COURS\nMERCI DE PATIENTER");

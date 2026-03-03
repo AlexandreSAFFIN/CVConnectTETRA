@@ -65,12 +65,14 @@ bool MaintenanceDrawWindow::onClickMaintenance()
 		SSL_DeleteProfile("ANCV");
 		Utils::ref().resetTerminal(HOST_DEV);
 		SGL::ref().dialogMessage("Maintenance", "Environnement de DEV", GL_ICON_INFORMATION, GL_BUTTON_VALID, GL_TIME_INFINITE);
+		canDispatch = false;
 		break;
 
 	case 7763: // PROD
 		SSL_DeleteProfile("ANCV");
 		Utils::ref().resetTerminal(HOST_PROD);
 		SGL::ref().dialogMessage("Maintenance", "Environnement de PROD", GL_ICON_INFORMATION, GL_BUTTON_VALID, GL_TIME_INFINITE);
+		canDispatch = false;
 		break;
 	case 7753: // SSLD
 		ssllib_open();
@@ -83,6 +85,7 @@ bool MaintenanceDrawWindow::onClickMaintenance()
 		{
 			SGL::ref().dialogMessage("Maintenance", "Echec de suppression du certificat SSL", GL_ICON_ERROR, GL_BUTTON_VALID, GL_TIME_INFINITE);
 		}
+		canDispatch = false;
 		ssllib_close();
 		break;
 	}
@@ -114,7 +117,10 @@ bool MaintenanceDrawWindow::onClickUpdate()
 
 bool MaintenanceDrawWindow::onClick(Message& msg)
 {
+	cib::json::Document jsonParam;
+	loadDataAsJson(FIC_PARAM, jsonParam);
 	int id = msg.getWidget().getId();
+
 	if(id == 1)
 	{
 		onClickMaintenance();
@@ -125,7 +131,18 @@ bool MaintenanceDrawWindow::onClick(Message& msg)
 	}
 	else if(id == 3)
 	{
-		onClickANCV();
+		if((string)jsonParam["shopId"].as_string() == "" || !Utils::ref().isConnected)
+		{
+			Utils::ptr()->connectionWindow->drawing();
+			if(Utils::ref().isConnected)
+			{
+				canDispatch = false;
+			}
+		}
+		else if(Utils::ref().isConnected)
+		{
+			onClickANCV();
+		}
 	}
 	else if(id == 4)
 	{
@@ -140,6 +157,8 @@ MaintenanceDrawWindow::MaintenanceDrawWindow(GraphicLib& glib, string text) :
 {
 
     createSnackBar();
+    cib::json::Document jsonParam;
+    loadDataAsJson(FIC_PARAM, jsonParam);
 
     new TileButton(mainWindow,
         Utils::ref().getIconsPath("rounded"), Utils::ref().getIconsPath("maintenance_icon"), "Maintenance",
@@ -149,8 +168,16 @@ MaintenanceDrawWindow::MaintenanceDrawWindow(GraphicLib& glib, string text) :
     		Utils::ref().getIconsPath("rounded"), Utils::ref().getIconsPath("reseau_icon"), "Reseau",
     		        8,230,2, this, &BaseDrawWindow::onClick);
 
-    new TileButton(mainWindow,
-    		Utils::ref().getIconsPath("rounded"), Utils::ref().getIconsPath("parametre_icon"), "Option",160,74,3, this, &BaseDrawWindow::onClick);
+	if((string)jsonParam["shopId"].as_string() == "" || !Utils::ref().isConnected)
+	{
+	    new TileButton(mainWindow,
+	    		Utils::ref().getIconsPath("rounded_red"), Utils::ref().getIconsPath("parametre_icon"), "Connexion",160,74,3, this, &BaseDrawWindow::onClick);
+	}
+	else
+	{
+		new TileButton(mainWindow,
+    		Utils::ref().getIconsPath("rounded_green"), Utils::ref().getIconsPath("parametre_icon"), "Option",160,74,3, this, &BaseDrawWindow::onClick);
+	}
 
     new TileButton(mainWindow,
     		Utils::ref().getIconsPath("rounded"), Utils::ref().getIconsPath("ok_icon"), "Update",160,230,4, this, &BaseDrawWindow::onClick);
@@ -178,6 +205,7 @@ bool MaintenanceDrawWindow::drawing()
 
     while (canDispatch) {
 //    	topLayout.show();
+    	mainWindow.show();
         mainWindow.dispatch(100);  // Boucle pour gérer les événements
         if(isShowSnackbar)
         {

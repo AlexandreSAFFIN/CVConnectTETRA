@@ -23,7 +23,6 @@ bool ANCVDrawWindow::onClick(Message& msg)
 	else if(id == 3)
 	{
 		canDispatch = false;
-		Utils::ref().parameterWindow->canDispatch = false;
 		Utils::ref().launchTransactionWithANCVParam(Utils::ref().getSaveTransac());
 	}
 	else
