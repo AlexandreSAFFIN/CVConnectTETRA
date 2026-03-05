@@ -168,7 +168,7 @@ MaintenanceDrawWindow::MaintenanceDrawWindow(GraphicLib& glib, string text) :
     		Utils::ref().getIconsPath("rounded"), Utils::ref().getIconsPath("reseau_icon"), "Reseau",
     		        8,230,2, this, &BaseDrawWindow::onClick);
 
-	if((string)jsonParam["shopId"].as_string() == "" || !Utils::ref().isConnected)
+	if(!Utils::ref().isConnected)
 	{
 	    new TileButton(mainWindow,
 	    		Utils::ref().getIconsPath("rounded_red"), Utils::ref().getIconsPath("parametre_icon"), "Connexion",160,74,3, this, &BaseDrawWindow::onClick);

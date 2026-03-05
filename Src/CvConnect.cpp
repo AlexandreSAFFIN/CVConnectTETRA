@@ -131,6 +131,5 @@ void CvConnect::initApp()
 	Utils::ptr()->connectionWindow = new ConnectDrawWindow(SGL::ref(), "AUTHENTIFICATION");
 	Utils::ptr()->paymentChoiceWindow = new PaymentChoiceDrawWindow(SGL::ref(), "CHOIX DU PAIEMENT");
 	Utils::ptr()->waitingWindow = new WaitingWindow(SGL::ref(), "OPERATION EN COURS\nMERCI DE PATIENTER");
-	Utils::ptr()->isConnected = Utils::ref().checkLicense();
 	Utils::ptr()->isSavedTransac = false;
 }

@@ -435,7 +435,10 @@ void Utils::resetTerminal(const string &host)
 	jsonParam["connectionType"] = (int)(connectionType::IP);
 	jsonParam["ANCVOnly"] = false;
 	jsonParam["shopId"] = "";
+	Utils::ref().isConnected = false;
+	Utils::ref().disconnect();
 	saveDataAsJson(FIC_PARAM, jsonParam);
+
 	m_host = host;
 	SGL::ref().dialogMessage("Paramétrage", "Application remise à zéro", GL_ICON_INFORMATION, GL_BUTTON_VALID, GL_TIME_INFINITE);
 }
@@ -1017,49 +1020,47 @@ bool Utils::checkLicense()
 	loadDataAsJson(FIC_PARAM, jsonParam);
 
 
-	if(jsonParam["shopId"] != "")
+
+	Utils::waitingWindow->drawing("Opération en cours", Waiting);
+
+	//TODO REMOVE
+//	response = createRequest("/Webservices/rest/FO/wcfANCVPeriph.svc/GetShopId/23136053", _GET, "", true);
+	response = createRequest("/Webservices/rest/FO/wcfANCVPeriph.svc/GetShopId/"+Terminal::ref().SerialNumber.substr(Terminal::ref().SerialNumber.size() - 8), _GET, "", true);
+
+	if (response.getStatusCode() == 200)
 	{
-		Utils::waitingWindow->drawing("Opération en cours", Waiting);
-
-		//TODO REMOVE
-	//	response = createRequest("/Webservices/rest/FO/wcfANCVPeriph.svc/GetShopId/23136053", _GET, "", true);
-		response = createRequest("/Webservices/rest/FO/wcfANCVPeriph.svc/GetShopId/"+Terminal::ref().SerialNumber.substr(Terminal::ref().SerialNumber.size() - 8), _GET, "", true);
-
-		if (response.getStatusCode() == 200)
+		jsonResponse.parse(response.getContent().data());
+		if( (m_host == HOST_PROD && (int)jsonResponse["GetShopIdResult"].as_int() > 0) || (m_host == HOST_DEV && !((string)jsonResponse["GetShopIdResult"].as_string()).empty()))
 		{
-			jsonResponse.parse(response.getContent().data());
-			if( (m_host == HOST_PROD && (int)jsonResponse["GetShopIdResult"].as_int() > 0) || (m_host == HOST_DEV && !((string)jsonResponse["GetShopIdResult"].as_string()).empty()))
+			if(m_host == HOST_PROD)
 			{
-
-				if(m_host == HOST_PROD)
-				{
-					std::ostringstream oss;
-					oss << (int)jsonResponse["GetShopIdResult"].as_int();
-					std::string s = oss.str();
-					jsonParam["shopId"] = s;
-				}
-				else
-				{
-					jsonParam["shopId"] = (string)jsonResponse["GetShopIdResult"].as_string();
-				}
-				isConnected = true;
-				bRet = true;
+				std::ostringstream oss;
+				oss << (int)jsonResponse["GetShopIdResult"].as_int();
+				std::string s = oss.str();
+				jsonParam["shopId"] = s;
 			}
-		}
-		saveDataAsJson(FIC_PARAM, jsonParam);
-		string msg = "ID client valide";
-		WaitingStep step = Valid;
-		if(!bRet)
-		{
-			step = Cancel;
-			msg = "Id Inconnu";
-			if(response.getStatusCode() != 200)
+			else
 			{
-				msg = "Une erreur réseau est survenue";
+				jsonParam["shopId"] = (string)jsonResponse["GetShopIdResult"].as_string();
 			}
+			isConnected = true;
+			bRet = true;
 		}
-		Utils::waitingWindow->drawing(msg, step);
 	}
+	saveDataAsJson(FIC_PARAM, jsonParam);
+	string msg = "ID client valide";
+	WaitingStep step = Valid;
+	if(!bRet)
+	{
+		step = Cancel;
+		msg = "Id Inconnu";
+		if(response.getStatusCode() != 200)
+		{
+			msg = "Une erreur réseau est survenue";
+		}
+	}
+	Utils::waitingWindow->drawing(msg, step);
+
 	return bRet;
 }
 

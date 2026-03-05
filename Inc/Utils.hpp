@@ -68,7 +68,6 @@ public:
 	string m_host;
 
 	bool isConnected;
-	bool isLicence;
 	long timeout;
 	bool isSavedTransac;
 
