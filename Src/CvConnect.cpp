@@ -126,6 +126,7 @@ void CvConnect::initApp()
 	Utils::ptr()->glib.setCharset(GL_ENCODING_ISO_8859_1);
 	cib::json::Document jsonParam;
 	initDisk();
+	Utils::ptr()->ref().isFirstTime = true;
 	Utils::ptr()->copyLogoToPinPad();
 	Utils::ptr()->loadData();
 	Utils::ptr()->connectionWindow = new ConnectDrawWindow(SGL::ref(), "AUTHENTIFICATION");

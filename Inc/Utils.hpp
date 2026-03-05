@@ -70,6 +70,7 @@ public:
 	bool isConnected;
 	long timeout;
 	bool isSavedTransac;
+	bool isFirstTime;
 
 	ingenico::service::Service m_serviceTransac;
 	cib::transaction::TransactionLauncher m_transaction;

@@ -60,10 +60,16 @@ int TxnStartEnd::start(const TLV_TREE_NODE inputData, TLV_TREE_NODE outputData)
 	loadDataAsJson(FIC_PARAM, jsonParam);
 
 	bool isParam = Utils::ref().isConnected;
-	if(!isParam)
+	if(!isParam && Utils::ptr()->ref().isFirstTime)
+	{
+		Utils::ref().checkLicense();
+		Utils::ptr()->ref().isFirstTime = false;
+	}
+	else if(!isParam && (string)jsonParam["shopId"].as_string() != "")
 	{
 		Utils::ref().checkLicense();
 	}
+
 
 	Utils::ref().timeout = 3000;
 
