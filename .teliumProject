@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?teliumProject version="4.1"?><?ingedev version="8.20.26.0"?><projectDescription activeConfig="GNU_ARM_DEBUG_TETRA" enableUsingCpp="true" projectType="APP">
+<?teliumProject version="4.1"?><?ingedev version="8.20.26.0"?><projectDescription activeConfig="GNU_ARM_RELEASE_TETRA" enableUsingCpp="true" projectType="APP">
 <virtualFolders>
 <virtualFolder name="Other Files" sources="false"/>
 <virtualFolder name="Source Files" sources="true">
@@ -32,13 +32,13 @@
 </archiveFilesVirtualFolder>
 </virtualFolders>
 <configs>
-<config applicationType="0x54f9" asmCpuMode="thumb" binaryName="8217530100" compiler="gnuArm47v7a" cpuMode="thumb" crc="false" dataBinaryFileBaseName="DATA54F9250" defaultTeliumCompatibility="Telium Tetra" disassembler="false" enableCPPExceptions="true" enablePieOption="false" gcov="false" gnu4StackProtectionMode="ProPolice" gnuOptim="-O0" gprof="false" hardware="Telium Tetra" linkerCustomOpt="" name="GNU_ARM_DEBUG_TETRA" projectFamily="821753" relroMode="None" sign="false" signatureCertificate="PAYMENT" signatureCertificateProvider="Telium SDK" stackProtectorMode="-fstack-protector-all" stripEnable="true" stripOpt=" --remove-section=.comment " useDataFileNamingConvention="true" zip="false">
+<config applicationType="0x54f9" asmCpuMode="thumb" binaryName="8217530100" compiler="gnuArm531v7a" cpuMode="thumb" crc="false" dataBinaryFileBaseName="DATA54F9250" defaultTeliumCompatibility="Telium Tetra" disassembler="false" enableCPPExceptions="true" enablePieOption="false" gcov="false" gnu4StackProtectionMode="ProPolice" gnuOptim="-O0" gprof="false" hardware="Telium Tetra" linkerCustomOpt="" name="GNU_ARM_DEBUG_TETRA" projectFamily="821753" relroMode="None" sign="false" signatureCertificate="PAYMENT" signatureCertificateProvider="Telium SDK" stackProtectorMode="-fstack-protector-strong" stripEnable="true" stripOpt=" --remove-section=.comment " useDataFileNamingConvention="true" zip="false">
 <teliumCompatibilities>
 <teliumCompatibility value="Telium Tetra"/>
 </teliumCompatibilities>
 <userIncs>
 <userInc value="Inc"/>
-<userInc value="${workspace_loc:/CIB_T3_DLL/ExpInc}"/>
+<userInc value="${workspace_loc:/cib_dll_t3/ExpInc}"/>
 </userIncs>
 <teliumPackageInfo countryCode="250" family="CvConnect" identifier="21753" maintenancePatch="00" majorVersion="01" minorRelease="00" range="00"/>
 <userDefines>
@@ -67,17 +67,13 @@
 </userDefines>
 <prebuild command="" description=""/>
 <postbuild command="" description=""/>
-<projectLibraries>
-<projectLib name="CIB_T3_DLL" parentProject="CIB_T3_DLL" projectLibCfg="GNU_ARM_DEBUG_TETRA"/>
-</projectLibraries>
 <userAsmIncs/>
 <userSystemLibraries/>
 <userSystemLibrariesOptions/>
 <userAsmDefines/>
 <startupFiles/>
-<userRpaths/>
 <teliumSdkPackages>
-<teliumSdkPackage package="Telium SDK" version="11.20.0.PatchA(b08)"/>
+<teliumSdkPackage package="Telium SDK" version="11.20.2.PatchBM(b22)"/>
 </teliumSdkPackages>
 <externalSchemes/>
 <dataFiles>
@@ -85,19 +81,25 @@
 <targetTerminals/>
 </dataFile>
 </dataFiles>
+<projectLibraries>
+<projectLib name="cib_dll_t3" parentProject="cib_dll_t3" projectLibCfg="GNU_ARM_RELEASE_TETRA"/>
+</projectLibraries>
+<userRpaths>
+<userRpath value="${workspace_loc:/cib_dll_t3/Bin/GNU_ARM_DEBUG_TETRA}"/>
+</userRpaths>
 </config>
-<config applicationType="0x54f9" asmCpuMode="thumb" binaryName="8217530100" compiler="gnuArm531v7a" cpuMode="thumb" crc="true" dataBinaryFileBaseName="DATA54F9250" defaultTeliumCompatibility="Telium Tetra" disassembler="false" enableCPPExceptions="true" gcov="false" gnu4StackProtectionMode="ProPolice" gnuOptim="-Os" gprof="false" hardware="Telium Tetra" linkerCustomOpt="" name="GNU_ARM_RELEASE_TETRA" projectFamily="821753" relroMode="None" sign="true" signatureCertificate="PAYMENT" signatureCertificateProvider="Sign/Kit" stackProtectorMode="-fstack-protector-strong" stripEnable="true" stripOpt=" --remove-section=.comment " useDataFileNamingConvention="true" zip="true">
+<config applicationType="0x54f9" asmCpuMode="thumb" assemblerCustomOpt="" binaryName="8217530100" compiler="gnuArm531v7a" compilerCustomOpt="" cpuMode="thumb" crc="true" dataBinaryFileBaseName="DATA54F9250" defaultTeliumCompatibility="Telium Tetra" disassembler="false" enableCPPExceptions="true" gcov="false" gnu4StackProtectionMode="ProPolice" gnuOptim="-Os" gprof="false" hardware="Telium Tetra" linkerCustomOpt="" name="GNU_ARM_RELEASE_TETRA" projectFamily="821753" relroMode="None" sign="true" signatureCertificate="PAYMENT" signatureCertificateProvider="Sign/Kit" stackProtectorMode="-fstack-protector-strong" stripEnable="true" stripOpt=" --remove-section=.comment " useDataFileNamingConvention="true" zip="true">
 <teliumCompatibilities>
 <teliumCompatibility value="Telium Tetra"/>
 </teliumCompatibilities>
 <userIncs>
 <userInc value="Inc"/>
-<userInc value="${workspace_loc:/CIB_T3_DLL/ExpInc}"/>
+<userInc value="${workspace_loc:/cib_dll_t3/ExpInc}"/>
 </userIncs>
 <teliumSdkPackages>
-<teliumSdkPackage package="Telium SDK" version="14.4.1.PatchH(b115)"/>
+<teliumSdkPackage package="Telium SDK" version="11.20.2.PatchBM(b22)"/>
 </teliumSdkPackages>
-<teliumPackageInfo countryCode="250" family="CvConnect" identifier="21753" maintenancePatch="00" majorVersion="01" minorRelease="02" range="00"/>
+<teliumPackageInfo countryCode="250" family="CvConnect" identifier="21753" maintenancePatch="00" majorVersion="01" minorRelease="01" range="00"/>
 <userDefines>
 <userDefine value="_ING_TELIUM_SDK_LOC=&quot;${telium_sdk_loc}&quot;"/>
 <userDefine value="_ING_TELIUM_SDK_NAME=&quot;${telium_sdk_name}&quot;"/>
@@ -128,19 +130,21 @@
 <targetTerminals/>
 </dataFile>
 </dataFiles>
-<userAsmIncs/>
 <userSystemLibraries/>
 <userSystemLibrariesOptions/>
 <userRpaths>
-<userRpath value="${workspace_loc:/CIB_T3_DLL/Bin/GNU_ARM_RELEASE_TETRA}"/>
+<userRpath value="${workspace_loc:/cib_dll_t3/Bin/GNU_ARM_RELEASE_TETRA}"/>
 </userRpaths>
-<userAsmDefines/>
 <startupFiles/>
 <projectLibraries>
-<projectLib name="CIB_T3_DLL" parentProject="CIB_T3_DLL" projectLibCfg="GNU_ARM_RELEASE_TETRA"/>
+<projectLib name="cib_dll_t3" parentProject="cib_dll_t3" projectLibCfg="GNU_ARM_RELEASE_TETRA"/>
 </projectLibraries>
 <userIncs/>
+<userAsmIncs/>
+<userAsmDefines/>
+<externalSchemes/>
 </config>
 </configs>
 <virtualFolders/>
+<configs/>
 </projectDescription>

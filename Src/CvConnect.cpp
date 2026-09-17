@@ -35,9 +35,6 @@ CvConnect::~CvConnect()
 ///////////////////////////////////////////////////////////
 
 
-
-
-
 void CvConnect::addTransacDescriptors()
 {
 	StartEndInterface::add_descriptor(*manifest);

@@ -18,6 +18,7 @@
 #include "PrintTicketWindow.hpp"
 #include "YesNoWindow.hpp"
 #include "AncvPrintTicket.hpp"
+#include "Exception.hpp"
 //                            #####################
 //                            #   TXN START END   #
 //                            #####################
@@ -49,6 +50,7 @@ TxnStartEnd::~TxnStartEnd()
 //! \return TXN_SR_OK.
 int TxnStartEnd::start(const TLV_TREE_NODE inputData, TLV_TREE_NODE outputData)
 {
+
 	// Get transaction info
 	TransactionInfo txn;
 	getTransactionInfo(inputData, txn);
@@ -70,7 +72,7 @@ int TxnStartEnd::start(const TLV_TREE_NODE inputData, TLV_TREE_NODE outputData)
 		Utils::ref().checkLicense();
 	}
 
-
+	isParam = Utils::ref().isConnected;
 	Utils::ref().timeout = 3000;
 
 	bool isANCV = false;
@@ -189,8 +191,8 @@ int TxnStartEnd::start(const TLV_TREE_NODE inputData, TLV_TREE_NODE outputData)
 		}
 		else
 		{
-			unsigned long readerDetected = TXN_TECHNO_READER_DETECTED;
-			updateTransactionInfo(outputData, 0, NULL, NULL, &readerDetected);
+			unsigned long readerDetected = TXN_TECHNO_MANUAL_ENTRY;
+			updateTransactionInfo(outputData, amount, NULL, NULL, &readerDetected);
 		}
 
 		if(s.state != PAID_KO && s.state != PAID_OK)
@@ -276,7 +278,7 @@ int TxnStartEnd::start(const TLV_TREE_NODE inputData, TLV_TREE_NODE outputData)
 			}
 			else
 			{
-				unsigned long readerDetected = TXN_TECHNO_READER_DETECTED;
+				unsigned long readerDetected = TXN_TECHNO_MANUAL_ENTRY;
 				updateTransactionInfo(outputData, 0, NULL, NULL, &readerDetected);
 			}
 		}
@@ -337,7 +339,7 @@ int TxnStartEnd::checkAndPrepare(const TLV_TREE_NODE inputData, TLV_TREE_NODE ou
 			string readerName;
 			getReaderInfo(nodeIn, readerTechno, readerName);
 
-			if ((readerTechno & (TXN_TECHNO_CONTACT_CHIP | TXN_TECHNO_CONTACTLESS | TXN_TECHNO_READER_DETECTED)) != 0)
+			if ((readerTechno & (TXN_TECHNO_CONTACT_CHIP | TXN_TECHNO_CONTACTLESS  | TXN_TECHNO_MANUAL_ENTRY | TXN_TECHNO_READER_DETECTED)) != 0)
 			{
 				// Return the reader technology & name supported by the application
 				TLV_TREE_NODE nodeOut = TlvTree_AddChild(outputData, TAG_TXN_READER, NULL, 0);
